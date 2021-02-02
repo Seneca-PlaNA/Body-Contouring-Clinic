@@ -94,7 +94,7 @@ constructor(props) {
                  </div>
                     
                         <div class="col-md-4" style={{'marginLeft' : '260px'}}><br/>
-                    <button class="col-md-4" type="submit" className="btn btn-dark btn-block">Sign in</button>
+                    <button class="col-md-4" type="submit" className="btn btn-outline-info btn-block">Sign in</button>
                     <p className="Forgot_idpw">
                         Forgot your <a href="./Forgot_Id_Pw">user id</a>
                          / <a href="./Forgot_Id_Pw">password</a>?
