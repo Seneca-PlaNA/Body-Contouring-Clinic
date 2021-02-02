@@ -71,8 +71,8 @@ class ManageOffer extends React.Component {
                                 <td>02</td>
                                 <td>Offer 2</td>
                                 <td>Some quick example text to build on the ca...</td>
-                                <td><Button variant="outline-secondary" href='/VIP/Admin/Manage/Edit'>EDIT</Button></td>
-                                <td><Button variant="outline-danger" onClick={this.showModal}>DELETE</Button></td>
+                                <td><Button variant="outline-secondary" href='/VIP/Admin/Manage/Edit'>Edit</Button></td>
+                                <td><Button variant="outline-danger" onClick={this.showModal}>Delete</Button></td>
                                 <PopUp show={this.state.show} handleClose={this.hideModal} handleDelete={this.deleteOffer} text={this.state.children} btn1='Cancel' btn2='Delete'/>
                             </tr>
                         </table>
