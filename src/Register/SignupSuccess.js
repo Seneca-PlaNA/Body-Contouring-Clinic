@@ -21,7 +21,7 @@ class SignupSuccess extends Component {
             </p>
             </div>
 
-            <button type="button" class="btn btn-outline-dark" style={{'margin-left':'15px'}}>
+            <button type="button" class="btn btn-outline-info btn-block" style={{'margin-left':'15px'}}>
               <a class="login" href="./Login">Go to Log In! ❯</a>
               </button>  
               <br/><br/>
