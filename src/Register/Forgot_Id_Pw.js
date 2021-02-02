@@ -82,7 +82,7 @@ class Forgot_Id_Pw extends Component {
                         </Form.Group>
                     </Form>
                     <div class="col-md-4" style={{'marginLeft' : '420px'}}>
-                                <button class="col-md-4" type="submit" className="btn btn-dark">Find</button>
+                                <button class="col-md-4" type="submit" className="btn btn-outline-info">Find</button>
                                 <br></br>  
                                 </div>
                 </div>  
@@ -108,7 +108,7 @@ class Forgot_Id_Pw extends Component {
                                 </Form.Group>
                             </Form>
                     <div class="col-md-4" style={{'marginLeft' : '420px'}}>
-                                <button class="col-md-4" type="submit" className="btn btn-dark">Find</button>
+                                <button class="col-md-4" type="submit" className="btn btn-outline-info">Find</button>
                                 </div>
                                 
                                 </div>
