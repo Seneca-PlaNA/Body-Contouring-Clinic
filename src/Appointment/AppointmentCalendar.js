@@ -55,7 +55,7 @@ class AppointmentCalendar extends React.Component {
     }
 
     render() {
-        const selectedView = 'month';     // default view
+        const selectedView = this.props.view;     // default view
         const today = new Date(); 
 
         return (
@@ -90,7 +90,7 @@ class AppointmentCalendar extends React.Component {
                   {
                     id: '2',
                     calendarId: '0',
-                    title: 'Practice',
+                    title: 'Brooks - Green Peel',
                     category: 'milestone',
                     dueDateClass: '',
                     start: today.toISOString(),
@@ -102,7 +102,7 @@ class AppointmentCalendar extends React.Component {
                   {
                     id: '3',
                     calendarId: '0',
-                    title: 'FE Workshop',
+                    title: 'Piper - Hair Removal',
                     category: 'allday',
                     dueDateClass: '',
                     start: today.toISOString(),

@@ -9,6 +9,9 @@ class AppointmentHome extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            calendarView: 'month',
+        }
     }
 
     componentDidMount() {
@@ -26,7 +29,7 @@ class AppointmentHome extends React.Component {
                 <Card className="p-3">
                     <blockquote className="blockquote mb-0 card-body" style={calendar}>
                     <p>
-                        <AppointmentCalendar />
+                        <AppointmentCalendar view={this.state.calendarView} />
                     </p>
                     </blockquote>
                 </Card>

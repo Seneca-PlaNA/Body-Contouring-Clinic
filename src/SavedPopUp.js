@@ -1,9 +1,9 @@
 import React from 'react';
-import '../App.css';
+import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Modal } from 'react-bootstrap';
 
-class SavedAppointment extends React.Component {
+class SavedPopUp extends React.Component {
 
     render() {
         return (
@@ -13,11 +13,11 @@ class SavedAppointment extends React.Component {
            </Modal.Header>
  
            <Modal.Footer>
-                <Button variant="outline-info" href="/Appointment/Appointment">Back to appointment</Button>
+                    <Button variant="outline-info" href={this.props.href}>{this.props.button}</Button>
            </Modal.Footer>
          </Modal>
         );
     }
 }
 
-export default SavedAppointment
+export default SavedPopUp

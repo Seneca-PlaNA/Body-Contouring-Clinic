@@ -41,9 +41,9 @@ class TermsAndConditions  extends Component {
 
             <div style={{marginLeft:"10px"}}>
             <div class="pagination"style={{'marginright': '130px'}}>
-              <a class="page-link" href="./Login">❮ Previous</a>
+              <a class="page-link btn btn-outline-info" href="./Login">❮ Previous</a>
               <a style={{marginLeft:"600px"}}></a>
-              <a class="page-link" href="./SignUp">Next ❯</a>
+              <a class="page-link btn btn-outline-info" href="./SignUp">Next ❯</a>
             </div>
             </div>
           

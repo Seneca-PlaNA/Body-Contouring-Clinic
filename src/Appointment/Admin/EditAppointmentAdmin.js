@@ -4,7 +4,7 @@ import { Form, Row, Col, Container, Button, Modal } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SideBar from '../../SideBar/SideBar';
 import styles from '../../app.module.css';
-import SavedAppointmentAdmin from './SavedAppointmentAdmin';
+import SavedPopUp from '../../SavedPopUp';
 
 class EditAppointmentAdmin extends React.Component {
 
@@ -17,7 +17,9 @@ class EditAppointmentAdmin extends React.Component {
                 { url: '/Appointment/Admin/Create', title: 'Create Appointment' },
             ],
             saveModal: false,
-            children: 'Appointment saved!'
+            savedBackLink: "/Appointment/Admin/Appointment",
+            button: "Back To Appointment",
+            title: "Appointment Saved!"
         };
         this.showSave = this.showSave.bind(this);
         this.hideSave = this.hideSave.bind(this);
@@ -119,7 +121,7 @@ class EditAppointmentAdmin extends React.Component {
                             <Col></Col>
                             <Col md="auto"><Button variant="outline-secondary" href="/Appointment/Admin/Appointment">Cancel</Button></Col>
                             <Button action onClick={this.showSave} variant="outline-info">Save</Button>
-                                <SavedAppointmentAdmin show={this.state.saveModal} handelClose={this.hideSave} text={this.state.children}/>
+                                <SavedPopUp show={this.state.saveModal} handelClose={this.hideSave} text={this.state.title} href={this.state.savedBackLink} button={this.state.button} />
 
                         </Row>    
                     </Container>
