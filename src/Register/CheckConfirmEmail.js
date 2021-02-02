@@ -21,7 +21,7 @@ class CheckConfirmEmail extends Component {
                height='250'          
              />
             <br></br>
-            <button type="button" class="btn btn-outline-dark" style={{'margin-left':'40px'}}>
+            <button type="button" class="btn btn-outline-info" style={{'margin-left':'40px'}}>
               <a class="login" href="./SignupSuccess">Email confirmed!   ❯</a>
               </button>  
 
