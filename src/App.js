@@ -42,19 +42,19 @@ class App extends React.Component{
               <a className="nav-link" href="/Service">Service and Prices</a>
             </li>
             <li className="nav-item">
+              <a className="nav-link" href="/VIP">VIP</a>
+            </li>
+            <li className="nav-item">
               <a className="nav-link" href="/Appointment">Appointment</a>
             </li>
             <li className="nav-item">
               <a className="nav-link" href="/Request">Request</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/Customer">Customer</a>
+              <a className="nav-link" href="/Customer">Profile</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/Register/Login">Sign In</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/Register/TermsAndConditions">Sign Up</a>
+              <a className="nav-link" href="/Register/Login">LogIn</a>
             </li>
           </ul>
         </nav>

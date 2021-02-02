@@ -68,10 +68,10 @@ class RequestHome extends React.Component {
                         <Container>
                             <Row >
                                 <Col xs={9}></Col>
-                                <Col xs={1}><Button variant="outline-info" href="/Request/Create">CREATE</Button></Col>
-                                <Col xs={1}><Button variant="outline-secondary" href='/Request/Edit'>EDIT</Button></Col>
-                                <Col xs={1}><Button variant="outline-danger" onClick={this.showModal}>DELETE</Button></Col>
-                                <PopUp show={this.state.show} handleClose={this.hideModal} handleDelete={this.deleteReq} text={this.state.children} btn1='CANCEL' btn2='DELETE'/>
+                                <Col xs={1}><Button variant="outline-info" href="/Request/Create">Create</Button></Col>
+                                <Col xs={1}><Button variant="outline-secondary" href='/Request/Edit'>Edit</Button></Col>
+                                <Col xs={1}><Button variant="outline-danger" onClick={this.showModal}>Delete</Button></Col>
+                                <PopUp show={this.state.show} handleClose={this.hideModal} handleDelete={this.deleteReq} text={this.state.children} btn1='Cancel' btn2='Delete'/>
                             </Row>
                             <br/><br/>
                         </Container>
