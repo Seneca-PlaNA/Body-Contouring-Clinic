@@ -3,11 +3,12 @@ const app = express();
 const port = process.env.PORT || 3001;
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const db = require('./dbConnection');
 const Account = require('../models/account');;
 
 app.use(cors());
 app.use(bodyParser.json());
-
+db();
 
 // hard-coded add new account
 app.get('/add-account', (req, res) => {
