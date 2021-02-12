@@ -26,6 +26,18 @@ const accountSchema = new Schema(
     address: {
       type: String,
     },
+    dayOfBirth: {
+      type: String,
+    },
+    phoneNumber: {
+      type: String,
+      required: true,
+    },
+    accountLevel: {
+      type: Schema.Types.ObjectId,
+      ref: 'accountLevel',
+      required: true,
+    },
   },
   { timestamps: true }
 );
