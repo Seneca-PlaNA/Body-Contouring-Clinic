@@ -1,99 +1,42 @@
 import React from 'react';
 import '../App.css';
-import offer from '../resources/offer_1.png';
 import { Button, Card, CardColumns } from 'react-bootstrap';
 
 class ListAllOffer extends React.Component {
   constructor() {
     super();
     this.state = {
-      show: false,
-      items: [{ url: '/VIP/', title: 'Special Offer' }],
+      results: [],
     };
+  }
+
+  componentDidMount () {
+    fetch('http://localhost:3001/offers')
+      .then((res) => {
+        this.setState({ results: res.json() });
+      });
   }
 
   render() {
     return (
       <div>
         <CardColumns>
-          <Card>
-            <Card.Img variant="top" src={offer} />
-            <Card.Body>
-              <Card.Title>Offer1</Card.Title>
-              <Card.Text>
-                Some quick example text to build on the card title and make up the bulk of the cards
-                content.
-              </Card.Text>
-              <Button variant="outline-info" href="/Appointment/Create">
-                Book
-              </Button>
-            </Card.Body>
-          </Card>
-          <Card>
-            <Card.Img variant="top" src={offer} />
-            <Card.Body>
-              <Card.Title>Offer2</Card.Title>
-              <Card.Text>
-                Some quick example text to build on the card title and make up the bulk of the cards
-                content.
-              </Card.Text>
-              <Button variant="outline-info" href="/Appointment/Create">
-                Book
-              </Button>
-            </Card.Body>
-          </Card>
-          <Card>
-            <Card.Img variant="top" src={offer} />
-            <Card.Body>
-              <Card.Title>Offer3</Card.Title>
-              <Card.Text>
-                Some quick example text to build on the card title and make up the bulk of the cards
-                content.
-              </Card.Text>
-              <Button variant="outline-info" href="/Appointment/Create">
-                Book
-              </Button>
-            </Card.Body>
-          </Card>
-          <Card>
-            <Card.Img variant="top" src={offer} />
-            <Card.Body>
-              <Card.Title>Offer4</Card.Title>
-              <Card.Text>
-                Some quick example text to build on the card title and make up the bulk of the cards
-                content.
-              </Card.Text>
-              <Button variant="outline-info" href="/Appointment/Create">
-                Book
-              </Button>
-            </Card.Body>
-          </Card>
-          <Card>
-            <Card.Img variant="top" src={offer} />
-            <Card.Body>
-              <Card.Title>Offer5</Card.Title>
-              <Card.Text>
-                Some quick example text to build on the card title and make up the bulk of the cards
-                content.
-              </Card.Text>
-              <Button variant="outline-info" href="/Appointment/Create">
-                Book
-              </Button>
-            </Card.Body>
-          </Card>
-          <Card>
-            <Card.Img variant="top" src={offer} />
-            <Card.Body>
-              <Card.Title>Offer6</Card.Title>
-              <Card.Text>
-                Some quick example text to build on the card title and make up the bulk of the cards
-                content.
-              </Card.Text>
-              <Button variant="outline-info" href="/Appointment/Create">
-                Book
-              </Button>
-            </Card.Body>
-          </Card>
+          {
+            this.state.results.map( (result) => {
+              <Card>
+                <Card.Img variant="top" src={result.imageURL} />
+                <Card.Body>
+                  <Card.Title>{result.offerName}</Card.Title>
+                  <Card.Text>
+                    {result.description}
+                  </Card.Text>
+                  <Button variant="outline-info" href="/Appointment/Create">
+                    Book
+                  </Button>
+                </Card.Body>
+              </Card>
+            })          
+          }
         </CardColumns>
       </div>
     );

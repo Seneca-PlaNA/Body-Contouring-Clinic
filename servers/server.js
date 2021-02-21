@@ -263,12 +263,12 @@ app.post('/add-offer', (req, res) => {
   offerHandler.addNewOffer(req.body).then((msg) => res.json(msg));
 });
 
-app.get('/offers', (req, res) => {
-  offerHandler
-    .viewAllOffers()
-    .then((offers) => res.json(offers))
-    .catch((err) => res.json(err));
-});
+// app.get('/offers', (req, res) => {
+//   offerHandler
+//     .viewAllOffers()
+//     .then((offers) => res.json(offers))
+//     .catch((err) => res.json(err));
+// });
 
 app.get('/offer/:id', (req, res) => {
   offerHandler
@@ -569,7 +569,16 @@ app.delete('/appointment/:id', (req, res) => {
     .catch((err) => res.json(err));
 });
 
-
+/*****************************************************************/
+/*   Main Server API                                             */
+/*****************************************************************/
+// Main_VIP getOffers 
+app.get('/offers', (req, res) => {
+  offerHandler
+    .viewAllOffers()
+    .then((offers) => res.json(offers))
+    .catch((err) => res.json(err));
+});
 
 app.use('/api', (req, res) => res.json({ backServer: 'true' }));
 
