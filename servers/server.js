@@ -576,7 +576,7 @@ app.delete('/appointment/:id', (req, res) => {
 app.get('/offers', (req, res) => {
   offerHandler
     .viewAllOffers()
-    .then((offers) => res.json(offers))
+    .then((offers) => res.json(offers ))
     .catch((err) => res.json(err));
 });
 
