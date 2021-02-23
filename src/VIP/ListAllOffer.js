@@ -40,7 +40,7 @@ class ListAllOffer extends React.Component {
               <Card.Body>
                 <Card.Title>{result.offerName}</Card.Title>
                 <Card.Text>{result.description}</Card.Text>
-                <Button variant="outline-info" href='/Appointment/Create/'>
+                <Button variant="outline-info" href={`/Appointment/Create?offerId=${result._id}`}>
                   Book
                 </Button>
               </Card.Body>
