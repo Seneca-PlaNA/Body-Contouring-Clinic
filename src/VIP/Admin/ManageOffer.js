@@ -15,10 +15,11 @@ class ManageOffer extends React.Component {
       ],
       children: 'Offer',
       offers: [],
+      selectedOffer: String,
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
-    this.deleteOffer = this.deleteOffer.bind(this);
+    this.handleOffer = this.handleOffer.bind(this);
   }
 
   showModal = () => {
@@ -29,13 +30,35 @@ class ManageOffer extends React.Component {
     this.setState({ show: false });
   };
 
-  deleteOffer = () => {
-    this.setState({ show: false });
+  handleOffer = () => {
+    this.deleteOffer()
+    .then(() => {
+      this.getOffers()
+      .then((data) => {
+        this.setState({
+          offers: data,
+            });
+        });
+    });
+
+    this.setState({ 
+      show: false,
+      selectedOffer: null })
   };
 
   getOffers() {
     return new Promise((resolve) => {
       fetch('http://localhost:3001/offers')
+        .then((response) => response.json())
+        .then((results) => {
+          resolve(results);
+        });
+    });
+  }
+
+  deleteOffer(){
+    return new Promise((resolve) => {
+      fetch('http://localhost:3001/offer/'+ this.state.selectedOffer, {method: 'DELETE'})
         .then((response) => response.json())
         .then((results) => {
           resolve(results);
@@ -76,58 +99,40 @@ class ManageOffer extends React.Component {
                 <td></td>
                 <td></td>
               </tr>
-              <tr>
-                <td>
-                  <input type="checkbox" />
-                </td>
-                <td>01</td>
-                <td>Offer 1</td>
-                <td>Some quick example text to build on the ca...</td>
-                <td>
-                  <Button variant="outline-secondary" href="/VIP/Admin/Manage/Edit">
-                    Edit
-                  </Button>
-                </td>
-                <td>
-                  <Button variant="outline-danger" onClick={this.showModal}>
-                    Delete
-                  </Button>
-                </td>
-                <PopUp
-                  show={this.state.show}
-                  handleClose={this.hideModal}
-                  handleDelete={this.deleteOffer}
-                  text={this.state.children}
-                  btn1="Cancel"
-                  btn2="Delete"
-                />
-              </tr>
-              <tr>
-                <td>
-                  <input type="checkbox" />
-                </td>
-                <td>02</td>
-                <td>Offer 2</td>
-                <td>Some quick example text to build on the ca...</td>
-                <td>
-                  <Button variant="outline-secondary" href="/VIP/Admin/Manage/Edit">
-                    Edit
-                  </Button>
-                </td>
-                <td>
-                  <Button variant="outline-danger" onClick={this.showModal}>
-                    Delete
-                  </Button>
-                </td>
-                <PopUp
-                  show={this.state.show}
-                  handleClose={this.hideModal}
-                  handleDelete={this.deleteOffer}
-                  text={this.state.children}
-                  btn1="Cancel"
-                  btn2="Delete"
-                />
-              </tr>
+              { this.state.offers.map((result, index) => (
+                  // eslint-disable-next-line react/jsx-key
+                  <tr>
+                  <td>
+                    <input type="checkbox" />
+                  </td>
+                  <td>{index}</td>
+                  <td>{result.offerName}</td>
+                  <td>{result.description}</td>
+                  <td>
+                    <Button variant="outline-secondary" href={`/VIP/Admin/Manage/Edit?offerId=`+ result._id}>
+                      Edit
+                    </Button>
+                  </td>
+                  <td>
+                    <Button variant="outline-danger" onClick={()=>{
+                      this.setState({
+                        show: true,
+                        selectedOffer: result._id,
+                      });
+                    }}>
+                      Delete
+                    </Button>
+                  </td>
+                  <PopUp
+                    show={this.state.show}
+                    handleClose={this.hideModal}
+                    handleDelete={this.handleOffer}
+                    text={this.state.children}
+                    btn1="Cancel"
+                    btn2="Delete"
+                  />
+                </tr>
+              ))}
             </table>
             <br />
             <span style={pagination}>
