@@ -590,6 +590,9 @@ app.delete('/offer/:id', (req, res) => {
 
 // Admin_VIP createOffer
 app.post('/add-offer', (req, res) => {
+  console.log("before : " + req.body);
+  req.body.startDate = new Date();
+  console.log("after : " + req.body);
   offerHandler.addNewOffer(req.body).then((msg) => res.json(msg));
 });
 

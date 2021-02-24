@@ -19,7 +19,6 @@ const offerSchema = new Schema(
     },
     endDate: {
       type: Date,
-      required: true,
     },
     description: {
       type: String,

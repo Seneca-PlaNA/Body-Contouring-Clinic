@@ -23,7 +23,6 @@ class CreateOffer extends React.Component {
 
   handlSubmit(event) {
     event.preventDefault();
-    console.log(this.state.offer);
     fetch('http://localhost:3001/add-offer',{
       method: "POST",
       body: JSON.stringify(this.state),
@@ -45,8 +44,6 @@ class CreateOffer extends React.Component {
   onDescriptionChange(event) {
     this.setState({
       description: event.target.value,
-      startDate: "2020-01-30T00:00:00.000Z",
-      endDate: "2021-04-12T00:00:00.000Z",
     });
   }
 
