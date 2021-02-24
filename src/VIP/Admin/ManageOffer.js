@@ -19,7 +19,7 @@ class ManageOffer extends React.Component {
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
-    this.handleOffer = this.handleOffer.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   showModal = () => {
@@ -30,7 +30,7 @@ class ManageOffer extends React.Component {
     this.setState({ show: false });
   };
 
-  handleOffer = () => {
+  handleDelete = () => {
     this.deleteOffer()
     .then(() => {
       this.getOffers()
@@ -126,7 +126,7 @@ class ManageOffer extends React.Component {
                   <PopUp
                     show={this.state.show}
                     handleClose={this.hideModal}
-                    handleDelete={this.handleOffer}
+                    handleDelete={this.handleDelete}
                     text={this.state.children}
                     btn1="Cancel"
                     btn2="Delete"
