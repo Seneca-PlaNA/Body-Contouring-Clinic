@@ -258,10 +258,10 @@ app.delete('/page/:id', (req, res) => {
     .catch((err) => res.json(err));
 });
 
-// offer
-app.post('/add-offer', (req, res) => {
-  offerHandler.addNewOffer(req.body).then((msg) => res.json(msg));
-});
+// // offer
+// app.post('/add-offer', (req, res) => {
+//   offerHandler.addNewOffer(req.body).then((msg) => res.json(msg));
+// });
 
 // app.get('/offers', (req, res) => {
 //   offerHandler
@@ -586,6 +586,11 @@ app.delete('/offer/:id', (req, res) => {
     .deleteOfferById(req.params.id)
     .then((offer) => res.json(offer))
     .catch((err) => res.json(err));
+});
+
+// Admin_VIP createOffer
+app.post('/add-offer', (req, res) => {
+  offerHandler.addNewOffer(req.body).then((msg) => res.json(msg));
 });
 
 app.use('/api', (req, res) => res.json({ backServer: 'true' }));

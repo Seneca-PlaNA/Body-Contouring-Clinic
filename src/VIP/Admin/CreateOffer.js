@@ -12,7 +12,42 @@ class CreateOffer extends React.Component {
         { url: '/VIP/Admin', title: 'Special Offer' },
         { url: '/VIP/Admin/Manage', title: 'Offer Manage' },
       ],
+      offerName: String,
+      services: [],
+      startDate: Date,
+      endDate: Date,
+      description: String,
+      imageURL: String,
     };
+  }
+
+  handlSubmit(event) {
+    event.preventDefault();
+    console.log(this.state.offer);
+    fetch('http://localhost:3001/add-offer',{
+      method: "POST",
+      body: JSON.stringify(this.state),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },})
+    .then((response) => (response.json()))
+    .catch((err) => (console.log(err)));
+
+  }
+
+  onNameChange(event) {
+    this.setState({
+      offerName: event.target.value
+    });
+  }
+
+  onDescriptionChange(event) {
+    this.setState({
+      description: event.target.value,
+      startDate: "2020-01-30T00:00:00.000Z",
+      endDate: "2021-04-12T00:00:00.000Z",
+    });
   }
 
   render() {
@@ -24,21 +59,21 @@ class CreateOffer extends React.Component {
           <h2 className="PageTitle">Create New Offer</h2>
           <br />
           <Container>
-            <Form>
-              <Form.Group as={Row}>
+            <Form onSubmit={this.handlSubmit.bind(this)} method="POST"> 
+              <Form.Group as={Row} controlId="offerName">
                 <Form.Label column sm={2}>
                   Title:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="text" placeholder="Offer Title"></Form.Control>
+                  <Form.Control type="text" placeholder="Offer Title" onChange={this.onNameChange.bind(this)} />
                 </Col>
               </Form.Group>
-              <Form.Group as={Row}>
+              <Form.Group as={Row} controlId="description">
                 <Form.Label column sm={2}>
                   Contents:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control as="textarea" rows={3} />
+                  <Form.Control as="textarea" rows={3} onChange={this.onDescriptionChange.bind(this)}/>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -57,7 +92,7 @@ class CreateOffer extends React.Component {
                     </Button>
                   </Col>
                   <Col md="auto">
-                    <Button variant="outline-info" href="/VIP/Admin/Manage/Create">
+                    <Button variant="outline-info" type="submit">
                       Save
                     </Button>
                   </Col>
