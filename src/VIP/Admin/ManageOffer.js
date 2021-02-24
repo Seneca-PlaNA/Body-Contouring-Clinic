@@ -3,6 +3,7 @@ import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
 import { Row, Col, Button } from 'react-bootstrap';
 import PopUp from '../../PopUp';
+import { Link } from 'react-router-dom';
 
 class ManageOffer extends React.Component {
   constructor() {
@@ -15,7 +16,7 @@ class ManageOffer extends React.Component {
       ],
       children: 'Offer',
       offers: [],
-      selectedOffer: String,
+      selectedOffer: {},
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -58,7 +59,7 @@ class ManageOffer extends React.Component {
 
   deleteOffer(){
     return new Promise((resolve) => {
-      fetch('http://localhost:3001/offer/'+ this.state.selectedOffer, {method: 'DELETE'})
+      fetch('http://localhost:3001/offer/'+ this.state.selectedOffer._id, {method: 'DELETE'})
         .then((response) => response.json())
         .then((results) => {
           resolve(results);
@@ -109,15 +110,17 @@ class ManageOffer extends React.Component {
                   <td>{result.offerName}</td>
                   <td>{result.description}</td>
                   <td>
-                    <Button variant="outline-secondary" href={`/VIP/Admin/Manage/Edit?offerId=`+ result._id}>
-                      Edit
-                    </Button>
+                    <Link to={`/VIP/Admin/Manage/Edit/${result._id}`}>
+                      <Button variant="outline-secondary">
+                        Edit
+                      </Button>
+                    </Link>
                   </td>
                   <td>
                     <Button variant="outline-danger" onClick={()=>{
                       this.setState({
                         show: true,
-                        selectedOffer: result._id,
+                        selectedOffer: result,
                       });
                     }}>
                       Delete

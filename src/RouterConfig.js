@@ -107,7 +107,8 @@ class RouterConfig extends React.Component {
           <Route exact path="/VIP/Admin" render={() => <VIPHomebyAdmin />} />
           <Route exact path="/VIP/Admin/Manage" render={() => <VIPManage />} />
           <Route exact path="/VIP/Admin/Manage/Create" render={() => <CreateOffer />} />
-          <Route exact path="/VIP/Admin/Manage/Edit" render={() => <EditOffer />} />
+          <Route exact path='/VIP/Admin/Manage/Edit/:id' component={EditOffer}/>
+
 
           {/* Request URL */}
           <Route exact path="/Request" render={() => <RequestHome />} />
