@@ -1,7 +1,7 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
 import '../../App.css';
-import { Modal } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 
 class ViewFAQ extends React.Component {
   render() {
@@ -20,6 +20,11 @@ class ViewFAQ extends React.Component {
             be indicated during checkout!
           </p>
         </Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-secondary" href="/Request/Admin/FAQ/Edit">
+            Edit
+          </Button>
+        </Modal.Footer>
       </Modal>
     );
   }

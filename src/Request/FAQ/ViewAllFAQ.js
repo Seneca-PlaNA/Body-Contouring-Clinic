@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../App.css';
-import ViewFAQbyAdmin from '../Admin/ViewFAQbyAdmin';
+import ViewFAQ from './ViewFAQ';
 import { ListGroup, Container, Tabs, Tab } from 'react-bootstrap';
 
 class ViewAllFAQ extends React.Component {
@@ -106,8 +106,7 @@ class ViewAllFAQ extends React.Component {
             </Tab>
           </Tabs>
         </Container>
-        {/* <ViewFAQ show={this.state.show} handleClose={this.hideFAQ} /> */}
-        <ViewFAQbyAdmin show={this.state.show} handleClose={this.hideFAQ} />
+        <ViewFAQ show={this.state.show} handleClose={this.hideFAQ} />
         <br />
         <br />
       </div>
