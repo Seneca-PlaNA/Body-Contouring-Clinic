@@ -14,6 +14,7 @@ class ManageOffer extends React.Component {
         { url: '/VIP/Admin/Manage', title: 'Offer Manage' },
       ],
       children: 'Offer',
+      offers: [],
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -32,6 +33,24 @@ class ManageOffer extends React.Component {
     this.setState({ show: false });
   };
 
+  getOffers() {
+    return new Promise((resolve) => {
+      fetch('http://localhost:3001/offers')
+        .then((response) => response.json())
+        .then((results) => {
+          resolve(results);
+        });
+    });
+  }
+
+  componentDidMount() {
+    this.getOffers()
+      .then((data) => {
+        this.setState({
+          offers: data,
+        });
+    });
+  }
   render() {
     const pagination = {
       color: '#B58970',

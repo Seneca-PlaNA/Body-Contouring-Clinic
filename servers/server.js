@@ -284,12 +284,12 @@ app.put('/offer/:id', (req, res) => {
     .catch((err) => res.json(err));
 });
 
-app.delete('/offer/:id', (req, res) => {
-  offerHandler
-    .deleteOfferById(req.params.id)
-    .then((offer) => res.json(offer))
-    .catch((err) => res.json(err));
-});
+// app.delete('/offer/:id', (req, res) => {
+//   offerHandler
+//     .deleteOfferById(req.params.id)
+//     .then((offer) => res.json(offer))
+//     .catch((err) => res.json(err));
+// });
 
 // staff
 app.post('/create-staff', (req, res) => {
@@ -577,6 +577,14 @@ app.get('/offers', (req, res) => {
   offerHandler
     .viewAllOffers()
     .then((offers) => res.json(offers ))
+    .catch((err) => res.json(err));
+});
+
+// Admin_VIP deleteOffer
+app.delete('/offer/:id', (req, res) => {
+  offerHandler
+    .deleteOfferById(req.params.id)
+    .then((offer) => res.json(offer))
     .catch((err) => res.json(err));
 });
 
