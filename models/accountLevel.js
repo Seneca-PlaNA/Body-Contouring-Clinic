@@ -3,10 +3,6 @@ const Schema = mongoose.Schema;
 
 const accountLevelSchema = new Schema(
   {
-    accountLevelId: {
-      type: Number,
-      require: true,
-    },
     accountLevelName: {
       type: String,
       required: true,
