@@ -595,6 +595,14 @@ app.post('/add-offer', (req, res) => {
   offerHandler.addNewOffer(req.body).then((msg) => res.json(msg));
 });
 
+// Admin_VIP createOffer
+app.get('/offer/services/:id', (req, res) => {
+  offerHandler
+    .viewOfferServiceById(req.params.id)
+    .then((offer) => res.json(offer.services.length))
+    .catch((err) => res.json(err));
+});
+
 app.use('/api', (req, res) => res.json({ backServer: 'true' }));
 
 app.listen(port, () => {
