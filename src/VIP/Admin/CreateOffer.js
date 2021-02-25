@@ -4,14 +4,15 @@ import SideBar from '../../SideBar/SideBar';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 
 class CreateOffer extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       show: false,
       items: [
         { url: '/VIP/Admin', title: 'Special Offer' },
         { url: '/VIP/Admin/Manage', title: 'Offer Manage' },
       ],
+      // create offer data
       offerName: String,
       services: [],
       startDate: Date,
@@ -23,6 +24,7 @@ class CreateOffer extends React.Component {
 
   handlSubmit(event) {
     event.preventDefault();
+
     fetch('http://localhost:3001/add-offer',{
       method: "POST",
       body: JSON.stringify(this.state),
@@ -36,15 +38,27 @@ class CreateOffer extends React.Component {
   }
 
   onNameChange(event) {
-    this.setState({
+    this.setState(() => ({
       offerName: event.target.value
-    });
+    }));
   }
 
   onDescriptionChange(event) {
-    this.setState({
+    this.setState(() => ({
       description: event.target.value,
-    });
+    }));
+  }
+
+  onStartDateChange(event) {
+    this.setState(() => ({
+      startDate: event.target.value,
+    }));
+  }
+
+  onEndDateChange(event) {
+    this.setState(() => ({
+      endDate: event.target.value,
+    }));
   }
 
   render() {
@@ -71,6 +85,17 @@ class CreateOffer extends React.Component {
                 </Form.Label>
                 <Col sm={6}>
                   <Form.Control as="textarea" rows={3} onChange={this.onDescriptionChange.bind(this)}/>
+                </Col>
+              </Form.Group>
+              <Form.Group as={Row} inline>
+                <Form.Label column sm={2}>
+                  Active Date
+                </Form.Label>
+                <Col sm={3}>
+                  <Form.Control controlId="startDate" type="date" placeholder="start date" onChange={this.onStartDateChange.bind(this)} />
+                </Col>
+                <Col sm={3}>
+                  <Form.Control controlId="endDate" type="date" placeholder="end date" onChange={this.onEndDateChange.bind(this)} />
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>

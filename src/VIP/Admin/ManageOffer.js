@@ -102,7 +102,7 @@ class ManageOffer extends React.Component {
               </tr>
               { this.state.offers.map((result, index) => (
                   // eslint-disable-next-line react/jsx-key
-                  <tr>
+                  <tr key={result._id}>
                   <td>
                     <input type="checkbox" />
                   </td>

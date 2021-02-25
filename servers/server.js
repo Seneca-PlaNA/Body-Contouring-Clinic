@@ -258,17 +258,17 @@ app.delete('/page/:id', (req, res) => {
     .catch((err) => res.json(err));
 });
 
-// // offer
-// app.post('/add-offer', (req, res) => {
-//   offerHandler.addNewOffer(req.body).then((msg) => res.json(msg));
-// });
+// offer
+app.post('/add-offer', (req, res) => {
+  offerHandler.addNewOffer(req.body).then((msg) => res.json(msg));
+});
 
-// app.get('/offers', (req, res) => {
-//   offerHandler
-//     .viewAllOffers()
-//     .then((offers) => res.json(offers))
-//     .catch((err) => res.json(err));
-// });
+app.get('/offers', (req, res) => {
+  offerHandler
+    .viewAllOffers()
+    .then((offers) => res.json(offers))
+    .catch((err) => res.json(err));
+});
 
 app.get('/offer/:id', (req, res) => {
   offerHandler
@@ -284,12 +284,12 @@ app.put('/offer/:id', (req, res) => {
     .catch((err) => res.json(err));
 });
 
-// app.delete('/offer/:id', (req, res) => {
-//   offerHandler
-//     .deleteOfferById(req.params.id)
-//     .then((offer) => res.json(offer))
-//     .catch((err) => res.json(err));
-// });
+app.delete('/offer/:id', (req, res) => {
+  offerHandler
+    .deleteOfferById(req.params.id)
+    .then((offer) => res.json(offer))
+    .catch((err) => res.json(err));
+});
 
 // staff
 app.post('/create-staff', (req, res) => {
@@ -566,40 +566,6 @@ app.delete('/appointment/:id', (req, res) => {
   appointmentHandler
     .deleteAppointmentById(req.params.id)
     .then((appointment) => res.json(appointment))
-    .catch((err) => res.json(err));
-});
-
-/*****************************************************************/
-/*   Main Server API                                             */
-/*****************************************************************/
-// Main_VIP getOffers 
-app.get('/offers', (req, res) => {
-  offerHandler
-    .viewAllOffers()
-    .then((offers) => res.json(offers ))
-    .catch((err) => res.json(err));
-});
-
-// Admin_VIP deleteOffer
-app.delete('/offer/:id', (req, res) => {
-  offerHandler
-    .deleteOfferById(req.params.id)
-    .then((offer) => res.json(offer))
-    .catch((err) => res.json(err));
-});
-
-// Admin_VIP createOffer
-app.post('/add-offer', (req, res) => {
-  // load start date
-  req.body.startDate = new Date();
-  offerHandler.addNewOffer(req.body).then((msg) => res.json(msg));
-});
-
-// Admin_VIP createOffer
-app.get('/offer/services/:id', (req, res) => {
-  offerHandler
-    .viewOfferServiceById(req.params.id)
-    .then((offer) => res.json(offer.services.length))
     .catch((err) => res.json(err));
 });
 

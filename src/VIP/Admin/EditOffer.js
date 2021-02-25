@@ -2,6 +2,7 @@ import React from 'react';
 import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
 class EditOffer extends React.Component {
   constructor(props) {
@@ -14,27 +15,59 @@ class EditOffer extends React.Component {
       ],
       children: 'Offer',
       offer: {},
-      id: this.props,
     };
   }
 
-  getOffer(id) {
-    return new Promise((resolve) => {
-      fetch(`http://localhost:3001/offer/${id}`)
-        .then((response) => response.json())
-        .then((results) => {
-          resolve(results);
-        });
-    });
+  handlSubmit(event) {
+    event.preventDefault();
+
+    fetch(`http://localhost:3001/offer/${this.props.id}`,{
+      method: "PUT",
+      body: JSON.stringify(this.state),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },})
+    .then((response) => (response.json()))
+    .catch((err) => (console.log(err)));
   }
 
+  onNameChange(event) {
+    this.setState((prevState) => ({
+      offer: {
+        ...prevState.offer,
+        offerName: event.target.value,
+      }
+    }));
+  }
+
+  onDescriptionChange(event) {
+    this.setState(() => ({
+      offer: {
+        offerName: this.state.offer.offerName,
+        description: event.target.value,
+      }
+    }));
+    console.log(this.state.offer);
+  }
+
+  //   handleChange(event) {
+  //   this.setState((prevState) => ({
+  //     offer: {
+  //       ...prevState.offer,
+  //       [event.target.name]: event.target.value
+  //     }
+  //   }));
+  // }
+
   componentDidMount() {
-    this.getOffer(this.state.id)
+    fetch(`http://localhost:3001/offer/${this.props.id}`)
+      .then(response => response.json())
       .then((data) => {
-        console.log(this.state.id)
         this.setState({
           offer: data,
         });
+        console.log(this.state.offer);
     });
   }
 
@@ -48,13 +81,13 @@ class EditOffer extends React.Component {
           <h2 className="PageTitle">Edit Offer</h2>
           <br />
           <Container>
-            <Form>
+            <Form onSubmit={this.handlSubmit.bind(this)} method="PUT">
               <Form.Group as={Row}>
                 <Form.Label column sm={2}>
                   Title:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="text" placeholder="Offer Title" value={this.state.offer.offerName}></Form.Control>
+                  <Form.Control type="text" placeholder="Offer Title" value={this.state.offer.offerName} onChange={this.onNameChange.bind(this)}></Form.Control>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -62,9 +95,20 @@ class EditOffer extends React.Component {
                   Contents:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control as="textarea" rows={3} />
+                  <Form.Control as="textarea" rows={3} value={this.state.offer.description} onChange={this.onDescriptionChange.bind(this)} />
                 </Col>
               </Form.Group>
+              {/* <Form.Group as={Row} inline>
+                <Form.Label column sm={2}>
+                  Active Date
+                </Form.Label>
+                <Col sm={3}>
+                  <Form.Control controlId="startDate" type="date" placeholder="start date" onChange={this.onStartDateChange.bind(this)} />
+                </Col>
+                <Col sm={3}>
+                  <Form.Control controlId="endDate" type="date" placeholder="end date" onChange={this.onEndDateChange.bind(this)} />
+                </Col>
+              </Form.Group> */}
               <Form.Group as={Row}>
                 <Form.Label column sm={2}>
                   Attach File:
@@ -97,6 +141,10 @@ class EditOffer extends React.Component {
       </div>
     );
   }
+}
+
+EditOffer.propTypes = {
+  id : PropTypes.string.isRequired
 }
 
 export default EditOffer;
