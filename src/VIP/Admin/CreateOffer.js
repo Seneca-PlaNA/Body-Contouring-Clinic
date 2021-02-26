@@ -2,6 +2,7 @@ import React from 'react';
 import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
+import { Redirect } from 'react-router';
 
 class CreateOffer extends React.Component {
   constructor(props) {
@@ -13,12 +14,15 @@ class CreateOffer extends React.Component {
         { url: '/VIP/Admin/Manage', title: 'Offer Manage' },
       ],
       // create offer data
-      offerName: String,
-      services: [],
-      startDate: Date,
-      endDate: Date,
-      description: String,
-      imageURL: String,
+      offer: {
+        offerName: String,
+        services: [],
+        startDate: Date,
+        endDate: Date,
+        description: String,
+        imageURL: String,
+      },
+      completed: false,
     };
   }
 
@@ -27,41 +31,60 @@ class CreateOffer extends React.Component {
 
     fetch('http://localhost:3001/add-offer',{
       method: "POST",
-      body: JSON.stringify(this.state),
+      body: JSON.stringify(this.state.offer),
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },})
     .then((response) => (response.json()))
+    .then(()=> this.setState({completed: true}))
     .catch((err) => (console.log(err)));
 
   }
 
   onNameChange(event) {
     this.setState(() => ({
-      offerName: event.target.value
+      offer:{
+        ...this.state.offer,
+        offerName: event.target.value
+      }
     }));
   }
 
   onDescriptionChange(event) {
     this.setState(() => ({
-      description: event.target.value,
+      offer:{
+        ...this.state.offer,  
+        description: event.target.value,
+      }
     }));
   }
 
   onStartDateChange(event) {
     this.setState(() => ({
-      startDate: event.target.value,
+      offer:{
+        ...this.state.offer, 
+        startDate: event.target.value,
+      }
     }));
   }
 
   onEndDateChange(event) {
     this.setState(() => ({
-      endDate: event.target.value,
+      offer:{
+        ...this.state.offer, 
+        endDate: event.target.value,
+      }
     }));
   }
 
   render() {
+    if(this.state.completed)
+    {
+      return <Redirect push to={{
+        pathname: '/VIP/Admin/Manage'
+      }}/>
+    }
     return (
       <div className="row">
         <div className="col-md-1"></div>

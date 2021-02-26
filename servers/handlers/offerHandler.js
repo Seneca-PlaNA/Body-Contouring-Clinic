@@ -44,6 +44,7 @@ exports.viewOneOfferById = function (id) {
 // update one
 exports.editOfferById = function (data, id) {
   return new Promise((resolve, reject) => {
+    console.log(data);
     Offer.updateOne({ _id: id }, { $set: data })
       .exec()
       .then(() => {
