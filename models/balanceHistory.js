@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const balanceHistorySchema = new Schema(
   {
-    balanceId: [
+    balances: [
       {
         type: Schema.Types.ObjectId,
         ref: 'balance',

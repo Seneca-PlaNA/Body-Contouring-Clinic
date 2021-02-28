@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const WorkScheduleSchema = new Schema({
-    staffId: {
+    staff: {
         type: Schema.Types.ObjectId,
         ref: 'staffs',
         required: true
     },
-    dateId: {
+    date: {
         type: Schema.Types.ObjectId,
         ref: 'dates',
         required: true

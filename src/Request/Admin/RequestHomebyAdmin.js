@@ -4,7 +4,6 @@ import searchIcon from '../../resources/searchIcon.png';
 import ListAllRequestbyAdmin from './ListAllRequestbyAdmin';
 import SideBar from '../../SideBar/SideBar';
 import { Button, Container, Form, Row, Col } from 'react-bootstrap';
-import PopUp from '../../PopUp';
 
 class RequestHomebyAdmin extends React.Component {
   constructor() {
@@ -17,12 +16,26 @@ class RequestHomebyAdmin extends React.Component {
       ],
       children: 'Request',
       auth: 'Admin',
+      dayValue: 0,
+      statusValue: '',
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.deleteReq = this.deleteReq.bind(this);
+    this.handleStatusChange = this.handleStatusChange.bind(this);
+    this.handleDayChange = this.handleDayChange.bind(this);
   }
 
+  handleStatusChange(e) {
+    this.setState({
+      statusValue: e.target.value
+    });
+  }
+  handleDayChange(e) {
+    this.setState({
+      dayValue: e.target.value
+    });
+  }
   showModal = () => {
     this.setState({ show: true });
   };
@@ -45,7 +58,13 @@ class RequestHomebyAdmin extends React.Component {
           <br />
           <div className="contents">
             <Form inline>
-              <Form.Control as="select">
+              <Form.Control
+                as="select"
+                name="days"
+                value={this.state.dayValue}
+                onChange={this.handleDayChange}
+              >
+                <option value="0">N/A</option>
                 <option value="30">Last 30 Days</option>
                 <option value="60">Last 60 Days</option>
                 <option value="90">Last 90 Days</option>
@@ -70,36 +89,32 @@ class RequestHomebyAdmin extends React.Component {
               >
                 <img src={searchIcon} alt="Search" />
               </Button>
-              <Form.Control as="select" style={{ 'margin-left': '30px', width: '100px' }}>
-                <option value="title">Unsolved</option>
-                <option value="content">Unread</option>
-                <option value="author">New</option>
-                <option value="titleContent">New Since Last Login</option>
+              <Form.Control
+                as="select"
+                name="request-status"
+                value={this.state.statusValue}
+                onChange={this.handleStatusChange}
+                style={{ 'margin-left': '30px', width: '100px' }}
+              >
+                <option value="none" default>
+                  All
+                </option>
+                <option value="unsolved">Unsolved</option>
+                <option value="in-progress">In-Progress</option>
+                <option value="solved">Solved</option>
               </Form.Control>
             </Form>
             <br />
-            <ListAllRequestbyAdmin />
+            <ListAllRequestbyAdmin status={this.state.statusValue} day={this.state.dayValue} />
             <Container>
               <Row>
                 <Col xs={10}></Col>
+                <Col xs={1}></Col>
                 <Col xs={1}>
                   <Button variant="outline-info" href="/Request/Admin/Answer">
                     Answer
                   </Button>
                 </Col>
-                <Col xs={1}>
-                  <Button variant="outline-secondary" onClick={this.showModal}>
-                    Delete
-                  </Button>
-                </Col>
-                <PopUp
-                  show={this.state.show}
-                  handleClose={this.hideModal}
-                  handleDelete={this.deleteReq}
-                  text={this.state.children}
-                  btn1="Cancel"
-                  btn2="Delete"
-                />
               </Row>
             </Container>
             <br />
