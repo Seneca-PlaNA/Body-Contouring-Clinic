@@ -35,6 +35,9 @@ exports.viewAllAppointments = function () {
 exports.viewAppointmentById = function (id) {
   return new Promise((resolve, reject) => {
     Appointment.findOne({ _id: id })
+      .populate('customer')
+      .populate('schedule')
+      .populate('service')
       .exec()
       .then((appointment) => {
         resolve(appointment);
