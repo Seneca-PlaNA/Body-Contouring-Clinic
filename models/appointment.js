@@ -9,17 +9,17 @@ const AppointmentSchema = new Schema({
     specialRequest: {
         type: String,
     },
-    customerId: {
+    customer: {
         type: Schema.Types.ObjectId,
         ref: 'customers',
         required: true
     },
-    scheduleId: {
+    schedule: {
         type: Schema.Types.ObjectId,
         ref: 'workSchedule',
         required: true
     },
-    services: {
+    service: {
       type: Schema.Types.ObjectId,
       ref: 'services',
       required: true

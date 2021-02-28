@@ -18,6 +18,10 @@ exports.addNewAppointments = function (data) {
 exports.viewAllAppointments = function () {
   return new Promise((resolve, reject) => {
     Appointment.find()
+      .populate('customer')
+      .populate('schedule')
+      .populate('service')
+      .exec()
       .then((appointments) => {
         resolve(appointments);
       })
