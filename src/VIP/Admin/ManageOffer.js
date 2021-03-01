@@ -49,7 +49,7 @@ class ManageOffer extends React.Component {
 
   getOffers() {
     return new Promise((resolve) => {
-      fetch('http://localhost:3001/offers')
+      fetch(`${process.env.REACT_APP_API_URL}/offer`)
         .then((response) => response.json())
         .then((results) => {
           resolve(results);
@@ -59,7 +59,7 @@ class ManageOffer extends React.Component {
 
   deleteOffer(){
     return new Promise((resolve) => {
-      fetch('http://localhost:3001/offer/'+ this.state.selectedOffer._id, {method: 'DELETE'})
+      fetch(`${process.env.REACT_APP_API_URL}/offer/`+ this.state.selectedOffer._id, {method: 'DELETE'})
         .then((response) => response.json())
         .then((results) => {
           resolve(results);

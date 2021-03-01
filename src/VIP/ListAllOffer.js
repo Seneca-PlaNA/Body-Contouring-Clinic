@@ -13,7 +13,7 @@ class ListAllOffer extends React.Component {
 
   getOffers() {
     return new Promise((resolve) => {
-      fetch('http://localhost:3001/offers')
+      fetch(`${process.env.REACT_APP_API_URL}/offers`)
         .then((response) => response.json())
         .then((results) => {
           resolve(results);
