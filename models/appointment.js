@@ -16,7 +16,7 @@ const AppointmentSchema = new Schema({
     },
     schedule: {
         type: Schema.Types.ObjectId,
-        ref: 'workSchedule',
+        ref: 'workSchedules',
         required: true
     },
     service: {

@@ -14,11 +14,28 @@ class AppointmentsAdmin extends React.Component {
         { url: '/Appointment/Admin/Appointment', title: 'View All Appointments' },
         { url: '/Appointment/Admin/Create', title: 'Create Appointment' },
       ],
+      appointments: [],
     };
   }
 
+  getAppointments() {
+    return new Promise((resolve) => {
+      fetch(`http://localhost:3001/appointments`)
+        .then((response) => response.json())
+        .then((results) => {
+          resolve(results);
+        });
+    });
+  };
+
   componentDidMount() {
     document.title = 'All Appointments | Body Contouring Clinic';
+    this.getAppointments()
+    .then((data) => {
+      this.setState({
+        appointments: data,
+      });
+  });
   }
 
   render() {
@@ -69,66 +86,19 @@ class AppointmentsAdmin extends React.Component {
                       <th>Info</th>
                       <th>Price</th>
                     </tr>
-                    <tr>
-                      <td>Brook Soso</td>
-                      <td>2021-01-14</td>
-                      <td>13:00</td>
-                      <td>Laser-Any Body area 6 sessions</td>
+                    {this.state.appointments.map((result)=>(
+                      // eslint-disable-next-line react/jsx-key
+                      <tr>
+                      <td>{result.customer.account.firstName} {result.customer.account.lastName}</td>
+                      <td>{result.schedule.date.date}</td>
+                      <td>{result.schedule.times.map((period)=>(period.time))} </td>
+                      <td>{result.service.serviceName}</td>
                       <td>$99</td>
                       <td>
-                        <a href="/Appointment/Admin/Appointment">details</a>
+                        <a href={`/Appointment/Admin/Appointment/${result._id}`}>details</a>
                       </td>
                     </tr>
-                    <tr>
-                      <td>Mei Chang</td>
-                      <td>2021-01-21</td>
-                      <td>10:30</td>
-                      <td>Pay as you go add on Medium</td>
-                      <td>$79</td>
-                      <td>
-                        <a href="/Appointment/Admin/Appointment">details</a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Brook Soso</td>
-                      <td>2021-01-14</td>
-                      <td>13:00</td>
-                      <td>Laser-Any Body area 6 sessions</td>
-                      <td>$99</td>
-                      <td>
-                        <a href="/Appointment/Admin/Appointment">details</a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Mei Chang</td>
-                      <td>2021-01-21</td>
-                      <td>10:30</td>
-                      <td>Pay as you go add on Medium</td>
-                      <td>$79</td>
-                      <td>
-                        <a href="/Appointment/Admin/Appointment">details</a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Brook Soso</td>
-                      <td>2021-01-14</td>
-                      <td>13:00</td>
-                      <td>Laser-Any Body area 6 sessions</td>
-                      <td>$99</td>
-                      <td>
-                        <a href="/Appointment/Admin/Appointment">details</a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Mei Chang</td>
-                      <td>2021-01-21</td>
-                      <td>10:30</td>
-                      <td>Pay as you go add on Medium</td>
-                      <td>$79</td>
-                      <td>
-                        <a href="/Appointment/Admin/Appointment">details</a>
-                      </td>
-                    </tr>
+                    ))}
                   </table>
                   <br />
                   <span style={pagination}>

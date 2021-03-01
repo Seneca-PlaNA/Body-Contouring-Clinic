@@ -4,6 +4,7 @@ import '../../App.css';
 import styles from '../../app.module.css';
 import SideBar from '../../SideBar/SideBar';
 import PopUp from '../../PopUp';
+import PropTypes from 'prop-types';
 
 class AppointmentAdmin extends React.Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class AppointmentAdmin extends React.Component {
       show: false,
       children: 'appointment',
       deletedLink: '/Appointment/Admin/Deleted',
+      appointment: {},
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -35,8 +37,16 @@ class AppointmentAdmin extends React.Component {
     this.setState({ show: false });
   };
 
+
   componentDidMount() {
     document.title = 'Create New Appointment | Body Contouring Clinic';
+    fetch(`http://localhost:3001/appointment/${this.props.id}`)
+      .then(response => response.json())
+      .then((data) => {
+        this.setState({
+          appointment: data,
+        });
+    });
   }
 
   render() {
@@ -54,15 +64,15 @@ class AppointmentAdmin extends React.Component {
                   <table className={styles.appointmentTable}>
                     <tr>
                       <td>Customer Name: </td>
-                      <td>Brook Soso</td>
+                      <td>{this.state.appointment.customer.account.firstName} {this.state.appointment.customer.account.lastName}</td>
                     </tr>
                     <tr>
                       <td>Date:</td>
-                      <td>2021/01/24</td>
+                      <td>{this.state.appointment.schedule.date.date}</td>
                     </tr>
                     <tr>
                       <td>Time:</td>
-                      <td>13:00-14:00</td>
+                      <td>{this.state.appointment.schedule.times.time}</td>
                     </tr>
                     <tr>
                       <td>Technician:</td>
@@ -113,6 +123,10 @@ class AppointmentAdmin extends React.Component {
       </>
     );
   }
+}
+
+AppointmentAdmin.propTypes = {
+  id : PropTypes.string.isRequired
 }
 
 export default AppointmentAdmin;
