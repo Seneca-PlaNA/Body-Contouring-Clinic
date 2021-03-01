@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const balanceSchema = new Schema(
   {
-    serviceId: {
+    service: {
       type: Schema.Types.ObjectId,
       ref: 'services',
       required: true,

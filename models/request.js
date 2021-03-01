@@ -3,16 +3,16 @@ const Schema = mongoose.Schema;
 
 const requestSchema = new Schema(
   {
-    customerId: {
+    customer: {
       type: Schema.Types.ObjectId,
       ref: 'customers',
       required: true,
     },
-    serviceCategoryId: {
+    serviceCategory: {
       type: Schema.Types.ObjectId,
       ref: 'serviceCategories',
     },
-    requestCategoryId: {
+    requestCategory: {
       type: Schema.Types.ObjectId,
       ref: 'requestCategories',
       required: true,

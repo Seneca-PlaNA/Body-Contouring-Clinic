@@ -3,11 +3,7 @@ const Schema = mongoose.Schema;
 
 const serviceCategorySchema = new Schema(
   {
-    // _id: {
-    //   type: mongoose.Types.ObjectId,
-    //   required: true,
-    // },
-    CategoryName: {
+    name: {
       type: String,
       required: true,
     },
