@@ -2,6 +2,7 @@
 import React from 'react';
 import '../App.css';
 import { Button, Card, CardColumns } from 'react-bootstrap';
+const API_URL = process.env.API_URL
 
 class ListAllOffer extends React.Component {
   constructor(props) {
@@ -13,7 +14,7 @@ class ListAllOffer extends React.Component {
 
   getOffers() {
     return new Promise((resolve) => {
-      fetch('http://localhost:3001/offers')
+      fetch({API_URL} +'/offers')
         .then((response) => response.json())
         .then((results) => {
           resolve(results);
