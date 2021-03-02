@@ -21,6 +21,8 @@ const dateHandler = require('./handlers/dateHandler');
 const timeHandler = require('./handlers/timeHandler');
 const workScheduleHandler = require('./handlers/workScheduleHandler');
 const appointmentHandler = require('./handlers/appointmentHandler');
+const faqHandler = require('./handlers/faqHandler');
+const faqCategoryHandler = require('./handlers/faqCategoryHandler');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -566,6 +568,72 @@ app.delete('/appointment/:id', (req, res) => {
   appointmentHandler
     .deleteAppointmentById(req.params.id)
     .then((appointment) => res.json(appointment))
+    .catch((err) => res.json(err));
+});
+
+// faq
+app.post('/create-faq', (req, res) => {
+  faqHandler.addNewFAQ(req.body).then((msg) => res.json(msg));
+});
+
+app.get('/faqs', (req, res) => {
+  faqHandler
+    .viewAllFAQs()
+    .then((faqs) => res.json(faqs))
+    .catch((err) => res.json(err));
+});
+
+app.get('/faq/:id', (req, res) => {
+  faqHandler
+    .viewFAQById(req.params.id)
+    .then((faq) => res.json(faq))
+    .catch((err) => res.json(err));
+});
+
+app.put('/faq/:id', (req, res) => {
+  faqHandler
+    .editFAQById(req.body, req.params.id)
+    .then((msg) => res.json(msg))
+    .catch((err) => res.json(err));
+});
+
+app.delete('/faq/:id', (req, res) => {
+  faqHandler
+    .deleteFAQById(req.params.id)
+    .then((faq) => res.json(faq))
+    .catch((err) => res.json(err));
+});
+
+// faq-category
+app.post('/create-faq-category', (req, res) => {
+  faqCategoryHandler.addNewFAQCategory(req.body).then((msg) => res.json(msg));
+});
+
+app.get('/faq-categories', (req, res) => {
+  faqCategoryHandler
+    .viewAllFAQCategories()
+    .then((faqCategories) => res.json(faqCategories))
+    .catch((err) => res.json(err));
+});
+
+app.get('/faq-category/:id', (req, res) => {
+  faqCategoryHandler
+    .viewFAQCategoryById(req.params.id)
+    .then((faqCategory) => res.json(faqCategory))
+    .catch((err) => res.json(err));
+});
+
+app.put('/faq-category/:id', (req, res) => {
+  faqCategoryHandler
+    .editFAQCategoryById(req.body, req.params.id)
+    .then((msg) => res.json(msg))
+    .catch((err) => res.json(err));
+});
+
+app.delete('/faq-category/:id', (req, res) => {
+  faqCategoryHandler
+    .deleteFAQCategoryById(req.params.id)
+    .then((faqCategory) => res.json(faqCategory))
     .catch((err) => res.json(err));
 });
 
