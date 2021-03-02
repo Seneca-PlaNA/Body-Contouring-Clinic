@@ -39,9 +39,8 @@ class AppointmentAdmin extends React.Component {
 
 
   componentDidMount() {
-    document.title = 'Create New Appointment | Body Contouring Clinic';
-    fetch(`http://localhost:3001/appointment/${this.props.id}`)
-      .then(response => response.json())
+    fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`)
+      .then(response => console.log(response.json()))
       .then((data) => {
         this.setState({
           appointment: data,
@@ -50,8 +49,9 @@ class AppointmentAdmin extends React.Component {
   }
 
   render() {
+    console.log(this.props.id);
     return (
-      <>
+
         <div className="row">
           <div className="col-md-1"></div>
           <SideBar items={this.state.items} />
@@ -64,7 +64,8 @@ class AppointmentAdmin extends React.Component {
                   <table className={styles.appointmentTable}>
                     <tr>
                       <td>Customer Name: </td>
-                      <td>{this.state.appointment.customer.account.firstName} {this.state.appointment.customer.account.lastName}</td>
+                      {/* <td>{this.state.appointment.customer.account.firstName} {this.state.appointment.customer.account.lastName}</td> */}
+                      <td>{this.state.appointment} </td>
                     </tr>
                     <tr>
                       <td>Date:</td>
@@ -120,7 +121,6 @@ class AppointmentAdmin extends React.Component {
             </Container>
           </div>
         </div>
-      </>
     );
   }
 }

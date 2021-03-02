@@ -4,6 +4,7 @@ import searchIcon from '../../resources/searchIcon.png';
 import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
 import styles from '../../app.module.css';
+import { Link } from 'react-router-dom';
 
 class AppointmentsAdmin extends React.Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class AppointmentsAdmin extends React.Component {
 
   getAppointments() {
     return new Promise((resolve) => {
-      fetch(`http://localhost:3001/appointments`)
+      fetch(`${process.env.REACT_APP_API_URL}/appointments`)
         .then((response) => response.json())
         .then((results) => {
           resolve(results);
@@ -95,7 +96,12 @@ class AppointmentsAdmin extends React.Component {
                       <td>{result.service.serviceName}</td>
                       <td>$99</td>
                       <td>
-                        <a href={`/Appointment/Admin/Appointment/${result._id}`}>details</a>
+                        <Link to={`/Appointment/Admin/Appointment/${result._id}`}>
+                          <Button variant="outline-secondary">
+                            details
+                          </Button>
+                        </Link>
+                        {/* <a href={`/Appointment/Admin/Appointment/${result._id}`}>details</a> */}
                       </td>
                     </tr>
                     ))}

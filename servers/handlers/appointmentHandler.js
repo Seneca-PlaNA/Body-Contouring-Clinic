@@ -49,11 +49,6 @@ exports.viewAppointmentById = function (id) {
         path: 'schedule',
         populate: [{ path: 'date'},{ path: 'times'}]
       })
-      .populate('service')
-      .exec()
-      .then((appointments) => {
-        resolve(appointments);
-      })
       .exec()
       .then((appointment) => {
         resolve(appointment);
