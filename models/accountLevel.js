@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const accountLevelSchema = new Schema(
   {
-    accountLevelName: {
+    name: {
       type: String,
       required: true,
     },

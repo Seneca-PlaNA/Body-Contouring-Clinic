@@ -9,7 +9,7 @@ class AppointmentDeletedAdmin extends React.Component {
     this.state = {
       items: [
         { url: '/Appointment', title: 'Appointment Home' },
-        { url: '/Appointment/Admin/Appointments', title: 'View All Appointments' },
+        { url: '/Appointment/Admin', title: 'View All Appointments' },
         { url: '/Appointment/Admin/Create', title: 'Create Appointment' },
       ],
     };
@@ -30,7 +30,7 @@ class AppointmentDeletedAdmin extends React.Component {
             <Container>
               <Row>
                 <Col>
-                  <Button variant="outline-info" href="/Appointment/Admin/Appointments">
+                  <Button variant="outline-info" href="/Appointment/Admin">
                     Back to Appointment List
                   </Button>
                 </Col>

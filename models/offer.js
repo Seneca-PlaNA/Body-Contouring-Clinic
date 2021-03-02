@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const offerSchema = new Schema(
   {
-    offerName: {
+    name: {
       type: String,
       required: true,
     },

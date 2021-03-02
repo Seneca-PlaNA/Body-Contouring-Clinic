@@ -38,7 +38,7 @@ class ListAllOffer extends React.Component {
             <Card>
               <Card.Img variant="top" src={result.imageURL} />
               <Card.Body>
-                <Card.Title>{result.offerName}</Card.Title>
+                <Card.Title>{result.name}</Card.Title>
                 <Card.Text>{result.description}</Card.Text>
                 <Button variant="outline-info" href={`/Appointment/Create?offerId=${result._id}`}>
                   Book

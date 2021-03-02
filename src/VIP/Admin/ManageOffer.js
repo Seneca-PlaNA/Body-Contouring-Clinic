@@ -49,7 +49,7 @@ class ManageOffer extends React.Component {
 
   getOffers() {
     return new Promise((resolve) => {
-      fetch(`${process.env.REACT_APP_API_URL}/offer`)
+      fetch(`${process.env.REACT_APP_API_URL}/offers`)
         .then((response) => response.json())
         .then((results) => {
           resolve(results);
@@ -107,7 +107,7 @@ class ManageOffer extends React.Component {
                     <input type="checkbox" />
                   </td>
                   <td>{index}</td>
-                  <td>{result.offerName}</td>
+                  <td>{result.name}</td>
                   <td>{result.description}</td>
                   <td>
                     <Link to={`/VIP/Admin/Manage/Edit/${result._id}`}>

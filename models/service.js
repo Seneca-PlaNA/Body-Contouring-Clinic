@@ -8,11 +8,11 @@ const serviceSchema = new Schema(
       ref: 'serviceCategories',
       required: true,
     },
-    serviceName: {
+    name: {
       type: String,
       required: true,
     },
-    serviceDescription: {
+    description: {
       type: String,
     },
     isActive: {

@@ -12,13 +12,13 @@ class CreateAppointmentAdmin extends React.Component {
       items: [
         { url: '/Appointment', title: 'Appointment Home' },
         {
-          url: '/Appointment/Admin/Appointments',
+          url: '/Appointment/Admin',
           title: 'View All Appointments',
         },
         { url: '/Appointment/Admin/Create', title: 'Create Appointment' },
       ],
       saveModal: false,
-      savedBackLink: '/Appointment/Admin/Appointment',
+      savedBackLink: '/Appointment/Admin',
       button: 'Back To Appointment',
       title: 'Appointment Saved!',
       serviceToggle: false,

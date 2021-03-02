@@ -23,7 +23,7 @@ class EditOffer extends React.Component {
   handlSubmit(event) {
     event.preventDefault();
     console.log(this.state.offer);
-    fetch(`http://localhost:3001/offer/${this.props.id}`,{
+    fetch(`${process.env.REACT_APP_API_URL}/offer/${this.props.id}`,{
       method: "PUT",
       body: JSON.stringify(this.state.offer),
       headers: {
@@ -39,7 +39,7 @@ class EditOffer extends React.Component {
     this.setState(() => ({
       offer: {
         ...this.state.offer,
-        offerName: event.target.value,
+        name: event.target.value,
       }
     }));
     console.log(this.state.offer);
@@ -103,7 +103,7 @@ class EditOffer extends React.Component {
                   Title:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="text" placeholder="Offer Title" value={this.state.offer.offerName} onChange={this.onNameChange.bind(this)}></Form.Control>
+                  <Form.Control type="text" placeholder="Offer Title" value={this.state.offer.name} onChange={this.onNameChange.bind(this)}></Form.Control>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
