@@ -54,7 +54,7 @@ class ListAllRequestbyAdmin extends React.Component {
             <th>Service</th>
             <th>Customer UserID</th>
             <th>Customer Name</th>
-            <th>Date</th>
+            <th>Created Date</th>
             <th>Status</th>
           </tr>
 
@@ -73,7 +73,7 @@ class ListAllRequestbyAdmin extends React.Component {
                       <input type="checkbox" />
                     </td>
                     <td>
-                      <Link to={`/Request/Admin/Answer/${request._id}`} style={{ color: 'black' }}>
+                      <Link to={`/Request/Admin/${request._id}`} style={{ color: 'black' }}>
                         {request.title}
                       </Link>
                     </td>
@@ -83,7 +83,7 @@ class ListAllRequestbyAdmin extends React.Component {
                     <td>
                       {request.customer.account.firstName + ' ' + request.customer.account.lastName}
                     </td>
-                    <td>{request.date}</td>
+                    <td>{moment(request.date).format('lll')}</td>
                     <td>{request.status}</td>
                   </tr>
                 )

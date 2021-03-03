@@ -40,7 +40,10 @@ exports.viewRequestById = function (id) {
     Request.findOne({ _id: id })
       .populate('requestCategory')
       .populate('serviceCategory')
-      .populate('customer')
+      .populate({
+        path: 'customer',
+        populate: { path: 'account' },
+      })
       .exec()
       .then((request) => {
         resolve(request);
@@ -55,6 +58,12 @@ exports.viewRequestById = function (id) {
 exports.viewRequestByInput = function (query) {
   return new Promise((resolve, reject) => {
     Request.find(query)
+      .populate('requestCategory')
+      .populate('serviceCategory')
+      .populate({
+        path: 'customer',
+        populate: { path: 'account' },
+      })
       .then((requests) => {
         resolve(requests);
       })
