@@ -18,6 +18,11 @@ exports.addNewStaff = function (data) {
 exports.viewAllStaff = function () {
   return new Promise((resolve, reject) => {
     Staff.find()
+      .populate({path: 'account'})
+      .populate({
+        path: 'workSchedules',
+        populate: [{ path: 'date'},{ path: 'times'}]
+      })
       .then((staff) => {
         resolve(staff);
       })

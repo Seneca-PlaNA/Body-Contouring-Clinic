@@ -2,8 +2,9 @@ import React from 'react';
 import '../../App.css';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 import SideBar from '../../SideBar/SideBar';
-import styles from '../../app.module.css';
 import SavedPopUp from '../../SavedPopUp';
+import PropTypes from 'prop-types';
+import { Redirect } from 'react-router';
 
 class EditAppointmentAdmin extends React.Component {
   constructor(props) {
@@ -11,14 +12,24 @@ class EditAppointmentAdmin extends React.Component {
     this.state = {
       items: [
         { url: '/Appointment', title: 'Appointment Home' },
-        { url: '/Appointment/Admin/Appointments', title: 'View All Appointments' },
+        { url: '/Appointment/Admin', title: 'View All Appointments' },
         { url: '/Appointment/Admin/Create', title: 'Create Appointment' },
       ],
       saveModal: false,
-      savedBackLink: '/Appointment/Admin/Appointment',
+      savedBackLink: '/Appointment/Admin',
       button: 'Back To Appointment',
       title: 'Appointment Saved!',
       serviceToggle: false,
+      appointment: [],
+      customer: [],
+      schedule: [],
+      times: [],
+      date: [],
+      service: [],
+      staff: [],
+      completed: false,
+      allServices: [],
+      allTechnicians: [],
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
@@ -38,9 +49,44 @@ class EditAppointmentAdmin extends React.Component {
 
   componentDidMount() {
     document.title = 'Edit New Appointment | Body Contouring Clinic';
+    fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`)
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({
+        appointment: data,
+        customer: data.customer.account,
+        schedule: data.schedule,
+        times: data.schedule.times[0],
+        date: data.schedule.date,
+        staff: data.schedule.staff.account,
+        service: data.service
+      });
+
+      fetch(`${process.env.REACT_APP_API_URL}/services`)
+      .then(response => response.json())  
+      .then((data)=>{
+        this.setState({
+          allServices: data
+        })
+      });
+
+      fetch(`${process.env.REACT_APP_API_URL}/staffs`)
+      .then(response => response.json())  
+      .then((data)=>{
+        this.setState({
+          allTechnicians: data
+        })
+      });
+  });
   }
 
   render() {
+    if(this.state.completed)
+    {
+      return <Redirect push to={{
+        pathname: '/Appointment/Admin'
+      }}/>
+    }
     return (
       <>
         <br />
@@ -48,25 +94,24 @@ class EditAppointmentAdmin extends React.Component {
         <div className="row">
           <div className="col-md-1"></div>
           <SideBar items={this.state.items} />
-          <div className="col-md-6">
-            <h2 className={styles.appointmentTitle}>Edit Appointment</h2>
+          <div className="col-md-8" style={{ 'margin-left': '80px' }}>
+            <h2 className="PageTitle">Edit Appointment</h2>
             <Container>
               <Row>
-                <Col></Col>
-                <Col xs={8}>
+                <Col>
                   <Form>
-                    <Form.Group as={Row}>
+                    <Form.Group as={Row} inline>
                       <Form.Label column sm="4">
                         Service(s):
                       </Form.Label>
                       <Col sm="8" style={{ marginLeft: '0px' }} className="row">
                         <Form.Control inline as="select" className="col-md-7">
-                          <option>Active air oxygen therapy</option>
-                          <option>Green peel</option>
-                          <option>Skin rejuventation</option>
-                          <option>laser hair removal</option>
+                          {this.state.allServices.map((result)=>(
+                            // eslint-disable-next-line react/jsx-key
+                            <option value={result.name}>{result.name}</option>
+                          ))}
                         </Form.Control>
-                        <Button onClick={this.multipleService} style={{ marginLeft: '50px' }}>
+                        <Button onClick={this.multipleService} style={{ marginLeft: '35px' }}>
                           Add Services
                         </Button>
                       </Col>
@@ -76,10 +121,10 @@ class EditAppointmentAdmin extends React.Component {
                         <Form.Label column sm="4"></Form.Label>
                         <Col sm="8" style={{ marginLeft: '0px' }} className="row">
                           <Form.Control inline as="select" className="col-md-7">
-                            <option>Active air oxygen therapy</option>
-                            <option>Green peel</option>
-                            <option>Skin rejuventation</option>
-                            <option>laser hair removal</option>
+                          {this.state.allServices.map((result)=>(
+                            // eslint-disable-next-line react/jsx-key
+                            <option value={result.name}>{result.name}</option>
+                          ))}
                           </Form.Control>
                         </Col>
                       </Form.Group>
@@ -91,10 +136,10 @@ class EditAppointmentAdmin extends React.Component {
                       </Form.Label>
                       <Col sm="8">
                         <Form.Control as="select">
-                          <option>Piper Chapman</option>
-                          <option>Alex Vause</option>
-                          <option>Daya Diaz</option>
-                          <option>Tasha Jefferson</option>
+                          {this.state.allTechnicians.map((result)=>(
+                            // eslint-disable-next-line react/jsx-key
+                            <option>{result.account.firstName} {result.account.lastName}</option>
+                          ))}
                         </Form.Control>
                       </Col>
                     </Form.Group>
@@ -120,7 +165,7 @@ class EditAppointmentAdmin extends React.Component {
                         Contact Number:
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control placeholder="647-596-9521" />
+                        <Form.Control placeholder="647-596-9521" value={this.state.appointment.contactNumber}/>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="exampleForm.ControlTextarea1">
@@ -128,7 +173,7 @@ class EditAppointmentAdmin extends React.Component {
                         Special Request:
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control as="textarea" rows={3} placeholder="Vanilla essential oil" />
+                        <Form.Control as="textarea" rows={3} placeholder="Vanilla essential oil" value={this.state.appointment.specialRequest}/>
                       </Col>
                     </Form.Group>
                   </Form>
@@ -138,7 +183,7 @@ class EditAppointmentAdmin extends React.Component {
               <Row>
                 <Col></Col>
                 <Col md="auto">
-                  <Button variant="outline-secondary" href="/Appointment/Admin/Appointment">
+                  <Button variant="outline-secondary" href="/Appointment/Admin">
                     Cancel
                   </Button>
                 </Col>
@@ -160,6 +205,10 @@ class EditAppointmentAdmin extends React.Component {
       </>
     );
   }
+}
+
+EditAppointmentAdmin.propTypes = {
+  id : PropTypes.string.isRequired
 }
 
 export default EditAppointmentAdmin;

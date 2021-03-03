@@ -6,6 +6,7 @@ import SideBar from '../../SideBar/SideBar';
 import PopUp from '../../PopUp';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
+import { Link } from 'react-router-dom';
 
 class AppointmentAdmin extends React.Component {
   constructor(props) {
@@ -134,9 +135,11 @@ class AppointmentAdmin extends React.Component {
                   <Button variant="outline-danger" onClick={this.showModal}>
                     Delete
                   </Button>{' '}
-                  <Button variant="outline-info" href="/Appointment/Admin/Edit">
-                    Edit
-                  </Button>
+                  <Link to={`/Appointment/Admin/Edit/${this.props.id}`}>
+                      <Button variant="outline-secondary">
+                        Edit
+                      </Button>
+                  </Link>
                 </Col>
                 <PopUp
                   show={this.state.show}
