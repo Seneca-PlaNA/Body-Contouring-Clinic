@@ -47,6 +47,49 @@ class EditAppointmentAdmin extends React.Component {
     this.setState({ saveModal: false });
   };
 
+  handlSubmit(event) {
+    event.preventDefault();
+    fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`,{
+      method: "PUT",
+      body: JSON.stringify(this.state.appointment),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },})
+    .then((response) => (response.json()))
+    .then(()=> this.setState({completed: true}))
+    .catch((err) => (console.log(err)));
+  }
+
+  onServiceChange(event) {
+    this.setState(() => ({
+      appointment:{
+        ...this.state.appointment,
+        service: event.target.value,
+      }
+    }));
+  }
+
+  onAddServiceChange(event){
+    this.setState(() => ({
+      appointment:{
+        ...this.state.appointment,
+        service: event.target.value,
+      }
+    }));
+  }
+
+  onStaffChange(event){
+    this.setState(() => ({
+      appointment:{
+        ...this.state.appointment,
+        schedule: {
+          staff: event.target.value,
+        }
+      }
+    }));
+  }
+  
   componentDidMount() {
     document.title = 'Edit New Appointment | Body Contouring Clinic';
     fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`)
@@ -99,16 +142,16 @@ class EditAppointmentAdmin extends React.Component {
             <Container>
               <Row>
                 <Col>
-                  <Form>
+                  <Form onSubmit={this.handlSubmit.bind(this)}>
                     <Form.Group as={Row} inline>
                       <Form.Label column sm="4">
                         Service(s):
                       </Form.Label>
                       <Col sm="8" style={{ marginLeft: '0px' }} className="row">
-                        <Form.Control inline as="select" className="col-md-7">
+                        <Form.Control inline controlId="service" as="select" className="col-md-7" onClick={this.onServiceChange.bind(this)}>
                           {this.state.allServices.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
-                            <option value={result.name}>{result.name}</option>
+                            <option value={result._id}>{result.name}</option>
                           ))}
                         </Form.Control>
                         <Button onClick={this.multipleService} style={{ marginLeft: '35px' }}>
@@ -123,22 +166,21 @@ class EditAppointmentAdmin extends React.Component {
                           <Form.Control inline as="select" className="col-md-7">
                           {this.state.allServices.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
-                            <option value={result.name}>{result.name}</option>
+                            <option value={result._id}>{result.name}</option>
                           ))}
                           </Form.Control>
                         </Col>
                       </Form.Group>
                     )}
-
-                    <Form.Group as={Row} controlId="exampleForm.ControlSelect1">
+                    <Form.Group as={Row} controlId="staff">
                       <Form.Label column sm="4">
                         Technician:
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control as="select">
+                        <Form.Control as="select" onChange={this.onStaffChange.bind(this)}>
                           {this.state.allTechnicians.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
-                            <option>{result.account.firstName} {result.account.lastName}</option>
+                            <option value={result._id}>{result.account.firstName} {result.account.lastName}</option>
                           ))}
                         </Form.Control>
                       </Col>
