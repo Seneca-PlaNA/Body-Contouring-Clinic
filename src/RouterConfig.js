@@ -131,8 +131,16 @@ class RouterConfig extends React.Component {
 
           {/* Customer URL */}
           <Route exact path="/Customer" render={() => <CustomerHome />} />
-          <Route exact path="/Customer/Profile" render={() => <CustomerProfile />} />
-          <Route exact path="/Customer/Edit" render={() => <CustomerEdit />} />
+          <Route
+            exact
+            path="/Customer/:id"
+            render={(props) => <CustomerProfile id={props.match.params.id} />}
+          />
+          <Route
+            exact
+            path="/Customer/Edit/:id"
+            render={(props) => <CustomerEdit id={props.match.params.id} />}
+          />
           <Route exact path="/Customer/Balance" render={() => <CustomerBalance />} />
           <Route exact path="/Customer/BalanceDetail" render={() => <BalanceDetail />} />
 

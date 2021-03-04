@@ -3,13 +3,33 @@ import SideBar from '../../SideBar/SideBar';
 import '../../App.css';
 import searchIcon from '../../resources/searchIcon.png';
 import { Form, Button, Table } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 class CustomerHomeAdmin extends React.Component {
-  state = {
-    items: [{ url: '/Customer/Admin', title: 'Home' }],
-  };
   constructor(prop) {
     super(prop);
+    this.state = {
+      profile: [],
+      items: [{ url: '/Customer/Admin', title: 'Home' }],
+    };
+  }
+
+  getAllCustomer() {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/accounts`)
+        .then((response) => response.json())
+        .then((results) => {
+          resolve(results);
+        });
+    });
+  }
+
+  componentDidMount() {
+    this.getAllCustomer().then((data) => {
+      this.setState({
+        profile: data,
+      });
+    });
   }
 
   render() {
@@ -41,33 +61,26 @@ class CustomerHomeAdmin extends React.Component {
           <Table striped bordered hover>
             <thead>
               <tr>
-                <th>#</th>
                 <th>Customer Name</th>
                 <th>Customer Balance</th>
                 <th>Customer Level</th>
                 <th>Detail</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Mintae Kim</td>
-                <td>$199</td>
-                <td>Normal</td>
-                <td>
-                  <a href="/Customer/Admin/Profile">Detail</a>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Harry Potter</td>
-                <td>$90</td>
-                <td>VIP</td>
-                <td>
-                  <a href="/Customer/Admin/Profile">Detail</a>
-                </td>
-              </tr>
-            </tbody>
+            {this.state.profile.map((result) => (
+              <tbody key={result._id}>
+                <tr>
+                  <td>
+                    {result.firstName} {result.lastName}
+                  </td>
+                  <td>$199</td>
+                  <td>Normal</td>
+                  <td>
+                    <Link to={`/customer/admin/profile/${result._id}`}>Detail</Link>
+                  </td>
+                </tr>
+              </tbody>
+            ))}
           </Table>
         </div>
       </div>

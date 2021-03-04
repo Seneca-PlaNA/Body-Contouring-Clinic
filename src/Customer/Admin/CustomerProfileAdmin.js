@@ -1,14 +1,34 @@
+/* eslint react/prop-types: 0 */
 import React from 'react';
 import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
 import { Container, Form, Row, Col, Button } from 'react-bootstrap';
 
 class CustomerProfileAdmin extends React.Component {
-  state = {
-    items: [{ url: '/Customer/Admin', title: 'Home' }],
-  };
   constructor(prop) {
     super(prop);
+    this.state = {
+      profile: {},
+      items: [{ url: '/Customer/Admin', title: 'Home' }],
+    };
+  }
+
+  getCustomerProfile(id) {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/account/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        });
+    });
+  }
+
+  componentDidMount() {
+    this.getCustomerProfile(this.props.id).then((data) => {
+      this.setState({
+        profile: data,
+      });
+    });
   }
 
   render() {
@@ -26,9 +46,9 @@ class CustomerProfileAdmin extends React.Component {
                 <Form.Label column md={3}>
                   Name:
                 </Form.Label>
-                <Col sm={1}>
+                <Col sm={5}>
                   <Form.Label column md={0}>
-                    User.FullName
+                    {this.state.profile.firstName} {this.state.profile.lastName}
                   </Form.Label>
                 </Col>
               </Form.Group>
@@ -38,7 +58,7 @@ class CustomerProfileAdmin extends React.Component {
                 </Form.Label>
                 <Col sm={1}>
                   <Form.Label column md={0}>
-                    User.Email
+                    {this.state.profile.email}
                   </Form.Label>
                 </Col>
               </Form.Group>

@@ -31,7 +31,7 @@ db();
 mongoose.set('useFindAndModify', false);
 
 //Account
-app.post('/add-account', (req, res) => {
+app.post('/create-account', (req, res) => {
   accountHandler.addNewAccount(req.body).then((msg) => res.json(msg));
 });
 
@@ -64,7 +64,7 @@ app.delete('/account/:id', (req, res) => {
 });
 
 //Account Level
-app.post('/add-account-level', (req, res) => {
+app.post('/create-account-level', (req, res) => {
   accountLevelHandler.addNewAccountLevel(req.body).then((msg) => res.json(msg));
 });
 
@@ -96,7 +96,7 @@ app.delete('/account-level/:id', (req, res) => {
 });
 
 //Balance
-app.post('/add-balance', (req, res) => {
+app.post('/create-balance', (req, res) => {
   balanceHandler.addNewBalance(req.body).then((msg) => res.json(msg));
 });
 
@@ -129,7 +129,7 @@ app.delete('/balance/:id', (req, res) => {
 });
 
 //Balance History
-app.post('/add-balance-history', (req, res) => {
+app.post('/create-balance-history', (req, res) => {
   balanceHistoryHandler.addNewBalanceHistory(req.body).then((msg) => res.json(msg));
 });
 
@@ -195,7 +195,7 @@ app.delete('/service-category/:id', (req, res) => {
 });
 
 // service
-app.post('/add-service', (req, res) => {
+app.post('/create-service', (req, res) => {
   serviceHandler.addNewService(req.body).then((msg) => res.json(msg));
 });
 
@@ -228,7 +228,7 @@ app.delete('/service/:id', (req, res) => {
 });
 
 // page
-app.post('/add-page', (req, res) => {
+app.post('/create-page', (req, res) => {
   pageHandler.addNewPage(req.body).then((msg) => res.json(msg));
 });
 
@@ -261,7 +261,7 @@ app.delete('/page/:id', (req, res) => {
 });
 
 // offer
-app.post('/add-offer', (req, res) => {
+app.post('/create-offer', (req, res) => {
   offerHandler.addNewOffer(req.body).then((msg) => res.json(msg));
 });
 
@@ -440,7 +440,7 @@ app.delete('/request-category/:id', (req, res) => {
 });
 
 // date
-app.post('/add-date', (req, res) => {
+app.post('/create-date', (req, res) => {
   dateHandler.addNewDate(req.body).then((msg) => res.json(msg));
 });
 
@@ -473,7 +473,7 @@ app.delete('/date/:id', (req, res) => {
 });
 
 // time
-app.post('/add-time', (req, res) => {
+app.post('/create-time', (req, res) => {
   timeHandler.addNewTime(req.body).then((msg) => res.json(msg));
 });
 
@@ -506,7 +506,7 @@ app.delete('/time/:id', (req, res) => {
 });
 
 // workSchedule
-app.post('/add-workSchedule', (req, res) => {
+app.post('/create-workSchedule', (req, res) => {
   workScheduleHandler.addNewWorkSchedule(req.body).then((msg) => res.json(msg));
 });
 
@@ -547,7 +547,7 @@ app.delete('/workSchedule/:id', (req, res) => {
 });
 
 // appointment
-app.post('/add-appointment', (req, res) => {
+app.post('/create-appointment', (req, res) => {
   appointmentHandler.addNewAppointments(req.body).then((msg) => res.json(msg));
 });
 
