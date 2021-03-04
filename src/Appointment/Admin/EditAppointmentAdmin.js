@@ -101,7 +101,7 @@ class EditAppointmentAdmin extends React.Component {
         schedule: data.schedule,
         times: data.schedule.times[0],
         date: data.schedule.date,
-        staff: data.schedule.staff.account,
+        staff: data.schedule.staff,
         service: data.service
       });
 
@@ -148,10 +148,10 @@ class EditAppointmentAdmin extends React.Component {
                         Service(s):
                       </Form.Label>
                       <Col sm="8" style={{ marginLeft: '0px' }} className="row">
-                        <Form.Control inline controlId="service" as="select" className="col-md-7" onClick={this.onServiceChange.bind(this)}>
+                        <Form.Control inline controlId="service" as="select" className="col-md-7" value={this.state.service._id} onClick={this.onServiceChange.bind(this)}>
                           {this.state.allServices.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
-                            <option value={result._id}>{result.name}</option>
+                            <option key={result._id} value={result._id}>{result.name}</option>
                           ))}
                         </Form.Control>
                         <Button onClick={this.multipleService} style={{ marginLeft: '35px' }}>
@@ -177,10 +177,10 @@ class EditAppointmentAdmin extends React.Component {
                         Technician:
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control as="select" onChange={this.onStaffChange.bind(this)}>
+                        <Form.Control as="select" value={this.state.staff._id} onChange={this.onStaffChange.bind(this)}>
                           {this.state.allTechnicians.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
-                            <option value={result._id}>{result.account.firstName} {result.account.lastName}</option>
+                            <option key={result._id} value={result._id}>{result.account.firstName} {result.account.lastName}</option>
                           ))}
                         </Form.Control>
                       </Col>
@@ -191,7 +191,7 @@ class EditAppointmentAdmin extends React.Component {
                         Date
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control type="date" />
+                        <Form.Control type="date" value="2021-03-12"/>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
@@ -199,7 +199,7 @@ class EditAppointmentAdmin extends React.Component {
                         Time
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control type="time" />
+                        <Form.Control type="time" value="11:00"/>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>

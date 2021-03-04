@@ -29,13 +29,8 @@ class CreateOffer extends React.Component {
   handlSubmit(event) {
     event.preventDefault();
 
-<<<<<<< HEAD
     fetch(`${process.env.REACT_APP_API_URL}/add-offer`,{
       method: "POST",
-=======
-    fetch('http://localhost:3001/create-offer', {
-      method: 'POST',
->>>>>>> 250aaa4c056534a24e40953ca610dc78535f66e8
       body: JSON.stringify(this.state.offer),
       headers: {
         Accept: 'application/json',
@@ -51,13 +46,8 @@ class CreateOffer extends React.Component {
     this.setState(() => ({
       offer: {
         ...this.state.offer,
-<<<<<<< HEAD
         name: event.target.value
       }
-=======
-        offerName: event.target.value,
-      },
->>>>>>> 250aaa4c056534a24e40953ca610dc78535f66e8
     }));
   }
 
@@ -107,13 +97,8 @@ class CreateOffer extends React.Component {
           <h2 className="PageTitle">Create New Offer</h2>
           <br />
           <Container>
-<<<<<<< HEAD
             <Form onSubmit={this.handlSubmit.bind(this)} method="POST"> 
               <Form.Group as={Row} controlId="name">
-=======
-            <Form onSubmit={this.handlSubmit.bind(this)} method="POST">
-              <Form.Group as={Row} controlId="offerName">
->>>>>>> 250aaa4c056534a24e40953ca610dc78535f66e8
                 <Form.Label column sm={2}>
                   Title:
                 </Form.Label>
