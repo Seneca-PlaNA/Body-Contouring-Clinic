@@ -517,6 +517,14 @@ app.get('/workSchedules', (req, res) => {
     .catch((err) => res.json(err));
 });
 
+app.get('/workSchedule', (req, res) => {
+  workScheduleHandler
+    .viewWorkScheduleByDate(req.query)
+    .then((workSchedule) => res.json(workSchedule))
+    .catch((err) => res.json(err));
+});
+
+
 app.get('/workSchedule/:id', (req, res) => {
   workScheduleHandler
     .viewWorkScheduleById(req.params.id)

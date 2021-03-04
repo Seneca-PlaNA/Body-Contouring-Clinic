@@ -51,6 +51,7 @@ class AppointmentsAdmin extends React.Component {
             <div className="contents">
               <Form inline>
                 <Form.Control as="select">
+                  <option value="1">All</option>
                   <option value="30">Today</option>
                   <option value="60">Tomorrow</option>
                   <option value="90">This Week</option>

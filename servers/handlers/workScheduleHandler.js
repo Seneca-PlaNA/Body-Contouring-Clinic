@@ -1,4 +1,6 @@
 const WorkSchedule = require('../../models/workSchedule');
+const Date = require('../../models/date');
+// const Time = require('../../models/time');
 
 // create new
 exports.addNewWorkSchedule = function (data) {
@@ -18,6 +20,13 @@ exports.addNewWorkSchedule = function (data) {
 exports.viewAllWorkSchedules = function () {
   return new Promise((resolve, reject) => {
     WorkSchedule.find()
+      .populate('date')
+      .populate('times')
+      .populate({
+        path: 'staff',
+        populate: { path: 'account' },
+      })
+      .exec()
       .then((workSchedules) => {
         resolve(workSchedules);
       })
@@ -31,6 +40,12 @@ exports.viewAllWorkSchedules = function () {
 exports.viewWorkScheduleById = function (id) {
   return new Promise((resolve, reject) => {
     WorkSchedule.findOne({ _id: id })
+      .populate('date')
+      .populate('times')
+      .populate({
+        path: 'staff',
+        populate: { path: 'account' },
+      })
       .exec()
       .then((workSchedule) => {
         resolve(workSchedule);
@@ -40,6 +55,52 @@ exports.viewWorkScheduleById = function (id) {
       });
   });
 };
+
+// view one by input
+exports.viewWorkScheduleByDate = function (query) {
+  return new Promise((resolve, reject) => {
+    Date.findOne(query)
+      .exec()
+      .then((result) =>{
+        WorkSchedule.find({date: result._id})
+        .populate({
+          path: 'staff',
+          populate: { path: 'account' },
+        })
+        .populate('times')
+        .exec()
+        .then((workSchedule) => {
+          resolve(workSchedule);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+      })
+  });
+};
+
+// // view one by input
+// exports.viewWorkScheduleByTime = function (query) {
+//   return new Promise((resolve, reject) => {
+//     Time.findOne(query)
+//       .exec()
+//       .then((result) =>{
+//         WorkSchedule.find({times: result._id, date: })
+//         .populate({
+//           path: 'staff',
+//           populate: { path: 'account' },
+//         })
+//         .populate('date')
+//         .exec()
+//         .then((workSchedule) => {
+//           resolve(workSchedule);
+//         })
+//         .catch((err) => {
+//           reject(err);
+//         });
+//       })
+//   });
+// };
 
 // update one
 exports.editWorkScheduleById = function (data, id) {

@@ -2,7 +2,7 @@ import React from 'react';
 import '../../App.css';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 import SideBar from '../../SideBar/SideBar';
-import SavedPopUp from '../../SavedPopUp';
+// import SavedPopUp from '../../SavedPopUp';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
 
@@ -232,13 +232,13 @@ class EditAppointmentAdmin extends React.Component {
                 <Button action onClick={this.showSave} variant="outline-info">
                   Save
                 </Button>
-                <SavedPopUp
+                {/* <SavedPopUp
                   show={this.state.saveModal}
                   handelClose={this.hideSave}
                   text={this.state.title}
                   href={this.state.savedBackLink}
                   button={this.state.button}
-                />
+                /> */}
               </Row>
             </Container>
             <Container style={{ 'margin-top': '50px', cursor: 'pointer' }}></Container>

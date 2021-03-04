@@ -24,6 +24,8 @@ class App extends React.Component {
     return (
       <div className="App">
         <Home />
+        <br /><br />
+        <br/><br />
         <Footer />
       </div>
     );

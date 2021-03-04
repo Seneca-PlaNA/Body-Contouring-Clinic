@@ -18,6 +18,8 @@ exports.addNewCustomer = function (data) {
 exports.viewAllCustomer = function () {
   return new Promise((resolve, reject) => {
     Customer.find()
+      .populate('account')
+      .exec()
       .then((customer) => {
         resolve(customer);
       })
@@ -31,6 +33,7 @@ exports.viewAllCustomer = function () {
 exports.viewCustomerById = function (id) {
   return new Promise((resolve, reject) => {
     Customer.findOne({ _id: id })
+      .populate('account')
       .exec()
       .then((customer) => {
         resolve(customer);

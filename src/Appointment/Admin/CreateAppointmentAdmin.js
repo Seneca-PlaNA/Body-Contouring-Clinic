@@ -1,9 +1,11 @@
+/* eslint-disable react/jsx-key */
 import React from 'react';
 import '../../App.css';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 import SideBar from '../../SideBar/SideBar';
 import styles from '../../app.module.css';
-import SavedPopUp from '../../SavedPopUp';
+// import SavedPopUp from '../../SavedPopUp';
+import { Redirect } from 'react-router';
 
 class CreateAppointmentAdmin extends React.Component {
   constructor(props) {
@@ -22,9 +24,112 @@ class CreateAppointmentAdmin extends React.Component {
       button: 'Back To Appointment',
       title: 'Appointment Saved!',
       serviceToggle: false,
+      completed: false,
+      appointment: {
+        customer: String,
+        contactNumber: String,
+        specialRequest: String,
+        service: String,
+        schedule: String,
+      },
+      services: [],
+      customers: [],
+      filterData: [],
+      techinian:[],
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
+  }
+
+  handlSubmit(event) {
+    console.log(this.state.appointment);
+    event.preventDefault();
+    fetch(`${process.env.REACT_APP_API_URL}/add-appointment`,{
+      method: "POST",
+      body: JSON.stringify(this.state.appointment),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },})
+    .then((response) => (response.json()))
+    .then(()=> this.setState({completed: true}))
+    .catch((err) => (console.log(err)));
+  }
+
+  onCustomerChange(event){
+    this.setState(() => ({
+      appointment:{
+        ...this.state.appointment,
+        customer: event.target.value,
+      }
+    }));
+  }
+
+  onServiceChange(event){
+    this.setState(() => ({
+      appointment:{
+        ...this.state.appointment,
+        service: event.target.value,
+      }
+    }));
+  }
+
+  onContactNumChange(event){
+    this.setState(() => ({
+      appointment:{
+        ...this.state.appointment,
+        contactNumber: event.target.value,
+      }
+    }));
+  }
+
+  onSpecialRequestChange(event){
+    this.setState(() => ({
+      appointment:{
+        ...this.state.appointment,
+        specialRequest: event.target.value,
+      }
+    }));
+  }
+
+  onDateChange(event){
+    var pureDate = (event.target.value).split("-");
+    var searchDate = pureDate[1] + "/" + pureDate[2] +"/" + pureDate[0];
+    console.log(searchDate);
+    fetch(`${process.env.REACT_APP_API_URL}/workSchedule?date=${searchDate}`)
+    .then(response => response.json())  
+    .then((data)=>{
+      console.log(data);
+      this.setState({
+        filterData: data
+      })
+    });
+  }
+
+  onTimeChange(event){
+    var technicianData = [];
+    this.state.filterData.forEach(function(data){
+
+      data.times.forEach((time)=>{
+          if(time._id == event.target.value)
+          {
+            technicianData = technicianData.concat(data.staff);
+          }
+      });
+    })
+    this.setState({
+      techinian: technicianData,
+  }); 
+  }
+
+  onScheduleChange(event){
+    console.log("id: "+event.target.value);
+    this.setState({
+      appointment:{
+        ...this.state.appointment,
+        schedule: event.target.value,
+      }
+    });
   }
 
   multipleService = () => {
@@ -38,10 +143,35 @@ class CreateAppointmentAdmin extends React.Component {
   hideSave = () => {
     this.setState({ saveModal: false });
   };
+
   componentDidMount() {
     document.title = 'Create New Appointment | Body Contouring Clinic';
+
+    fetch(`${process.env.REACT_APP_API_URL}/services`)
+    .then(response => response.json())  
+    .then((data)=>{
+      this.setState({
+        services: data
+      })
+    });
+
+    fetch(`${process.env.REACT_APP_API_URL}/customers`)
+    .then(response => response.json())  
+    .then((data)=>{
+      this.setState({
+        customers: data,
+      })
+    });
   }
+
   render() {
+    {console.log(this.state.times)}
+    if(this.state.completed)
+    {
+      return <Redirect push to={{
+        pathname: '/Appointment/Admin'
+      }}/>
+    }
     return (
       <>
         <br />
@@ -55,25 +185,32 @@ class CreateAppointmentAdmin extends React.Component {
               <Row>
                 <Col></Col>
                 <Col xs={8}>
-                  <Form>
-                    <Form.Group as={Row}>
+                  <Form onSubmit={this.handlSubmit.bind(this)} method="POST">
+                    <Form.Group as={Row} controlId="customer">
                       <Form.Label column sm="4">
                         Customer Name:
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control placeholder="Natalie Fig" />
+                        <Form.Control inline as="select" className="col-md-7" onChange={this.onCustomerChange.bind(this)}>
+                          <option value="">-- select customer --</option>
+                          {this.state.customers.map((result)=>(
+                            // eslint-disable-next-line react/jsx-key
+                            <option value={result._id}>{result.account.firstName} {result.account.lastName}</option>
+                          ))}
+                        </Form.Control>
                       </Col>
                     </Form.Group>
-                    <Form.Group as={Row}>
+                    <Form.Group as={Row} controlId="service">
                       <Form.Label column sm="4">
                         Services:
                       </Form.Label>
                       <Col sm="8" style={{ marginLeft: '0px' }} className="row">
-                        <Form.Control inline as="select" className="col-md-7">
-                          <option>Active air oxygen therapy</option>
-                          <option>Green peel</option>
-                          <option>Skin rejuventation</option>
-                          <option>laser hair removal</option>
+                        <Form.Control inline as="select" className="col-md-7" onChange={this.onServiceChange.bind(this)}>
+                          <option value="">-- select service --</option>
+                          {this.state.services.map((result)=>(
+                            // eslint-disable-next-line react/jsx-key
+                            <option value={result._id}>{result.name}</option>
+                          ))}
                         </Form.Control>
                         <Button onClick={this.multipleService} style={{ marginLeft: '50px' }}>
                           Add Services
@@ -81,46 +218,55 @@ class CreateAppointmentAdmin extends React.Component {
                       </Col>
                     </Form.Group>
                     {this.state.serviceToggle && (
-                      <Form.Group as={Row}>
+                      <Form.Group as={Row} controlId="service">
                         <Form.Label column sm="4"></Form.Label>
                         <Col sm="8" style={{ marginLeft: '0px' }} className="row">
-                          <Form.Control inline as="select" className="col-md-7">
-                            <option>Active air oxygen therapy</option>
-                            <option>Green peel</option>
-                            <option>Skin rejuventation</option>
-                            <option>laser hair removal</option>
+                          <Form.Control inline as="select" className="col-md-7" onChange={this.onServiceChange.bind(this)}>
+                          <option value="">-- select customer --</option>
+                          {this.state.services.map((result)=>(
+                            // eslint-disable-next-line react/jsx-key
+                            <option value={result._id}>{result.name}</option>
+                          ))}
                           </Form.Control>
                         </Col>
                       </Form.Group>
                     )}
                     <Form.Group as={Row}>
                       <Form.Label column sm="4">
-                        Technician:
-                      </Form.Label>
-                      <Col sm="8">
-                        <Form.Control as="select">
-                          <option>Piper Chapman</option>
-                          <option>Alex Vause</option>
-                          <option>Daya Diaz</option>
-                          <option>Tasha Jefferson</option>
-                        </Form.Control>
-                      </Col>
-                    </Form.Group>
-
-                    <Form.Group as={Row}>
-                      <Form.Label column sm="4">
                         Date:
                       </Form.Label>
-                      <Col sm="4">
-                        <Form.Control type="date" />
+                      <Col sm="6">
+                        <Form.Control type="date" onChange={this.onDateChange.bind(this)}/>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
                       <Form.Label column sm="4">
                         Time:
                       </Form.Label>
-                      <Col sm="4">
-                        <Form.Control type="time" />
+                      <Col sm="6">
+                        <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)}>
+                          <option value="">-- select time --</option>
+                          {this.state.filterData.map((result)=>(
+                            // eslint-disable-next-line react/jsx-key
+                            result.times.map((timeSlot)=>(
+                              <option value={timeSlot._id}>{timeSlot.time}</option>
+                            ))
+                          ))}
+                          </Form.Control>
+                      </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} controlId="schedule">
+                      <Form.Label column sm="4">
+                        Technician:
+                      </Form.Label>
+                      <Col sm="8">
+                        <Form.Control as="select" onChange={this.onScheduleChange.bind(this)}>
+                          <option value="">-- select technician --</option>
+                          {this.state.techinian.map((result)=>(
+                            <option value={result._id}>{result.account.firstName} {result.account.lastName}</option>
+                          ))}
+
+                        </Form.Control>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
@@ -128,7 +274,7 @@ class CreateAppointmentAdmin extends React.Component {
                         Contact Number:
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control placeholder="647-596-9521" />
+                        <Form.Control placeholder="647-596-9521" onChange={this.onContactNumChange.bind(this)}/>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
@@ -136,30 +282,23 @@ class CreateAppointmentAdmin extends React.Component {
                         Special Request:
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control as="textarea" rows={3} />
+                        <Form.Control as="textarea" rows={3} onChange={this.onSpecialRequestChange.bind(this)}/>
                       </Col>
                     </Form.Group>
+                    <Row>
+                      <Col></Col>
+                      <Col md="auto">
+                        <Button variant="outline-secondary" href="/Appointment/Admin">
+                          Cancel
+                        </Button>
+                      </Col>
+                      <Button variant="outline-info" type="submit">
+                        Save
+                      </Button>
+                    </Row>
                   </Form>
                 </Col>
                 <Col></Col>
-              </Row>
-              <Row>
-                <Col></Col>
-                <Col md="auto">
-                  <Button variant="outline-secondary" href="/Appointment">
-                    Cancel
-                  </Button>
-                </Col>
-                <Button onClick={this.showSave} variant="outline-info">
-                  Save
-                </Button>
-                <SavedPopUp
-                  show={this.state.saveModal}
-                  handelClose={this.hideSave}
-                  text={this.state.title}
-                  href={this.state.savedBackLink}
-                  button={this.state.button}
-                />
               </Row>
             </Container>
           </div>
