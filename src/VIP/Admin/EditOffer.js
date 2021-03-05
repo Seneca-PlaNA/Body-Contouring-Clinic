@@ -73,7 +73,7 @@ class EditOffer extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`http://localhost:3001/offer/${this.props.id}`)
+    fetch(`${process.env.REACT_APP_API_URL}/offer/${this.props.id}`)
       .then(response => response.json())
       .then((data) => {
         this.setState({

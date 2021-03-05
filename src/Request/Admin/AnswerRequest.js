@@ -3,6 +3,7 @@ import SideBar from '../../SideBar/SideBar';
 import { Button, Container, Row, Col, Form } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
+import moment from 'moment';
 
 class AnswerRequest extends React.Component {
   constructor(props) {
@@ -39,7 +40,16 @@ class AnswerRequest extends React.Component {
       request: {
         ...this.state.request,
         answer: e.target.value,
-      }
+      },
+    }));
+  }
+
+  onStatusChange(e) {
+    this.setState(() => ({
+      request: {
+        ...this.state.request,
+        status: e.target.value,
+      },
     }));
   }
 
@@ -54,11 +64,15 @@ class AnswerRequest extends React.Component {
   }
 
   render() {
-
     if (this.state.completed) {
-      return <Redirect push to={{
-        pathname: '/Request/Admin'
-      }} />
+      return (
+        <Redirect
+          push
+          to={{
+            pathname: `/Request/Admin/${this.state.request._id}`,
+          }}
+        />
+      );
     }
     const reqTitle = {
       'font-size': 'large',
@@ -68,26 +82,43 @@ class AnswerRequest extends React.Component {
 
     return (
       <div className="row">
-        {console.log(this.state.request)}
         <div className="col-md-1"></div>
         <SideBar items={this.state.items} />
         <div className="col-md-8" style={{ 'margin-left': '80px' }}>
-          <h2 className="PageTitle">Request Answer for {this.state.request._id}</h2>
+          <h2 className="PageTitle">Answer Request</h2>
           <br />
           <div className="contents" style={{ 'text-align': 'left', 'margin-right': '250px' }}>
             <Container>
               <Form onSubmit={this.handleSubmit.bind(this)} method="PUT">
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
                   <Form.Label style={reqTitle}>
-                    Q: {this.state.request.title} {this.state.request.date}
+                    Q: {this.state.request.title}{' '}
+                    {' (' + moment(this.state.request.date).format('ll') + ')'}
                   </Form.Label>
-                  <Form.Control type="text" placeholder="Hello" readOnly></Form.Control>
+                  <Form.Control type="text" readOnly value={this.state.request.contents} />
                 </Form.Group>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
                   <Form.Label style={reqTitle}>
-                    A: RE: {this.state.request.title} {this.state.request.date}
+                    A: RE: {this.state.request.title}{' '}
+                    {' (' + moment(this.state.request.date).format('ll') + ')'}
                   </Form.Label>
-                  <Form.Control as="textarea" rows={3} value={this.state.request.answer} onChange={this.onAnswerChange.bind(this)} />
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    value={this.state.request.answer}
+                    onChange={this.onAnswerChange.bind(this)}
+                  />
+                </Form.Group>
+                <Form.Group style={{ 'background-color': '#F5F9F9' }}>
+                  <Form.Label style={reqTitle}>Request Status</Form.Label>
+                  <Form.Control as="select" onChange={this.onStatusChange.bind(this)}>
+                    <option default>
+                      ----Choose----
+                    </option>
+                    <option value="unsolved">Unsolved</option>
+                    <option value="in-progress">In-Progress</option>
+                    <option value="solved">Solved</option>
+                  </Form.Control>
                 </Form.Group>
                 <Container>
                   <Row>

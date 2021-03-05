@@ -1,19 +1,39 @@
+/* eslint react/prop-types: 0 */
 import React from 'react';
 import '../App.css';
 import SideBar from '../SideBar/SideBar';
 import { Container, Form, Row, Col } from 'react-bootstrap';
 
 class CustomerProfile extends React.Component {
-  state = {
-    items: [
-      { url: '/Customer/', title: 'Home' },
-      { url: '/Customer/Profile', title: 'Profile' },
-      { url: '/Customer/Edit', title: 'Edit Profile' },
-      { url: '/Customer/Balance', title: 'Balance' },
-    ],
-  };
-  constructor(prop) {
-    super(prop);
+  constructor(props) {
+    super(props);
+    this.state = {
+      profile: {},
+      items: [
+        { url: '/Customer/', title: 'Home' },
+        { url: `/Customer/${this.props.id}`, title: 'Profile' },
+        { url: `/Customer/Edit/${this.props.id}`, title: 'Edit Profile' },
+        { url: '/Customer/Balance', title: 'Balance' },
+      ],
+    };
+  }
+
+  getCustomerProfile(id) {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/account/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        });
+    });
+  }
+
+  componentDidMount() {
+    this.getCustomerProfile(this.props.id).then((data) => {
+      this.setState({
+        profile: data,
+      });
+    });
   }
 
   render() {
@@ -25,15 +45,15 @@ class CustomerProfile extends React.Component {
           <h2 className="PageTitle">Profile</h2>
           <hr />
           <br />
-          <Container class="col-md-6">
+          <Container class="col-md-12">
             <Form style={{ fontSize: '20px', marginLeft: '80px', textAlign: 'left' }}>
               <Form.Group as={Row}>
                 <Form.Label column md={3}>
                   Name:
                 </Form.Label>
-                <Col sm={1}>
+                <Col sm={3}>
                   <Form.Label column md={0}>
-                    User.FullName
+                    {this.state.profile.firstName} {this.state.profile.lastName}
                   </Form.Label>
                 </Col>
               </Form.Group>
@@ -41,23 +61,23 @@ class CustomerProfile extends React.Component {
                 <Form.Label column sm={3}>
                   Email:
                 </Form.Label>
-                <Col sm={1}>
+                <Col sm={3}>
                   <Form.Label column md={0}>
-                    User.Email
+                    {this.state.profile.email}
                   </Form.Label>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
                 <Form.Label column sm={3}>
-                  Address:
+                  User Id:
                 </Form.Label>
                 <Col sm={1}>
                   <Form.Label column md={0}>
-                    User.Address
+                    {this.state.profile.userID}
                   </Form.Label>
                 </Col>
               </Form.Group>
-              <Form.Group as={Row}>
+              {/* <Form.Group as={Row}>
                 <Form.Label column sm={3}>
                   Current Balance:
                 </Form.Label>
@@ -76,7 +96,7 @@ class CustomerProfile extends React.Component {
                     User.level
                   </Form.Label>
                 </Col>
-              </Form.Group>
+              </Form.Group> */}
             </Form>
           </Container>
           <br />

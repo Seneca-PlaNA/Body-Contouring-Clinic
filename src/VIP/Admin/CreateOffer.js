@@ -29,61 +29,65 @@ class CreateOffer extends React.Component {
   handlSubmit(event) {
     event.preventDefault();
 
-    fetch('http://localhost:3001/add-offer',{
-      method: "POST",
+    fetch('http://localhost:3001/create-offer', {
+      method: 'POST',
       body: JSON.stringify(this.state.offer),
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },})
-    .then((response) => (response.json()))
-    .then(()=> this.setState({completed: true}))
-    .catch((err) => (console.log(err)));
-
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then(() => this.setState({ completed: true }))
+      .catch((err) => console.log(err));
   }
 
   onNameChange(event) {
     this.setState(() => ({
-      offer:{
+      offer: {
         ...this.state.offer,
-        offerName: event.target.value
-      }
+        offerName: event.target.value,
+      },
     }));
   }
 
   onDescriptionChange(event) {
     this.setState(() => ({
-      offer:{
-        ...this.state.offer,  
+      offer: {
+        ...this.state.offer,
         description: event.target.value,
-      }
+      },
     }));
   }
 
   onStartDateChange(event) {
     this.setState(() => ({
-      offer:{
-        ...this.state.offer, 
+      offer: {
+        ...this.state.offer,
         startDate: event.target.value,
-      }
+      },
     }));
   }
 
   onEndDateChange(event) {
     this.setState(() => ({
-      offer:{
-        ...this.state.offer, 
+      offer: {
+        ...this.state.offer,
         endDate: event.target.value,
-      }
+      },
     }));
   }
 
   render() {
-    if(this.state.completed)
-    {
-      return <Redirect push to={{
-        pathname: '/VIP/Admin/Manage'
-      }}/>
+    if (this.state.completed) {
+      return (
+        <Redirect
+          push
+          to={{
+            pathname: '/VIP/Admin/Manage',
+          }}
+        />
+      );
     }
     return (
       <div className="row">
@@ -93,13 +97,17 @@ class CreateOffer extends React.Component {
           <h2 className="PageTitle">Create New Offer</h2>
           <br />
           <Container>
-            <Form onSubmit={this.handlSubmit.bind(this)} method="POST"> 
+            <Form onSubmit={this.handlSubmit.bind(this)} method="POST">
               <Form.Group as={Row} controlId="offerName">
                 <Form.Label column sm={2}>
                   Title:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="text" placeholder="Offer Title" onChange={this.onNameChange.bind(this)} />
+                  <Form.Control
+                    type="text"
+                    placeholder="Offer Title"
+                    onChange={this.onNameChange.bind(this)}
+                  />
                 </Col>
               </Form.Group>
               <Form.Group as={Row} controlId="description">
@@ -107,7 +115,11 @@ class CreateOffer extends React.Component {
                   Contents:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control as="textarea" rows={3} onChange={this.onDescriptionChange.bind(this)}/>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    onChange={this.onDescriptionChange.bind(this)}
+                  />
                 </Col>
               </Form.Group>
               <Form.Group as={Row} inline>
@@ -115,10 +127,20 @@ class CreateOffer extends React.Component {
                   Active Date
                 </Form.Label>
                 <Col sm={3}>
-                  <Form.Control controlId="startDate" type="date" placeholder="start date" onChange={this.onStartDateChange.bind(this)} />
+                  <Form.Control
+                    controlId="startDate"
+                    type="date"
+                    placeholder="start date"
+                    onChange={this.onStartDateChange.bind(this)}
+                  />
                 </Col>
                 <Col sm={3}>
-                  <Form.Control controlId="endDate" type="date" placeholder="end date" onChange={this.onEndDateChange.bind(this)} />
+                  <Form.Control
+                    controlId="endDate"
+                    type="date"
+                    placeholder="end date"
+                    onChange={this.onEndDateChange.bind(this)}
+                  />
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
