@@ -36,7 +36,8 @@ class AppointmentsAdmin extends React.Component {
     .then((data) => {
       this.setState({
         appointments: data,
-        schedule: data.schedule
+        schedule: data.schedule,
+        
       });
   });
   }
