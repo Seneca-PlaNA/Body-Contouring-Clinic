@@ -109,8 +109,10 @@ class RouterConfig extends React.Component {
           {/* Request URL */}
           <Route exact path="/Request" render={() => <RequestHome />} />
           <Route exact path="/Request/Create" render={() => <CreateRequest />} />
-          <Route exact path="/Request/Detail" render={() => <ViewRequest />} />
-          <Route exact path="/Request/Edit" render={() => <EditRequest />} />
+          <Route exact path="/Request/Detail/:id"
+            render={(props) => (<ViewRequest id={props.match.params.id}></ViewRequest>)} />
+          <Route exact path="/Request/Edit/:id"
+            render={(props) => (<EditRequest id={props.match.params.id}></EditRequest>)} />
           <Route exact path="/Request/FAQ" render={() => <ViewFAQ />} />
 
           {/* Request Admin URL*/}

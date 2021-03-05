@@ -85,11 +85,6 @@ class RequestHome extends React.Component {
                   </Button>
                 </Col>
                 <Col xs={1}>
-                  <Button variant="outline-secondary" href="/Request/Edit">
-                    Edit
-                  </Button>
-                </Col>
-                <Col xs={1}>
                   <Button variant="outline-danger" onClick={this.showModal}>
                     Delete
                   </Button>
