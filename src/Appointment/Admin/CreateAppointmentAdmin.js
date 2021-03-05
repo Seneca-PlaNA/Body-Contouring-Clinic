@@ -44,7 +44,7 @@ class CreateAppointmentAdmin extends React.Component {
   handlSubmit(event) {
     console.log(this.state.appointment);
     event.preventDefault();
-    fetch(`${process.env.REACT_APP_API_URL}/add-appointment`,{
+    fetch(`${process.env.REACT_APP_API_URL}/create-appointment`,{
       method: "POST",
       body: JSON.stringify(this.state.appointment),
       headers: {
@@ -113,7 +113,8 @@ class CreateAppointmentAdmin extends React.Component {
       data.times.forEach((time)=>{
           if(time._id == event.target.value)
           {
-            technicianData = technicianData.concat(data.staff);
+            // technicianData = technicianData.concat(data.staff);
+            technicianData = technicianData.concat(data);
           }
       });
     })
@@ -263,7 +264,7 @@ class CreateAppointmentAdmin extends React.Component {
                         <Form.Control as="select" onChange={this.onScheduleChange.bind(this)}>
                           <option value="">-- select technician --</option>
                           {this.state.techinian.map((result)=>(
-                            <option value={result._id}>{result.account.firstName} {result.account.lastName}</option>
+                            <option value={result._id}>{result.staff.account.firstName} {result.staff.account.lastName}</option>
                           ))}
 
                         </Form.Control>

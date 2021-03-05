@@ -15,8 +15,6 @@ class AppointmentsAdmin extends React.Component {
         { url: '/Appointment/Admin/Create', title: 'Create Appointment' },
       ],
       appointments: [],
-      schedule: [],
-
     };
   }
 
@@ -35,9 +33,7 @@ class AppointmentsAdmin extends React.Component {
     this.getAppointments()
     .then((data) => {
       this.setState({
-        appointments: data,
-        schedule: data.schedule,
-        
+        appointments: data, 
       });
   });
   }
@@ -91,10 +87,8 @@ class AppointmentsAdmin extends React.Component {
                       // eslint-disable-next-line react/jsx-key
                       <tr>
                       <td>{result.customer.account.firstName} {result.customer.account.lastName}</td>
-                      <td>{result.schedule.date.date == null ? '' : result.schedule.date.date}</td>
-                      <td>{result.schedule.times == null ? '' : result.schedule.times.map((period)=>(period.time))}</td>
-                      <td></td>
-                      <td></td>
+                      <td>{result.schedule == null ? '' : result.schedule.date.date}</td>
+                      <td>{result.schedule == null ? '' : result.schedule.times.map((period)=>(period.time))}</td>
                       <td>{result.service.name}</td>
                       <td>$99</td>
                       <td>

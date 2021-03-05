@@ -105,6 +105,7 @@ class AppointmentAdmin extends React.Component {
                     <tr>
                       <td>Time:</td>
                       <td>{this.state.times.time}</td>
+                      <td>{this.state.times == null ? '' : this.state.times.time}</td>
                     </tr>
                     <tr>
                       <td>Technician:</td>
