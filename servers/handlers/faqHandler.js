@@ -18,6 +18,8 @@ exports.addNewFAQ = function (data) {
 exports.viewAllFAQs = function () {
   return new Promise((resolve, reject) => {
     FAQ.find()
+      .populate('faqCategory')
+      .exec()
       .then((faqs) => {
         resolve(faqs);
       })
@@ -31,6 +33,7 @@ exports.viewAllFAQs = function () {
 exports.viewFAQById = function (id) {
   return new Promise((resolve, reject) => {
     FAQ.findOne({ _id: id })
+      .populate('faqCategory')
       .exec()
       .then((faq) => {
         resolve(faq);
