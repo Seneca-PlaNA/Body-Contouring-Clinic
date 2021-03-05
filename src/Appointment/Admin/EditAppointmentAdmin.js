@@ -89,6 +89,12 @@ class EditAppointmentAdmin extends React.Component {
       }
     }));
   }
+
+  onDateFormatChange(dateValue){
+    var pureDate = (dateValue).split("/");
+    var formDate = pureDate[0] + "-" + pureDate[1] +"-" + pureDate[2];
+    return formDate;
+  }
   
   componentDidMount() {
     document.title = 'Edit New Appointment | Body Contouring Clinic';
@@ -172,6 +178,22 @@ class EditAppointmentAdmin extends React.Component {
                         </Col>
                       </Form.Group>
                     )}
+                    <Form.Group as={Row}>
+                      <Form.Label column sm="4">
+                        Date
+                      </Form.Label>
+                      <Col sm="8">
+                        <Form.Control type="date" value={this.state.date.date}/>
+                      </Col>
+                    </Form.Group>
+                    <Form.Group as={Row}>
+                      <Form.Label column sm="4">
+                        Time
+                      </Form.Label>
+                      <Col sm="8">
+                        <Form.Control type="time" value="11:00"/>
+                      </Col>
+                    </Form.Group>
                     <Form.Group as={Row} controlId="staff">
                       <Form.Label column sm="4">
                         Technician:
@@ -183,23 +205,6 @@ class EditAppointmentAdmin extends React.Component {
                             <option key={result._id} value={result._id}>{result.account.firstName} {result.account.lastName}</option>
                           ))}
                         </Form.Control>
-                      </Col>
-                    </Form.Group>
-
-                    <Form.Group as={Row}>
-                      <Form.Label column sm="4">
-                        Date
-                      </Form.Label>
-                      <Col sm="8">
-                        <Form.Control type="date" value="2021-03-12"/>
-                      </Col>
-                    </Form.Group>
-                    <Form.Group as={Row}>
-                      <Form.Label column sm="4">
-                        Time
-                      </Form.Label>
-                      <Col sm="8">
-                        <Form.Control type="time" value="11:00"/>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
