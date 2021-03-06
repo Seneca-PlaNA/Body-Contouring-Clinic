@@ -8,8 +8,8 @@ import { PropTypes } from 'prop-types';
 
 
 class EditFAQ extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       items: [
         { url: '/Request/Admin', title: 'View All Request' },
@@ -35,6 +35,15 @@ class EditFAQ extends React.Component {
     .then((response) => (response.json()))
     .then(()=> this.setState({completed: true}))
     .catch((err) => (console.log(err)));
+  }
+
+  onCategoryChange(event) {
+    this.setState(() => ({
+      faq: {
+        ...this.state.faq,
+        faqCategory: event.target.value,
+      },
+    }));
   }
 
   onFAQCategoryChange(event) {
@@ -95,7 +104,7 @@ class EditFAQ extends React.Component {
     this.getFAQ(this.props.id).then((data) => {
       this.setState({
         faq: data,
-        faqID: data._id,
+        faqId: data._id,
         faqCategory: data.faqCategory,
       })
     });
@@ -133,14 +142,14 @@ class EditFAQ extends React.Component {
                 <Col sm={6}>
                   <Form.Control as="select"
                   onChange={this.onFAQCategoryChange.bind(this)}
-                    value={this.state.faqCategory == null ? '' : this.state.faqCategory._id}
+                    value={this.state.faqCategory._id}
                   >
+                    <option value="">--Choose--</option>
                     {this.state.faqCategories.map((faqCategory) => (
                       <option key={faqCategory._id} value={faqCategory._id}>
                         {faqCategory.name}
                       </option>
                     ))}
-                    <option value="">--Choose--</option>
                   </Form.Control>
                 </Col>
               </Form.Group>
@@ -157,7 +166,7 @@ class EditFAQ extends React.Component {
                   Contents:
                 </Form.Label>
                 <Col sm={6}>
-                <Form.Control as="textarea" rows={3}value={this.state.faq.contents} onChange={this.onContentsChange.bind(this)}/>
+                <Form.Control as="textarea" rows={3} value={this.state.faq.contents} onChange={this.onContentsChange.bind(this)}/>
                 </Col>
               </Form.Group>
 
