@@ -129,9 +129,11 @@ class AppointmentAdmin extends React.Component {
               <Row>
                 <Col></Col>
                 <Col>
-                  <Button variant="outline-info" href="/Appointment/Admin/Message">
-                    Leave Message
-                  </Button>{' '}
+                  <Link to={`/Appointment/Admin/Message/${this.props.id}`}>
+                      <Button variant="outline-secondary">
+                        Leave Message
+                      </Button>
+                  </Link>{' '}
                   <Button variant="outline-danger" onClick={this.showModal}>
                     Delete
                   </Button>{' '}

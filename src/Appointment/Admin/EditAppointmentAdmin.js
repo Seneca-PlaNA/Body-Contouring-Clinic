@@ -140,17 +140,6 @@ class EditAppointmentAdmin extends React.Component {
     });
   }
 
-  // onStaffChange(event){
-  //   this.setState(() => ({
-  //     appointment:{
-  //       ...this.state.appointment,
-  //       schedule: {
-  //         staff: event.target.value,
-  //       }
-  //     }
-  //   }));
-  // }
-
   onDateFormatChange(dateValue){
     var pureDate = (dateValue).split("/");
     var formDate = pureDate[0] + "-" + pureDate[1] +"-" + pureDate[2];
