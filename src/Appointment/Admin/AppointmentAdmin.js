@@ -14,7 +14,7 @@ class AppointmentAdmin extends React.Component {
     this.state = {
       items: [
         { url: '/Appointment', title: 'Appointment Home' },
-        { url: '/Appointment/Admin/Appointments', title: 'View All Appointments' },
+        { url: '/Appointment/Admin/', title: 'View All Appointments' },
         { url: '/Appointment/Admin/Create', title: 'New Appointment' },
       ],
       show: false,
@@ -104,7 +104,6 @@ class AppointmentAdmin extends React.Component {
                     </tr>
                     <tr>
                       <td>Time:</td>
-                      <td>{this.state.times.time}</td>
                       <td>{this.state.times == null ? '' : this.state.times.time}</td>
                     </tr>
                     <tr>

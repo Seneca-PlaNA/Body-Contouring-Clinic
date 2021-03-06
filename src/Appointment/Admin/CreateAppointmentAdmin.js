@@ -35,7 +35,7 @@ class CreateAppointmentAdmin extends React.Component {
       services: [],
       customers: [],
       filterData: [],
-      techinian:[],
+      technician:[],
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
@@ -119,7 +119,7 @@ class CreateAppointmentAdmin extends React.Component {
       });
     })
     this.setState({
-      techinian: technicianData,
+      technician: technicianData,
   }); 
   }
 
@@ -263,7 +263,7 @@ class CreateAppointmentAdmin extends React.Component {
                       <Col sm="8">
                         <Form.Control as="select" onChange={this.onScheduleChange.bind(this)}>
                           <option value="">-- select technician --</option>
-                          {this.state.techinian.map((result)=>(
+                          {this.state.technician.map((result)=>(
                             <option value={result._id}>{result.staff.account.firstName} {result.staff.account.lastName}</option>
                           ))}
 
