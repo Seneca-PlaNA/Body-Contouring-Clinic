@@ -11,7 +11,7 @@ class AnswerRequest extends React.Component {
     this.state = {
       items: [
         { url: '/Request/Admin', title: 'View All Request' },
-        { url: '/Request/Admin/FAQ', title: 'FAQ' },
+        { url: '/Request/FAQ/Admin', title: 'FAQ' },
       ],
       request: {},
       request_answer: '',

@@ -13,7 +13,7 @@ class ViewAllFAQbyAdmin extends React.Component {
       show: false,
       items: [
         { url: '/Request/Admin', title: 'View All Request' },
-        { url: '/Request/Admin/FAQ', title: 'FAQ' },
+        { url: '/Request/FAQ/Admin', title: 'FAQ' },
       ],
       children: 'FAQ',
       faqs: [],
@@ -23,7 +23,6 @@ class ViewAllFAQbyAdmin extends React.Component {
     };
      this.showFAQ = this.showFAQ.bind(this); 
      this.hideFAQ = this.hideFAQ.bind(this); 
-//     this.deleteFAQ = this.deleteFAQ.bind(this); 
      this.handleDelete = this.handleDelete.bind(this);
   }
 
@@ -35,10 +34,6 @@ class ViewAllFAQbyAdmin extends React.Component {
     this.setState({ show: false });
   };
 
-/*   deleteFAQ = () => {
-    this.setState({ show: false });
-  }; */
-
   editFAQ = () => {
     this.setState({ show:false })
   }
@@ -46,7 +41,7 @@ class ViewAllFAQbyAdmin extends React.Component {
   handleDelete = () => {
     this.deleteFAQ()
     .then(() => {
-      this.getFAQs(this.state.selectedFAQ._id)
+      this.getFAQs()
       .then((data) => {
         this.setState({
           faq: data,
@@ -71,7 +66,7 @@ class ViewAllFAQbyAdmin extends React.Component {
     });
   }
 
-  getFAQ(id) {
+/*   getFAQ(id) {
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/faq/${id}`)
         .then((response) => response.json())
@@ -79,7 +74,7 @@ class ViewAllFAQbyAdmin extends React.Component {
           resolve(data);
         });
     });
-  }
+  } */
 
   deleteFAQ(){
     return new Promise((resolve) => {
@@ -107,7 +102,7 @@ class ViewAllFAQbyAdmin extends React.Component {
         <Redirect
           push
           to={{
-            pathname: '/Request/Admin/FAQ',
+            pathname: '/Request/FAQ/Admin/',
           }}
         />
       );
@@ -140,7 +135,7 @@ class ViewAllFAQbyAdmin extends React.Component {
                      <Accordion.Collapse eventKey="0">
                        <Card.Body>{result.contents}
                        <ButtonToolbar>
-                         <Button variant="outline-secondary" style={{ marginLeft: '780px' }} href="/Request/Admin/FAQ/Edit">Edit</Button>
+                         <Button variant="outline-secondary" style={{ marginLeft: '780px' }} href="/Request/FAQ/Admin/Edit">Edit</Button>
                          <Button variant="outline-danger" style={{ marginLeft: '15px' }} onClick={()=> {
                           this.setState({
                             show: true,
@@ -162,7 +157,7 @@ class ViewAllFAQbyAdmin extends React.Component {
             <Row>
               <Col xs={8}></Col>
               <Col xs={7}>
-                <Button variant="outline-info" style={{ marginRight: '480px' }} href="/Request/Admin/FAQ/Create">
+                <Button variant="outline-info" style={{ marginRight: '480px' }} href="/Request/FAQ/Admin/Create">
                   Create
                 </Button>
               </Col>

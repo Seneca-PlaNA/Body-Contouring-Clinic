@@ -21,7 +21,6 @@ import CustomerAccountAdmin from './Customer/Admin/CustomerAccountAdmin';
 import CustomerAccountEditAdmin from './Customer/Admin/CustomerAccountEditAdmin';
 import ViewRequest from './Request/ViewRequest';
 import RequestHomeAdmin from './Request/Admin/RequestHomebyAdmin';
-import ViewRequestAdmin from './Request/Admin/ViewRequestDetails';
 import AnswerRequest from './Request/Admin/AnswerRequest';
 import EditRequest from './Request/EditRequest';
 import ViewFAQ from './Request/FAQ/ViewAllFAQbyGeneral';
@@ -108,49 +107,34 @@ class RouterConfig extends React.Component {
           <Route exact path="/VIP/Admin" render={() => <VIPHomebyAdmin />} />
           <Route exact path="/VIP/Admin/Manage" render={() => <VIPManage />} />
           <Route exact path="/VIP/Admin/Manage/Create" render={() => <CreateOffer />} />
-          <Route
-            exact
-            path="/VIP/Admin/Manage/Edit/:id"
-            render={(props) => <EditOffer id={props.match.params.id} />}
-          />
+          <Route exact path='/VIP/Admin/Manage/Edit/:id' render={(props) => <EditOffer  id={props.match.params.id}/>}/>
+
 
           {/* Request URL */}
           <Route exact path="/Request" render={() => <RequestHome />} />
           <Route exact path="/Request/Create" render={() => <CreateRequest />} />
-          <Route exact path="/Request/Detail/:id"
-            render={(props) => (<ViewRequest id={props.match.params.id}></ViewRequest>)} />
-          <Route exact path="/Request/Edit/:id"
-            render={(props) => (<EditRequest id={props.match.params.id}></EditRequest>)} />
+          <Route exact path="/Request/Detail" render={() => <ViewRequest />} />
+          <Route exact path="/Request/Edit" render={() => <EditRequest />} />
           <Route exact path="/Request/FAQ" render={() => <ViewFAQ />} />
 
           {/* Request Admin URL*/}
           <Route exact path="/Request/Admin" render={() => <RequestHomeAdmin />} />
           <Route
-            exact
-            path="/Request/Admin/:id"
-            render={(props) => <ViewRequestAdmin id={props.match.params.id} />}
-          />
-          <Route
-            exact
             path="/Request/Admin/Answer/:id"
-            render={(props) => <AnswerRequest id={props.match.params.id} />}
+            render={(props) => (
+              <AnswerRequest
+                id={props.match.params.id}
+              ></AnswerRequest>
+            )}
           />
-          <Route exact path="/Request/Admin/FAQ" render={() => <ViewFAQAdmin />} />
-          <Route exact path="/Request/Admin/FAQ/Create" render={() => <CreateFAQ />} />
-          <Route exact path="/Request/Admin/FAQ/Edit" render={() => <EditFAQ />} />
+          <Route exact path="/Request/FAQ/Admin" render={() => <ViewFAQAdmin />} />
+          <Route exact path="/Request/FAQ/Admin/Create" render={() => <CreateFAQ />} />
+          <Route exact path="/Request/FAQ/Admin/Edit" render={() => <EditFAQ />} />
 
           {/* Customer URL */}
           <Route exact path="/Customer" render={() => <CustomerHome />} />
-          <Route
-            exact
-            path="/Customer/:id"
-            render={(props) => <CustomerProfile id={props.match.params.id} />}
-          />
-          <Route
-            exact
-            path="/Customer/Edit/:id"
-            render={(props) => <CustomerEdit id={props.match.params.id} />}
-          />
+          <Route exact path="/Customer/Profile" render={() => <CustomerProfile />} />
+          <Route exact path="/Customer/Edit" render={() => <CustomerEdit />} />
           <Route exact path="/Customer/Balance" render={() => <CustomerBalance />} />
           <Route exact path="/Customer/BalanceDetail" render={() => <BalanceDetail />} />
 

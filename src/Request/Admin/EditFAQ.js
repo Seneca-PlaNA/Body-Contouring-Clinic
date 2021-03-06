@@ -4,7 +4,7 @@ import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 import { Redirect } from 'react-router';
-import { moment } from 'moment';
+import { PropTypes } from 'prop-types';
 
 
 class EditFAQ extends React.Component {
@@ -13,7 +13,7 @@ class EditFAQ extends React.Component {
     this.state = {
       items: [
         { url: '/Request/Admin', title: 'View All Request' },
-        { url: '/Request/Admin/FAQ', title: 'FAQ' },
+        { url: '/Request/FAQ/Admin', title: 'FAQ' },
       ],
       faq:[],
       faqCategory:[],
@@ -70,7 +70,6 @@ class EditFAQ extends React.Component {
   }
 
   getFAQ(id) {
-    moment();
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/faq/${id}`)
         .then((response) => response.json())
@@ -113,7 +112,7 @@ class EditFAQ extends React.Component {
         <Redirect
           push
           to={{
-            pathname: '/Request/Admin/FAQ',
+            pathname: '/Request/FAQ/Admin',
           }}
         />
       );
@@ -161,19 +160,14 @@ class EditFAQ extends React.Component {
                 <Form.Control as="textarea" rows={3}value={this.state.faq.contents} onChange={this.onContentsChange.bind(this)}/>
                 </Col>
               </Form.Group>
-              <Form.Group as={Row}>
-                <Form.Label column sm={2}>
-                  Attach File:
-                </Form.Label>
-                <Form.File />
-              </Form.Group>
+
               <br />
               <br />
               <Container>
                 <Row>
                   <Col xs={6}></Col>
                   <Col xs={1}>
-                    <Button variant="outline-secondary" href="/Request/Admin/FAQ/">
+                    <Button variant="outline-secondary" href="/Request/FAQ/Admin/">
                       Cancel
                     </Button>
                   </Col>
@@ -193,6 +187,10 @@ class EditFAQ extends React.Component {
       </div>
     );
   }
+
 }
+EditFAQ.propTypes = {
+  id: PropTypes.string.isRequired,
+};
 
 export default EditFAQ;

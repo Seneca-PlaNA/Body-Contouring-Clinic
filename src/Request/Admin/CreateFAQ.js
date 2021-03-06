@@ -13,7 +13,7 @@ class CreateFAQ extends React.Component {
       show: false,
       items: [
         { url: '/Request/Admin', title: 'View All Request' },
-        { url: '/Request/Admin/FAQ', title: 'FAQ' },
+        { url: '/Request/FAQ/Admin', title: 'FAQ' },
       ],
       // create faq data
       faq: {
@@ -92,7 +92,7 @@ class CreateFAQ extends React.Component {
     if(this.state.completed)
     {
       return <Redirect push to={{
-        pathname: '/Request/Admin/FAQ'
+        pathname: '/Request/FAQ/Admin'
       }}/>
     }
     return (
@@ -143,7 +143,7 @@ class CreateFAQ extends React.Component {
                 <Row>
                   <Col xs={6}></Col>
                   <Col xs={1}>
-                    <Button variant="outline-secondary" href="/Request/Admin/FAQ/">
+                    <Button variant="outline-secondary" href="/Request/FAQ/Admin/">
                       Cancel
                     </Button>
                   </Col>

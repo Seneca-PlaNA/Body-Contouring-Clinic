@@ -20,7 +20,7 @@ class ViewFAQbyAdmin extends React.Component {
           </p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="outline-secondary" href="/Request/Admin/FAQ/Edit">
+          <Button variant="outline-secondary" href="/Request/FAQ/Admin/Edit">
             Edit
           </Button>
         </Modal.Footer>
