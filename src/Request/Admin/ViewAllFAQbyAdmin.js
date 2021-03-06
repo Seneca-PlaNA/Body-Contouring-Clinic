@@ -66,7 +66,7 @@ class ViewAllFAQbyAdmin extends React.Component {
     });
   }
 
-/*   getFAQ(id) {
+  getFAQ(id) {
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/faq/${id}`)
         .then((response) => response.json())
@@ -74,8 +74,7 @@ class ViewAllFAQbyAdmin extends React.Component {
           resolve(data);
         });
     });
-  } */
-
+  }
   deleteFAQ(){
     return new Promise((resolve) => {
       fetch('http://localhost:3001/faq/' + this.state.selectedFAQ._id, {method: 'DELETE'})
