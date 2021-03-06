@@ -7,8 +7,8 @@ import { Tabs, Tab, Card, Accordion, Container, Button, ButtonToolbar, Col, Row 
 import { Redirect } from 'react-router';
 
 class ViewAllFAQbyAdmin extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       show: false,
       items: [
@@ -35,7 +35,10 @@ class ViewAllFAQbyAdmin extends React.Component {
   };
 
   editFAQ = () => {
-    this.setState({ show:false })
+    this.setState({ 
+      show:false,
+      selectedFAQ: [],
+     })
   }
 
   handleDelete = () => {
@@ -58,7 +61,7 @@ class ViewAllFAQbyAdmin extends React.Component {
 
   getFAQs() {
     return new Promise((resolve) => {
-      fetch('http://localhost:3001/faqs')
+      fetch(`${process.env.REACT_APP_API_URL}/faqs`)
         .then((response) => response.json())
         .then((results) => {
           resolve(results);
@@ -77,7 +80,7 @@ class ViewAllFAQbyAdmin extends React.Component {
   }
   deleteFAQ(){
     return new Promise((resolve) => {
-      fetch('http://localhost:3001/faq/' + this.state.selectedFAQ._id, {method: 'DELETE'})
+      fetch(`${process.env.REACT_APP_API_URL}/faq/` + this.state.selectedFAQ._id, {method: 'DELETE'})
         .then((response) => response.json())
         .then((results) => {
           resolve(results);
