@@ -92,3 +92,26 @@ exports.deleteAppointmentById = function (id) {
       });
   });
 };
+
+// view all
+exports.viewAllAppointmentsByCustomer = function (query) {
+  return new Promise((resolve, reject) => {
+    Appointment.find(query)
+      .populate({
+        path: 'customer',
+        populate: { path: 'account' },
+      })
+      .populate({
+        path: 'schedule',
+        populate: [{ path: 'date'},{ path: 'times'}]
+      })
+      .populate('service')
+      .exec()
+      .then((appointments) => {
+        resolve(appointments);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};

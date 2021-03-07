@@ -8,13 +8,68 @@ import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 
 import { Button } from 'react-bootstrap';
+// import { getAllByPlaceholderText } from '@testing-library/dom';
 
 class AppointmentCalendar extends React.Component {
   constructor(props) {
     super(props);
+    this.state ={
+      appointment:[],
+      schedule:[],
+    };
     this.calendarRef = React.createRef();
   }
 
+  componentDidMount() {
+    fetch(`${process.env.REACT_APP_API_URL}/appointment?customer=602b55ef4bff0f4ab039060f`)
+      .then(response => response.json())
+      .then((data) => {
+        this.setState({
+          appointment: data
+        });
+        this.formatCalendar(this.state.appointment);
+      });
+  }
+
+  formatCalendar = (appointments) => {
+    if(appointments == null)
+    {
+      console.log("Error");
+    }
+    else
+    {
+      appointments.forEach((appointment)=>{
+        var pureDate = (appointment.schedule.date.date).split("/");
+        var pureTime = (appointment.schedule.times[0].time).split("-");
+        var pureStart = pureTime[0].split(":");
+        var pureEnd = pureTime[1].split(":");
+
+        pureDate[0] = String(Number(pureDate[0]) - 1);
+        console.log(pureDate);
+
+        var startTime = new Date(pureDate[2], pureDate[0], pureDate[1], pureStart[0], pureStart[1]);
+        var endTime = new Date(pureDate[2], pureDate[0], pureDate[1], pureEnd[0], pureEnd[1]);
+        var appnt_id = appointment._id;
+        var appnt_title = appointment.service.name;
+
+        var tempAppnmt = {
+          id: appnt_id,
+          caalendarId: 1,
+          title: appnt_title,
+          category: 'time',
+          dueDateClass: '',
+          start: startTime.toISOString(),
+          end: endTime.toISOString(),
+          isReadOnly: true,
+      }
+
+        this.setState({
+          schedule: this.state.schedule.concat(tempAppnmt),
+        });
+        console.log(this.state.schedule);
+      });
+    }
+  }
   // ---------- Instance method ---------- //
 
   // Button to move next month
@@ -55,7 +110,6 @@ class AppointmentCalendar extends React.Component {
 
   render() {
     const selectedView = this.props.view; // default view
-    const today = new Date();
 
     return (
       <>
@@ -78,42 +132,7 @@ class AppointmentCalendar extends React.Component {
           disableDblClick={true}
           disableClick={false}
           isReadOnly={false}
-          schedules={[
-            {
-              id: '1',
-              calendarId: '0',
-              title: 'TOAST UI Calendar Study',
-              category: 'time',
-              dueDateClass: '',
-              start: today.toISOString(),
-              end: today.toISOString(),
-              // end: getDate('hours', today, 3, '+').toISOString()
-            },
-            {
-              id: '2',
-              calendarId: '0',
-              title: 'Brooks - Green Peel',
-              category: 'milestone',
-              dueDateClass: '',
-              start: today.toISOString(),
-              end: today.toISOString(),
-              // start: getDate('date', today, 1, '+').toISOString(),
-              // end: getDate('date', today, 1, '+').toISOString(),
-              isReadOnly: true,
-            },
-            {
-              id: '3',
-              calendarId: '0',
-              title: 'Piper - Hair Removal',
-              category: 'allday',
-              dueDateClass: '',
-              start: today.toISOString(),
-              end: today.toISOString(),
-              // start: getDate('date', today, 2, '-').toISOString(),
-              // end: getDate('date', today, 1, '-').toISOString(),
-              isReadOnly: true,
-            },
-          ]}
+          schedules = {this.state.schedule}
           scheduleView
           taskView
           template={{
@@ -139,7 +158,7 @@ class AppointmentCalendar extends React.Component {
             },
           ]}
           useDetailPopup
-          useCreationPopup
+          // useCreationPopup
           view={selectedView} // You can also set the `defaultView` option.
           month={{
             daynames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],

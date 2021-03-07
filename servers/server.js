@@ -579,6 +579,14 @@ app.delete('/appointment/:id', (req, res) => {
     .catch((err) => res.json(err));
 });
 
+app.get('/appointment', (req, res) => {
+  appointmentHandler
+    .viewAllAppointmentsByCustomer(req.query)
+    .then((appointment) => res.json(appointment))
+    .catch((err) => res.json(err));
+});
+
+
 // faq
 app.post('/create-faq', (req, res) => {
   faqHandler.addNewFAQ(req.body).then((msg) => res.json(msg));
