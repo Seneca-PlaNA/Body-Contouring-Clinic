@@ -31,11 +31,11 @@ class CreateFAQ extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    fetch('http://localhost:3001/create-faq',{
+    fetch(`${process.env.REACT_APP_API_URL}/create-faq`,{
       method: "POST",
       body: JSON.stringify(this.state.faq),
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json'
       },})
     .then((response) => (response.json()))
