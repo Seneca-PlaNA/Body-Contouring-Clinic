@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
@@ -199,7 +198,7 @@ class EditFAQ extends React.Component {
 
 }
 EditFAQ.propTypes = {
-  id: PropTypes.string.isRequired,
+ id: PropTypes.string.isRequired
 };
 
 export default EditFAQ;
