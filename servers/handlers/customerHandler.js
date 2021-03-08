@@ -76,3 +76,17 @@ exports.deleteCustomerById = function (id) {
       });
   });
 };
+
+exports.viewCustomerByInput = function (query) {
+  return new Promise((resolve, reject) => {
+    Customer.findOne(query)
+      .populate('account')
+      .exec()
+      .then((customer) => {
+        resolve(customer);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};

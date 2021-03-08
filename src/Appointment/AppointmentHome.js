@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Card, Container, Row, Col } from 'react-bootstrap';
 import '../App.css';
 import AppointmentCalendar from './AppointmentCalendar';
+import { Link } from 'react-router-dom';
 
 class AppointmentHome extends React.Component {
   constructor(props) {
@@ -41,9 +42,11 @@ class AppointmentHome extends React.Component {
               </Button>
             </Col>
             <Col>
-              <Button variant="outline-info" href="/Appointment/Create">
-                Create Appointment
-              </Button>
+              <Link to={`/Appointment/Create/602b55ef4bff0f4ab039060f`}>
+                <Button variant="outline-secondary">
+                  Create Appointment
+                </Button>
+              </Link>
             </Col>
           </Row>
           <br />

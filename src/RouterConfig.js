@@ -71,9 +71,9 @@ class RouterConfig extends React.Component {
           {/* Appointment URL */}
           <Route exact path="/Appointment" render={() => <AppointmentHome />} />
           <Route exact path="/Appointment/Appointments" render={() => <Appointments />} />
-          <Route exact path="/Appointment/Create" render={() => <CreateAppointment />} />
-          <Route exact path="/Appointment/Appointment" render={() => <Appointment />} />
-          <Route exact path="/Appointment/Edit" render={() => <EditAppointment />} />
+          <Route exact path="/Appointment/Create/:id" render={(props) => <CreateAppointment id={props.match.params.id}/>} />
+          <Route exact path="/Appointment/Appointment/:id" render={(props) => <Appointment id={props.match.params.id}/>} />
+          <Route exact path="/Appointment/Edit/:id" render={(props) => <EditAppointment id={props.match.params.id}/>} />
           <Route exact path="/Appointment/Deleted" render={() => <AppointmentDeleted />} />
 
           {/* Appointment Admin URL */}

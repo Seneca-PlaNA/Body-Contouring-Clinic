@@ -140,12 +140,6 @@ class EditAppointmentAdmin extends React.Component {
     });
   }
 
-  onDateFormatChange(dateValue){
-    var pureDate = (dateValue).split("/");
-    var formDate = pureDate[0] + "-" + pureDate[1] +"-" + pureDate[2];
-    return formDate;
-  }
-  
   componentDidMount() {
     document.title = 'Edit New Appointment | Body Contouring Clinic';
     fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`)
@@ -266,7 +260,6 @@ class EditAppointmentAdmin extends React.Component {
                             // eslint-disable-next-line react/jsx-key
                             <option value={result._id}>{result.staff.account.firstName} {result.staff.account.lastName}</option>
                           ))}
-
                         </Form.Control>
                       </Col>
                     </Form.Group>

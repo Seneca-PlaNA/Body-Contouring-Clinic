@@ -359,6 +359,13 @@ app.delete('/customer/:id', (req, res) => {
     .catch((err) => res.json(err));
 });
 
+app.get('/customer', (req, res) => {
+  customerHandler
+    .viewCustomerByInput(req.query)
+    .then((customer) => res.json(customer))
+    .catch((err) => res.json(err));
+});
+
 // request
 app.post('/create-request', (req, res) => {
   requestHandler.addNewRequest(req.body).then((msg) => res.json(msg));

@@ -7,14 +7,14 @@ class ViewAppointmentMessage extends React.Component {
   render() {
     return (
       <Modal show={this.props.show} centered>
-        <Modal.Header>
-          <Modal.Title>Message for Appointment {this.props.appointmentId}</Modal.Title>
+        <Modal.Header closeButton onClick={this.props.handleClose}>
+          <Modal.Title>Message for this Appointment</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{this.props.text}</Modal.Body>
+        <Modal.Body>{this.props.text == null? "No Message": this.props.text}</Modal.Body>
         <Modal.Footer>
-          <Button variant="outline-info" href="/Appointment/Appointment">
-            Back to appointment
-          </Button>
+            <Button variant="outline-info" onClick={this.props.handleClose}>
+              Back to appointment
+            </Button>
         </Modal.Footer>
       </Modal>
     );
@@ -25,6 +25,7 @@ ViewAppointmentMessage.propTypes = {
   show: PropTypes.string,
   appointmentId: PropTypes.number,
   text: PropTypes.string,
+  handleClose: PropTypes.func,
 };
 
 export default ViewAppointmentMessage;

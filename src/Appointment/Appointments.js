@@ -1,7 +1,8 @@
 import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import '../App.css';
 import SideBar from '../SideBar/SideBar';
+import { Link } from 'react-router-dom';
 
 class Appointments extends React.Component {
   constructor(props) {
@@ -10,31 +11,52 @@ class Appointments extends React.Component {
       items: [
         { url: '/Appointment', title: 'Appointment Home' },
         { url: '/Appointment/Appointments', title: 'View All Appointments' },
-        { url: '/Appointment/Create', title: 'Create Appointment' },
+        { url: `/Appointment/Create/602b55ef4bff0f4ab039060f`, title: 'Create Appointment' },
       ],
+      appointments: [],
+      customer: {},
+      account: {},
     };
+  }
+
+  getAppointment(custId){
+    fetch(`${process.env.REACT_APP_API_URL}/appointment?customer=${custId}`)
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({
+        appointments: data
+      });
+    });
   }
 
   componentDidMount() {
     document.title = 'All Appointments | Body Contouring Clinic';
+
+    fetch(`${process.env.REACT_APP_API_URL}/customer?account=602aeb19e5e37f341e204809`)
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({
+        customer: data,
+        account: data.account,
+      });
+      this.getAppointment(this.state.customer._id);
+    });
   }
 
   render() {
     const pagination = {
       color: '#B58970',
     };
+
     return (
       <>
         <div className="row">
           <div className="col-md-1"></div>
           <SideBar items={this.state.items} />
-          <div className="col-md-6">
-            <h2>Hello, user.fullName!</h2>
-            <h2>These are all your upcoming appointments</h2>
-            <Container>
-              <Row>
-                <Col></Col>
-                <Col xs={7}>
+          <div className="col-md-8" style={{ 'margin-left': '80px' }}>
+            <h2 className="PageTitle">Hello, {this.state.account.firstName} {this.state.account.lastName},
+            <br/>These are all your upcoming appointments</h2>
+            <div className="contents">
                   <table>
                     <tr>
                       <th>Date</th>
@@ -42,38 +64,34 @@ class Appointments extends React.Component {
                       <th>Info</th>
                       <th>Price</th>
                     </tr>
-                    <tr>
-                      <td>2021-01-14</td>
-                      <td>13:00</td>
-                      <td>Laser-Any Body area 6 sessions</td>
-                      <td>$99</td>
-                      <td>
-                        <a href="/Appointment/Appointment">details</a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>2021-01-21</td>
-                      <td>10:30</td>
-                      <td>Pay as you go add on Medium</td>
-                      <td>$79</td>
-                      <td>
-                        <a href="/Appointment/Appointment">details</a>
-                      </td>
-                    </tr>
+                    {this.state.appointments.map((appointment)=>(
+                      // eslint-disable-next-line react/jsx-key
+                      <tr>
+                        <td>{appointment.schedule == null ? '' : appointment.schedule.date.date}</td>
+                        <td>{appointment.schedule == null ? '' : appointment.schedule.times.map((period)=>(period.time))}</td>
+                        <td>{appointment.service.name}</td>
+                        <td>$99</td>
+                        <td>
+                          <Link to={`/Appointment/Appointment/${appointment._id}`}>
+                            <Button variant="outline-secondary">
+                              details
+                            </Button>
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
                   </table>
                   <br />
                   <span style={pagination}>
                     {'<'} 1 2 3 4 5 {'>'}
                   </span>
-                </Col>
-                <Col></Col>
-              </Row>
-            </Container>
+            </div>
           </div>
         </div>
       </>
     );
   }
 }
+
 
 export default Appointments;
