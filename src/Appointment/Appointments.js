@@ -68,7 +68,7 @@ class Appointments extends React.Component {
                       // eslint-disable-next-line react/jsx-key
                       <tr>
                         <td>{appointment.schedule == null ? '' : appointment.schedule.date.date}</td>
-                        <td>{appointment.schedule == null ? '' : appointment.schedule.times.map((period)=>(period.time))}</td>
+                        <td>{appointment.schedule == null ? '' : appointment.schedule.time.time}</td>
                         <td>{appointment.service.name}</td>
                         <td>$99</td>
                         <td>

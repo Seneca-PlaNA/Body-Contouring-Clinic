@@ -39,8 +39,9 @@ class AppointmentCalendar extends React.Component {
     else
     {
       appointments.forEach((appointment)=>{
+        console.log(appointment.schedule.time.time);
         var pureDate = (appointment.schedule.date.date).split("/");
-        var pureTime = (appointment.schedule.times[0].time).split("-");
+        var pureTime = (appointment.schedule.time.time).split("-");
         var pureStart = pureTime[0].split(":");
         var pureEnd = pureTime[1].split(":");
 

@@ -13,7 +13,7 @@ class EditAppointment extends React.Component {
       items: [
         { url: '/Appointment', title: 'Appointment Home' },
         { url: '/Appointment/Appointments', title: 'View All Appointments' },
-        { url: '/Appointment/Create', title: 'Create Appointment' },
+        { url: '/Appointment/Create/602b55ef4bff0f4ab039060f', title: 'Create Appointment' },
       ],
       saveModal: false,
       title: 'Appointment saved!',
@@ -23,7 +23,7 @@ class EditAppointment extends React.Component {
       appointment: [],
       customer: [],
       schedule: [],
-      times: [],
+      time: [],
       date: [],
       service: [],
       staff: [],
@@ -117,13 +117,10 @@ class EditAppointment extends React.Component {
     var technicianData = [];
     this.state.filterData.forEach(function(data){
 
-      data.times.forEach((time)=>{
-          if(time._id == event.target.value)
-          {
-            // technicianData = technicianData.concat(data.staff);
-            technicianData = technicianData.concat(data);
-          }
-      });
+      if(data.time._id == event.target.value)
+      {
+        technicianData = technicianData.concat(data);
+      }
     })
     this.setState({
       technician: technicianData,
@@ -149,7 +146,7 @@ class EditAppointment extends React.Component {
         appointment: data,
         customer: data.customer.account,
         schedule: data.schedule,
-        times: data.schedule.times[0],
+        time: data.schedule.time,
         date: data.schedule.date,
         staff: data.schedule.staff,
         service: data.service
@@ -241,10 +238,7 @@ class EditAppointment extends React.Component {
                           <option value="">-- select time --</option>
                           {this.state.filterData.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
-                            result.times.map((timeSlot)=>(
-                              // eslint-disable-next-line react/jsx-key
-                              <option value={timeSlot._id}>{timeSlot.time}</option>
-                            ))
+                            <option value={result.time._id}>{result.time.time}</option>
                           ))}
                           </Form.Control>
                       </Col>

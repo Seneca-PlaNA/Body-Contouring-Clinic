@@ -103,7 +103,7 @@ exports.viewAllAppointmentsByCustomer = function (query) {
       })
       .populate({
         path: 'schedule',
-        populate: [{ path: 'date'},{ path: 'times'}]
+        populate: [{ path: 'date'},{ path: 'time'}]
       })
       .populate('service')
       .exec()

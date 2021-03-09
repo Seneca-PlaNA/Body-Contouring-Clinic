@@ -13,7 +13,7 @@ class CreateAppointment extends React.Component {
       items: [
         { url: '/Appointment', title: 'Appointment Home' },
         { url: '/Appointment/Appointments', title: 'View All Appointments' },
-        { url: `/Appointment/Create/${this.props.id}`, title: 'Create Appointment' },
+        { url: `/Appointment/Create/602b55ef4bff0f4ab039060f`, title: 'Create Appointment' },
       ],
       saveModal: false,
       savedBackLink: '/Appointment/Appointment',
@@ -49,9 +49,6 @@ class CreateAppointment extends React.Component {
   };
 
   handlSubmit(event) {
-    this.setState({
-      customer: this.props.id,
-    });
     event.preventDefault();
     fetch(`${process.env.REACT_APP_API_URL}/create-appointment`,{
       method: "POST",
@@ -69,6 +66,7 @@ class CreateAppointment extends React.Component {
     this.setState(() => ({
       appointment:{
         ...this.state.appointment,
+        customer: this.props.id,
         service: event.target.value,
       }
     }));
@@ -110,13 +108,10 @@ class CreateAppointment extends React.Component {
     var technicianData = [];
     this.state.filterData.forEach(function(data){
 
-      data.times.forEach((time)=>{
-          if(time._id == event.target.value)
-          {
-            // technicianData = technicianData.concat(data.staff);
-            technicianData = technicianData.concat(data);
-          }
-      });
+        if(data.time._id == event.target.value)
+        {
+          technicianData = technicianData.concat(data);
+        }
     })
     this.setState({
       technician: technicianData,
@@ -150,7 +145,7 @@ class CreateAppointment extends React.Component {
     if(this.state.completed)
     {
       return <Redirect push to={{
-        pathname: `Appointment/Appointments`
+        pathname: `/Appointment/Appointments`
       }}/>
     }
     return (
@@ -174,7 +169,7 @@ class CreateAppointment extends React.Component {
                       <Col sm="8" style={{ marginLeft: '0px' }} className="row">
                         <Form.Control inline as="select" className="col-md-7" onChange={this.onServiceChange.bind(this)}>
                         <option>-- select service --</option>
-                        {this.state.allServices.map((result)=>(
+                        {this.state.services.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
                             <option key={result._id} value={result._id}>{result.name}</option>
                           ))}
@@ -190,7 +185,7 @@ class CreateAppointment extends React.Component {
                         <Col sm="8" style={{ marginLeft: '0px' }} className="row">
                           <Form.Control inline as="select" className="col-md-7">
                             <option value="">-- select service --</option>
-                            {this.state.allServices.map((result)=>(
+                            {this.state.services.map((result)=>(
                               // eslint-disable-next-line react/jsx-key
                               <option value={result._id}>{result.name}</option>
                             ))}
@@ -215,10 +210,7 @@ class CreateAppointment extends React.Component {
                           <option value="">-- select time --</option>
                           {this.state.filterData.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
-                            result.times.map((timeSlot)=>(
-                              // eslint-disable-next-line react/jsx-key
-                              <option value={timeSlot._id}>{timeSlot.time}</option>
-                            ))
+                              <option value={result.time._id}>{result.time.time}</option>
                           ))}
                           </Form.Control>
                       </Col>
