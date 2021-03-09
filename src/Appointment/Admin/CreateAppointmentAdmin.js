@@ -109,14 +109,10 @@ class CreateAppointmentAdmin extends React.Component {
   onTimeChange(event){
     var technicianData = [];
     this.state.filterData.forEach(function(data){
-
-      data.times.forEach((time)=>{
-          if(time._id == event.target.value)
+          if(data.time._id == event.target.value)
           {
-            // technicianData = technicianData.concat(data.staff);
             technicianData = technicianData.concat(data);
           }
-      });
     })
     this.setState({
       technician: technicianData,
@@ -166,7 +162,6 @@ class CreateAppointmentAdmin extends React.Component {
   }
 
   render() {
-    {console.log(this.state.times)}
     if(this.state.completed)
     {
       return <Redirect push to={{
@@ -248,10 +243,8 @@ class CreateAppointmentAdmin extends React.Component {
                         <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)}>
                           <option value="">-- select time --</option>
                           {this.state.filterData.map((result)=>(
-                            // eslint-disable-next-line react/jsx-key
-                            result.times.map((timeSlot)=>(
-                              <option value={timeSlot._id}>{timeSlot.time}</option>
-                            ))
+                              // eslint-disable-next-line react/jsx-key
+                              <option value={result.time._id}>{result.time.time}</option>
                           ))}
                           </Form.Control>
                       </Col>

@@ -88,7 +88,7 @@ class AppointmentsAdmin extends React.Component {
                       <tr>
                       <td>{result.customer.account.firstName} {result.customer.account.lastName}</td>
                       <td>{result.schedule == null ? '' : result.schedule.date.date}</td>
-                      <td>{result.schedule == null ? '' : result.schedule.times.map((period)=>(period.time))}</td>
+                      <td>{result.schedule == null ? '' : result.schedule.time.time}</td>
                       <td>{result.service.name}</td>
                       <td>$99</td>
                       <td>
