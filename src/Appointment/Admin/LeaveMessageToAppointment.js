@@ -23,7 +23,7 @@ class LeaveMessageToAppointment extends React.Component {
       appointment: [],
       customer: [],
       schedule: [],
-      times: [],
+      time: [],
       date: [],
       service: [],
       staff: [],
@@ -86,7 +86,7 @@ class LeaveMessageToAppointment extends React.Component {
         appointment: data,
         customer: data.customer.account,
         schedule: data.schedule,
-        times: data.schedule.times[0],
+        time: data.schedule.time,
         date: data.schedule.date,
         staff: data.schedule.staff.account,
         service: data.service
@@ -145,7 +145,7 @@ class LeaveMessageToAppointment extends React.Component {
                         Time
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control disabled placeholder="14:30" value={this.state.times.time}/>
+                        <Form.Control disabled placeholder="14:30" value={this.state.time.time}/>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>

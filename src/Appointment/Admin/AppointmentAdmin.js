@@ -23,7 +23,7 @@ class AppointmentAdmin extends React.Component {
       appointment: [],
       customer: [],
       schedule: [],
-      times: [],
+      time: [],
       date: [],
       service: [],
       staff: [],
@@ -69,7 +69,7 @@ class AppointmentAdmin extends React.Component {
           appointment: data,
           customer: data.customer.account,
           schedule: data.schedule,
-          times: data.schedule.times[0],
+          time: data.schedule.time,
           date: data.schedule.date,
           staff: data.schedule.staff.account,
           service: data.service
@@ -104,7 +104,7 @@ class AppointmentAdmin extends React.Component {
                     </tr>
                     <tr>
                       <td>Time:</td>
-                      <td>{this.state.times == null ? '' : this.state.times.time}</td>
+                      <td>{this.state.time == null ? '' : this.state.time.time}</td>
                     </tr>
                     <tr>
                       <td>Technician:</td>

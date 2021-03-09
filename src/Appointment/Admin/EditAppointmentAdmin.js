@@ -23,7 +23,7 @@ class EditAppointmentAdmin extends React.Component {
       appointment: [],
       customer: [],
       schedule: [],
-      times: [],
+      time: [],
       date: [],
       service: [],
       staff: [],
@@ -116,15 +116,12 @@ class EditAppointmentAdmin extends React.Component {
   onTimeChange(event){
     var technicianData = [];
     this.state.filterData.forEach(function(data){
-
-      data.times.forEach((time)=>{
-          if(time._id == event.target.value)
+          if(data.time._id == event.target.value)
           {
-            // technicianData = technicianData.concat(data.staff);
             technicianData = technicianData.concat(data);
           }
-      });
-    })
+      
+    });
     this.setState({
       technician: technicianData,
   }); 
@@ -149,7 +146,7 @@ class EditAppointmentAdmin extends React.Component {
         appointment: data,
         customer: data.customer.account,
         schedule: data.schedule,
-        times: data.schedule.times[0],
+        time: data.schedule.time,
         date: data.schedule.date,
         staff: data.schedule.staff,
         service: data.service
@@ -240,11 +237,8 @@ class EditAppointmentAdmin extends React.Component {
                         <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)}>
                           <option value="">-- select time --</option>
                           {this.state.filterData.map((result)=>(
-                            // eslint-disable-next-line react/jsx-key
-                            result.times.map((timeSlot)=>(
                               // eslint-disable-next-line react/jsx-key
-                              <option value={timeSlot._id}>{timeSlot.time}</option>
-                            ))
+                              <option value={result.time._id}>{result.time.time}</option>
                           ))}
                           </Form.Control>
                       </Col>
