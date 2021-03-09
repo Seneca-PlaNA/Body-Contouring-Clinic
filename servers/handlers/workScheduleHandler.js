@@ -21,7 +21,7 @@ exports.viewAllWorkSchedules = function () {
   return new Promise((resolve, reject) => {
     WorkSchedule.find()
       .populate('date')
-      .populate('times')
+      .populate('time')
       .populate({
         path: 'staff',
         populate: { path: 'account' },
@@ -41,7 +41,7 @@ exports.viewWorkScheduleById = function (id) {
   return new Promise((resolve, reject) => {
     WorkSchedule.findOne({ _id: id })
       .populate('date')
-      .populate('times')
+      .populate('time')
       .populate({
         path: 'staff',
         populate: { path: 'account' },
@@ -67,7 +67,7 @@ exports.viewWorkScheduleByDate = function (query) {
           path: 'staff',
           populate: { path: 'account' },
         })
-        .populate('times')
+        .populate('time')
         .exec()
         .then((workSchedule) => {
           resolve(workSchedule);

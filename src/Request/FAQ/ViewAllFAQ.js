@@ -1,112 +1,89 @@
+/* eslint-disable react/jsx-key */
 import React from 'react';
 import '../../App.css';
 import ViewFAQ from './ViewFAQ';
-import { ListGroup, Container, Tabs, Tab } from 'react-bootstrap';
+import { Accordion, Container, Tabs, Tab, Card } from 'react-bootstrap';
 
 class ViewAllFAQ extends React.Component {
   constructor() {
     super();
     this.state = {
       show: false,
+      faqs: [],
+      faqCategory: ' ',
     };
-    this.showFAQ = this.showFAQ.bind(this);
-    this.hideFAQ = this.hideFAQ.bind(this);
+/*     this.showFAQ = this.showFAQ.bind(this);
+    this.hideFAQ = this.hideFAQ.bind(this); */
   }
 
-  showFAQ = () => {
+/*   showFAQ = () => {
     this.setState({ show: true });
   };
 
   hideFAQ = () => {
     this.setState({ show: false });
-  };
+  }; */
+  getFAQs() {
+    return new Promise((resolve) => {
+      fetch('http://localhost:3001/faqs')
+        .then((response) => response.json())
+        .then((results) => {
+          resolve(results);
+        });
+    });
+  }
 
+  getFAQCategory(id) {
+    return new Promise((resolve) => {
+      fetch(`http://localhost:3001/faq-category/${id}`)
+        .then((response) => response.json())
+        .then((results) => {
+          resolve(results);
+        });
+    });
+  }
+
+  componentDidMount() {
+    this.getFAQs()
+      .then((data) => {
+        this.setState({
+          faqs: data,
+        });
+    });
+  }
   render() {
     return (
       <div className="contents" style={{ 'text-align': 'left', 'margin-right': '280px' }}>
         <Container>
+        { this.state.faqs.map( (result) => (
           <Tabs
-            id="controlled-tab-example"
+            id={result._id}
             activeKey={this.state.key}
             onSelect={(key) => this.setState({ key })}
           >
             <Tab
-              eventKey="shipping"
-              title="Shipping"
+              eventKey={result.faqCategory._id}
+              title={result.faqCategory.name}
               style={{ color: '#393F44', 'margin-top': '10px' }}
             >
-              <ListGroup variant="flush">
-                <ListGroup.Item action onClick={this.showFAQ}>
-                  What are the shipping fee and delivery timeline?
-                </ListGroup.Item>
-                <ListGroup.Item action onClick={this.showFAQ}>
-                  What does in-stock, backordered and made-to-order mean?
-                </ListGroup.Item>
-                <ListGroup.Item action onClick={this.showFAQ}>
-                  What is the last date to place an order to receive by Dec 24th?
-                </ListGroup.Item>
-              </ListGroup>
-            </Tab>
-            <Tab
-              eventKey="myOrder"
-              title="My Order"
-              style={{ color: '#393F44', 'margin-top': '10px' }}
-            >
-              <ListGroup variant="flush">
-                <ListGroup.Item action onClick={this.showFAQ}>
-                  What are the shipping fee and delivery timeline?
-                </ListGroup.Item>
-                <ListGroup.Item action onClick={this.showFAQ}>
-                  What does in-stock, backordered and made-to-order mean?
-                </ListGroup.Item>
-                <ListGroup.Item action onClick={this.showFAQ}>
-                  What is the last date to place an order to receive by Dec 24th?
-                </ListGroup.Item>
-              </ListGroup>
-            </Tab>
-            <Tab
-              eventKey="payment"
-              title="Payment"
-              style={{ color: '#393F44', 'margin-top': '10px' }}
-            >
-              <ListGroup variant="flush">
-                <ListGroup.Item action onClick={this.showFAQ}>
-                  How do I find my order number?
-                </ListGroup.Item>
-                <ListGroup.Item action onClick={this.showFAQ}>
-                  Can I cancel my order?
-                </ListGroup.Item>
-                <ListGroup.Item action onClick={this.showFAQ}>
-                  Can I update my order?
-                </ListGroup.Item>
-                <ListGroup.Item action onClick={this.showFAQ}>
-                  Can I change my address?
-                </ListGroup.Item>
-              </ListGroup>
-            </Tab>
-            <Tab
-              eventKey="returns"
-              title="Returns"
-              style={{ color: '#393F44', 'margin-top': '10px' }}
-            >
-              <ListGroup variant="flush">
-                <ListGroup.Item action onClick={this.showFAQ}>
-                  How do I find my order number?
-                </ListGroup.Item>
-                <ListGroup.Item action onClick={this.showFAQ}>
-                  Can I cancel my order?
-                </ListGroup.Item>
-                <ListGroup.Item action onClick={this.showFAQ}>
-                  Can I update my order?
-                </ListGroup.Item>
-                <ListGroup.Item action onClick={this.showFAQ}>
-                  Can I change my address?
-                </ListGroup.Item>
-              </ListGroup>
-            </Tab>
+              <Accordion>
+                <Card>
+                  <Accordion.Toggle as={Card.Header} eventKey="0">
+                     {result.title}
+                     </Accordion.Toggle>
+                     <Accordion.Collapse eventKey="0">
+                       <Card.Body>{result.contents}</Card.Body>
+                     </Accordion.Collapse>
+                </Card>
+              </Accordion>
+            </Tab> 
           </Tabs>
+        ))}
+                      <br/><br/><br/><br/><br/>
         </Container>
-        <ViewFAQ show={this.state.show} handleClose={this.hideFAQ} />
+        <ViewFAQ show={this.state.show} 
+        //handleClose={this.hideFAQ} 
+        />
         <br />
         <br />
       </div>

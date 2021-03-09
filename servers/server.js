@@ -23,9 +23,14 @@ const workScheduleHandler = require('./handlers/workScheduleHandler');
 const appointmentHandler = require('./handlers/appointmentHandler');
 const faqHandler = require('./handlers/faqHandler');
 const faqCategoryHandler = require('./handlers/faqCategoryHandler');
+const Account = require('../models/account');
+// const auth = require('./middleware/auth');
+const cookieParser = require('cookie-parser');
 
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 db();
 
 mongoose.set('useFindAndModify', false);
@@ -531,7 +536,6 @@ app.get('/workSchedule', (req, res) => {
     .catch((err) => res.json(err));
 });
 
-
 app.get('/workSchedule/:id', (req, res) => {
   workScheduleHandler
     .viewWorkScheduleById(req.params.id)
@@ -659,6 +663,48 @@ app.delete('/faq-category/:id', (req, res) => {
     .then((faqCategory) => res.json(faqCategory))
     .catch((err) => res.json(err));
 });
+
+//login
+app.post('/login', (req, res) => {
+  Account.findOne({ userID: req.body.userID }, (err, user) => {
+    if (err || user == null) {
+      return res.json({
+        loginSuccess: false,
+        message: 'Not available ID',
+      });
+    }
+    user
+      .comparePassword(req.body.password)
+      .then((isMatch) => {
+        if (!isMatch) {
+          return res.json({
+            loginSuccess: false,
+            message: 'Not matched password',
+          });
+        }
+        user
+          .generateToken()
+          .then((user) => {
+            res
+              .cookie('x_auth', user.token)
+              .status(200)
+              .json({ loginSuccess: true, _id: user._id, token: user.token });
+          })
+          .catch((err) => {
+            res.status(400).send(err);
+          });
+      })
+      .catch((err) => res.json({ loginSuccess: false, err }));
+  });
+});
+
+// app.get('/auth', auth, (req, res) => {
+//   res.status(200).json({
+//     _id: req._id,
+//     isAuth: true,
+//     email: req.user.email,
+//   });
+// });
 
 app.use('/api', (req, res) => res.json({ backServer: 'true' }));
 

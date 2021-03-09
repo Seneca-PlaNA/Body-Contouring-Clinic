@@ -16,8 +16,9 @@ class CustomerProfileEdit extends React.Component {
         { url: '/Customer/', title: 'Home' },
         { url: `/Customer/${this.props.id}`, title: 'Profile' },
         { url: `/Customer/Edit/${this.props.id}`, title: 'Edit Profile' },
-        { url: '/Customer/Balance', title: 'Balance' },
+        { url: `/Customer/Balance/${this.props.id}`, title: 'Balance' },
       ],
+      _id: localStorage.getItem('_id'),
     };
   }
 

@@ -21,7 +21,6 @@ import CustomerAccountAdmin from './Customer/Admin/CustomerAccountAdmin';
 import CustomerAccountEditAdmin from './Customer/Admin/CustomerAccountEditAdmin';
 import ViewRequest from './Request/ViewRequest';
 import RequestHomeAdmin from './Request/Admin/RequestHomebyAdmin';
-import ViewRequestAdmin from './Request/Admin/ViewRequestDetails';
 import AnswerRequest from './Request/Admin/AnswerRequest';
 import EditRequest from './Request/EditRequest';
 import ViewFAQ from './Request/FAQ/ViewAllFAQbyGeneral';
@@ -77,16 +76,28 @@ class RouterConfig extends React.Component {
           <Route exact path="/Appointment/Deleted" render={() => <AppointmentDeleted />} />
 
           {/* Appointment Admin URL */}
+          <Route exact path="/Appointment/Admin/" render={() => <AppointmentsAdmin />} />
           <Route
             exact
-            path="/Appointment/Admin/"
-            render={() => <AppointmentsAdmin />}
+            path="/Appointment/Admin/Appointment/:id"
+            render={(props) => <AppointmentAdmin id={props.match.params.id} />}
           />
-          <Route exact path="/Appointment/Admin/Appointment/:id" render={(props) => <AppointmentAdmin id={props.match.params.id}/>} />
-          <Route exact path="/Appointment/Admin/Edit/:id" render={(props) => <EditAppointmentAdmin id={props.match.params.id}/>} />
+          <Route
+            exact
+            path="/Appointment/Admin/Edit/:id"
+            render={(props) => <EditAppointmentAdmin id={props.match.params.id} />}
+          />
           <Route exact path="/Appointment/Admin/Create" render={() => <CreateAppointmentAdmin />} />
-          <Route exact path="/Appointment/Admin/Message/:id" render={(props) => <LeaveMessageToAppointment id={props.match.params.id}/>}/>
-          <Route exact path="/Appointment/Admin/Deleted" render={() => <AppointmentDeletedAdmin />}/>
+          <Route
+            exact
+            path="/Appointment/Admin/Message/:id"
+            render={(props) => <LeaveMessageToAppointment id={props.match.params.id} />}
+          />
+          <Route
+            exact
+            path="/Appointment/Admin/Deleted"
+            render={() => <AppointmentDeletedAdmin />}
+          />
 
           {/* Staff Schedule URL */}
           <Route exact path="/Staff/Schedule" render={() => <ViewStaffSchedule />} />
@@ -109,42 +120,46 @@ class RouterConfig extends React.Component {
           {/* Request URL */}
           <Route exact path="/Request" render={() => <RequestHome />} />
           <Route exact path="/Request/Create" render={() => <CreateRequest />} />
-          <Route exact path="/Request/Detail/:id"
-            render={(props) => (<ViewRequest id={props.match.params.id}></ViewRequest>)} />
-          <Route exact path="/Request/Edit/:id"
-            render={(props) => (<EditRequest id={props.match.params.id}></EditRequest>)} />
+          <Route exact path="/Request/Detail" render={() => <ViewRequest />} />
+          <Route exact path="/Request/Edit" render={() => <EditRequest />} />
           <Route exact path="/Request/FAQ" render={() => <ViewFAQ />} />
 
           {/* Request Admin URL*/}
           <Route exact path="/Request/Admin" render={() => <RequestHomeAdmin />} />
           <Route
-            exact
-            path="/Request/Admin/:id"
-            render={(props) => <ViewRequestAdmin id={props.match.params.id} />}
+            path="/Request/Admin/Answer/:id"
+            render={(props) => <AnswerRequest id={props.match.params.id}></AnswerRequest>}
           />
+          <Route exact path="/Request/FAQ/Admin" render={() => <ViewFAQAdmin />} />
+          <Route exact path="/Request/FAQ/Admin/Create" render={() => <CreateFAQ />} />
           <Route
             exact
-            path="/Request/Admin/Answer/:id"
-            render={(props) => <AnswerRequest id={props.match.params.id} />}
+            path="/Request/FAQ/Admin/Edit/:id"
+            render={(props) => <EditFAQ id={props.match.params.id} />}
           />
-          <Route exact path="/Request/Admin/FAQ" render={() => <ViewFAQAdmin />} />
-          <Route exact path="/Request/Admin/FAQ/Create" render={() => <CreateFAQ />} />
-          <Route exact path="/Request/Admin/FAQ/Edit" render={() => <EditFAQ />} />
 
           {/* Customer URL */}
           <Route exact path="/Customer" render={() => <CustomerHome />} />
           <Route
             exact
             path="/Customer/:id"
-            render={(props) => <CustomerProfile id={props.match.params.id} />}
+            render={() => <CustomerProfile id={localStorage.getItem('_id')} />}
           />
           <Route
             exact
             path="/Customer/Edit/:id"
-            render={(props) => <CustomerEdit id={props.match.params.id} />}
+            render={() => <CustomerEdit id={localStorage.getItem('_id')} />}
           />
-          <Route exact path="/Customer/Balance" render={() => <CustomerBalance />} />
-          <Route exact path="/Customer/BalanceDetail" render={() => <BalanceDetail />} />
+          <Route
+            exact
+            path="/Customer/Balance/:id"
+            render={() => <CustomerBalance id={localStorage.getItem('_id')} />}
+          />
+          <Route
+            exact
+            path="/Customer/BalanceDetail/:id"
+            render={() => <BalanceDetail id={localStorage.getItem('_id')} />}
+          />
 
           {/* Customer Admin URL*/}
           <Route exact path="/Customer/Admin" render={() => <CustomerHomeAdmin />} />

@@ -7,9 +7,9 @@ class CustomerBalance extends React.Component {
   state = {
     items: [
       { url: '/Customer/', title: 'Home' },
-      { url: '/Customer/Profile', title: 'Profile' },
-      { url: '/Customer/Edit', title: 'Edit Profile' },
-      { url: '/Customer/Balance', title: 'Balance' },
+      { url: `/Customer/${this.props.id}`, title: 'Profile' },
+      { url: `/Customer/Edit/${this.props.id}`, title: 'Edit Profile' },
+      { url: `/Customer/Balance${this.props.id}`, title: 'Balance' },
     ],
   };
   constructor(prop) {

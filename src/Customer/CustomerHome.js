@@ -4,16 +4,36 @@ import '../App.css';
 import { Table } from 'react-bootstrap';
 
 class CustomerHome extends React.Component {
-  state = {
-    items: [
-      { url: '/Customer/', title: 'Home' },
-      { url: '/Customer/Profile', title: 'Profile' },
-      { url: '/Customer/Edit', title: 'Edit Profile' },
-      { url: '/Customer/Balance', title: 'Balance' },
-    ],
-  };
-  constructor(prop) {
-    super(prop);
+  constructor(props) {
+    super(props);
+    this.state = {
+      profile: {},
+      items: [
+        { url: '/Customer/', title: 'Home' },
+        { url: `/Customer/${localStorage.getItem('_id')}`, title: 'Profile' },
+        { url: `/Customer/Edit/${localStorage.getItem('_id')}`, title: 'Edit Profile' },
+        { url: `/Customer/Balance/${localStorage.getItem('_id')}`, title: 'Balance' },
+      ],
+      _id: localStorage.getItem('_id'),
+    };
+  }
+
+  getCustomerProfile(id) {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/account/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        });
+    });
+  }
+
+  componentDidMount() {
+    this.getCustomerProfile(this.state._id).then((data) => {
+      this.setState({
+        profile: data,
+      });
+    });
   }
 
   render() {
@@ -22,7 +42,9 @@ class CustomerHome extends React.Component {
         <div className="col-md-1"></div>
         <SideBar items={this.state.items} />
         <div className="col-md-6" style={{ 'margin-left': '80px' }}>
-          <h2 className="PageTitle">Hi, User.fullName</h2>
+          <h2 className="PageTitle">
+            Hi, {this.state.profile.firstName} {this.state.profile.lastName}{' '}
+          </h2>
           <hr />
           <br />
           <h4>Appointment of Clinic</h4>

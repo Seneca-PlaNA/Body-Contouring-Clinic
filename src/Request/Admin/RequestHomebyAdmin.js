@@ -12,7 +12,7 @@ class RequestHomebyAdmin extends React.Component {
       show: false,
       items: [
         { url: '/Request/Admin', title: 'View All Request' },
-        { url: '/Request/Admin/FAQ', title: 'FAQ' },
+        { url: '/Request/FAQ/Admin', title: 'FAQ' },
       ],
       children: 'Request',
       auth: 'Admin',

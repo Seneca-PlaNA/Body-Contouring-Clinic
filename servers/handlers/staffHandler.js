@@ -21,7 +21,7 @@ exports.viewAllStaff = function () {
       .populate('account')
       .populate({
         path: 'workSchedules',
-        populate: [{ path: 'date'},{ path: 'times'}]
+        populate: [{ path: 'date'},{ path: 'time'}]
       })
       .then((staff) => {
         resolve(staff);
@@ -39,7 +39,7 @@ exports.viewStaffById = function (id) {
       .populate('account')
       .populate({
         path: 'workSchedules',
-        populate: { path: 'times' },
+        populate: [{ path: 'date'},{ path: 'time'}],
       })
       .exec()
       .then((staff) => {

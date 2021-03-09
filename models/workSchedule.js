@@ -12,10 +12,10 @@ const WorkScheduleSchema = new Schema({
         ref: 'dates',
         required: true
     },
-    times: [{
+    time: {
         type: Schema.Types.ObjectId,
         ref: 'times',
-    }],
+    },
     description: {
         type: String,
         required: true
