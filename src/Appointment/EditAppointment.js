@@ -32,6 +32,7 @@ class EditAppointment extends React.Component {
       allTechnicians: [],
       filterData: [],
       technician:[],
+      printDate: String,
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
@@ -100,6 +101,10 @@ class EditAppointment extends React.Component {
   }
 
   onDateChange(event){
+    this.setState({
+      printDate: event.target.value,
+    });
+
     var pureDate = (event.target.value).split("-");
     var searchDate = pureDate[1] + "/" + pureDate[2] +"/" + pureDate[0];
     console.log(searchDate);
@@ -108,7 +113,7 @@ class EditAppointment extends React.Component {
     .then((data)=>{
       console.log(data);
       this.setState({
-        filterData: data
+        filterData: data,
       })
     });
   }
@@ -142,6 +147,9 @@ class EditAppointment extends React.Component {
     fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`)
     .then(response => response.json())
     .then((data) => {
+      var pDate = (data.schedule.date.date).split("/");
+      var result = pDate[2] + "-" + pDate[0] + "-" + pDate[1];
+      
       this.setState({
         appointment: data,
         customer: data.customer.account,
@@ -149,7 +157,8 @@ class EditAppointment extends React.Component {
         time: data.schedule.time,
         date: data.schedule.date,
         staff: data.schedule.staff,
-        service: data.service
+        service: data.service,
+        printDate: result,
       });
 
       fetch(`${process.env.REACT_APP_API_URL}/services`)
@@ -226,7 +235,7 @@ class EditAppointment extends React.Component {
                         Date
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control type="date" onChange={this.onDateChange.bind(this)}/>
+                        <Form.Control type="date" value={this.state.printDate} onChange={this.onDateChange.bind(this)}/>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>

@@ -16,6 +16,8 @@ class EditOffer extends React.Component {
       ],
       children: 'Offer',
       offer: {},
+      startDate : String,
+      endDate: String,
       completed : false,
     };
   }
@@ -56,6 +58,7 @@ class EditOffer extends React.Component {
 
   onStartDateChange(event) {
     this.setState(() => ({
+      startDate: event.target.value,
       offer:{
         ...this.state.offer,
         startDate: event.target.value,
@@ -65,6 +68,7 @@ class EditOffer extends React.Component {
 
   onEndDateChange(event) {
     this.setState(() => ({
+      endDate: event.target.value,
       offer:{
         ...this.state.offer,
         endDate: event.target.value,
@@ -76,8 +80,13 @@ class EditOffer extends React.Component {
     fetch(`${process.env.REACT_APP_API_URL}/offer/${this.props.id}`)
       .then(response => response.json())
       .then((data) => {
+        var sDate = data.startDate.split("T");
+        var eDate = data.endDate.split("T");
+        console.log(sDate);
         this.setState({
           offer: data,
+          startDate : sDate[0],
+          endDate : eDate[0],
         });
     });
   }
@@ -119,10 +128,10 @@ class EditOffer extends React.Component {
                   Active Date
                 </Form.Label>
                 <Col sm={3}>
-                  <Form.Control controlId="startDate" type="date" placeholder="start date" value={this.state.offer.startDate} onChange={this.onStartDateChange.bind(this)} />
+                  <Form.Control controlId="startDate" type="date" value={this.state.startDate} onChange={this.onStartDateChange.bind(this)} />
                 </Col>
                 <Col sm={3}>
-                  <Form.Control controlId="endDate" type="date" placeholder="end date" value={this.state.offer.endDate} onChange={this.onEndDateChange.bind(this)} />
+                  <Form.Control controlId="endDate" type="date" value={this.state.endDate} onChange={this.onEndDateChange.bind(this)} />
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
