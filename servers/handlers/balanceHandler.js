@@ -18,8 +18,25 @@ exports.addNewBalance = function (data) {
 exports.viewAllBalance = function () {
   return new Promise((resolve, reject) => {
     Balance.find()
-      .then((offers) => {
-        resolve(offers);
+    .populate({
+      path: 'balanceHistory',
+      populate: { path: 'date'},
+    })
+    .populate({
+      path: 'service',
+      populate: [{ path: 'serviceCategory'}, { path: 'name' }],
+    })
+    .populate({
+      path: 'accountLevel',
+      populate: { path: 'name'},
+    })
+    .populate({
+      path: 'customer',
+      populate: { path: 'account' },
+    })
+    .exec()
+      .then((balance) => {
+        resolve(balance);
       })
       .catch((err) => {
         reject(err);
@@ -31,9 +48,25 @@ exports.viewAllBalance = function () {
 exports.viewOneBalanceById = function (id) {
   return new Promise((resolve, reject) => {
     Balance.findOne({ _id: id })
+    .populate({
+      path: 'balanceHistory',
+      populate: { path: 'date'},
+    })
+    .populate({
+      path: 'service',
+      populate: [{ path: 'serviceCategory'}, { path: 'name' }],
+    })
+    .populate({
+      path: 'accountLevel',
+      populate: { path: 'name'},
+    })
+    .populate({
+      path: 'customer',
+      populate: { path: 'account' },
+    })
       .exec()
-      .then((offer) => {
-        resolve(offer);
+      .then((balance) => {
+        resolve(balance);
       })
       .catch((err) => {
         reject(err);

@@ -10,7 +10,9 @@ class CustomerHomeAdmin extends React.Component {
     super(prop);
     this.state = {
       profile: [],
-      items: [{ url: '/Customer/Admin', title: 'Home' }],
+      items: [{ url: '/Customer/Admin', title: 'Home' },
+      { url: `/Customer/Admin/ManageBalance`, title: 'ManageBalance' },
+],
     };
   }
 

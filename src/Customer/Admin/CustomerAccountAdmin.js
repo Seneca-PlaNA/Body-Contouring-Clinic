@@ -9,7 +9,9 @@ class CustomerAccountAdmin extends React.Component {
     super();
     this.state = {
       show: false,
-      items: [{ url: '/Customer/Admin', title: 'Home' }],
+      items: [{ url: '/Customer/Admin', title: 'Home' },
+      { url: `/Customer/Admin/ManageBalance`, title: 'ManageBalance' },
+],
       children: 'Customer',
       auth: 'Admin',
     };

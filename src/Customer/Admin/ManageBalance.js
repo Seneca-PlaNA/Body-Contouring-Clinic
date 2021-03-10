@@ -3,49 +3,46 @@ import SideBar from '../SideBar/SideBar';
 import '../App.css';
 import { Form, Row, Col, Container, Table } from 'react-bootstrap';
 
-class CustomerBalance extends React.Component {
-  constructor(props) {
-    super(props);
+class ManageBalance extends React.Component {
+  constructor() {
+    super();
     this.state = {
-     items: [
-      { url: '/Customer/', title: 'Home' },
-      { url: `/Customer/${this.props.id}`, title: 'Profile' },
-      { url: `/Customer/Edit/${this.props.id}`, title: 'Edit Profile' },
-      { url: `/Customer/Balance${this.props.id}`, title: 'Balance' },
-    ], 
-      auth: 'General',
-      _id: localStorage.getItem('_id'),
-      balance: [],
-      balanceId: '',
-      customer: [],
-      service: [],
-      accountLevel: [],
-      balanceHistory: [],
+      show: false,
+      items: [{ url: '/Customer/Admin', title: 'Home' },
+              { url: `/Customer/Admin/ManageBalance`, title: 'ManageBalance' },
+    ],
+
+      children: 'Customer',
+      auth: 'Admin',
+      balances: [],
+      balanceHistories: [],
+      accounts: [],
+      accountLevels: [],
+      services:[],
     };
   }
 
-getBalances(id){
-    fetch(`${process.env.REACT_APP_API_URL}/balance?customer=${id}`)
-    .then((response) => response.json())
-    .then((results) => {
-      console.log(results);
-      this.setState({
-        requests: results,
-    });
+getBalances(){
+  return new Promise((resolve) => {
+    fetch(`${process.env.REACT_APP_API_URL}/balances`)
+      .then((response) => response.json())
+      .then((results) => {
+        resolve(results);
+      });
   });
 }
 
 componentDidMount() {
-  this.getBalance(this.props.id).then((data) => {
+  this.getBalances()
+  .then((data) => {
     this.setState({
-      balance: data,
- //     balanceId: data._id,
-      balanceHistory: data.balanceHistory,
-      customer: data.customer.account,
-      service: data.service,
-      accountLevel: data.accountLevel,
+      balances: data,
+      balanceHistories: data.balanceHistories,
+      accounts: data.accounts,
+      accountLevels: data.accountLevels,
+      services: data.services,
     });
-  });
+});
 }
 
   render() {
@@ -56,11 +53,10 @@ componentDidMount() {
     };
     return (
       <div className="row">
-        {console.log(this.state.customer)}
         <div className="col-md-1"></div>
         <SideBar items={this.state.items} />
         <div className="col-md-6" style={{ 'margin-left': '80px' }}>
-          <h2 className="PageTitle">Hi, {this.state.customer.firstName + ' ' + this.state.customer.lastName}</h2>
+          <h2 className="PageTitle">Hi, {this.state.user.firstName + ' ' + this.state.user.lastName}</h2>
           <hr />
           <br />
           <h4>Balance Information</h4>
@@ -72,7 +68,7 @@ componentDidMount() {
                 </Form.Label>
                 <Col sm={2}>
                   <Form.Label column md={0}>
-                    ${this.state.balance.balanceAccount}
+                    ${this.state.balances.balanceAccount}
                   </Form.Label>
                 </Col>
                 <Col sm={2}>
@@ -82,7 +78,7 @@ componentDidMount() {
                 </Col>
                 <Col sm={2}>
                   <Form.Label column md={0}>
-                  ${this.state.accountLevel}
+                    VIP
                   </Form.Label>
                 </Col>
               </Form.Group>
@@ -102,10 +98,19 @@ componentDidMount() {
                       <th>Price</th>
                     </tr>
                     <tr>
-                      <td>${this.state.balance.balanceAccount}</td>
-                      <td>${this.state.service.serviceCategory}</td>
-                      <td>${this.state.service.name}</td>
+                      <td>${this.state.balances.balanceAccount}</td>
+                      <td>Body Clinic</td>
+                      <td>Laser skin clean therapy</td>
                       <td>$100</td>
+                      <td>
+                        <a href="/Customer/BalanceDetail">details</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>2021-01-21</td>
+                      <td>Face Clinic</td>
+                      <td>Remove Black head</td>
+                      <td>$50</td>
                       <td>
                         <a href="/Customer/BalanceDetail">details</a>
                       </td>
@@ -137,4 +142,4 @@ componentDidMount() {
   }
 }
 
-export default CustomerBalance;
+export default ManageBalance;
