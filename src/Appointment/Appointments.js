@@ -11,8 +11,9 @@ class Appointments extends React.Component {
       items: [
         { url: '/Appointment', title: 'Appointment Home' },
         { url: '/Appointment/Appointments', title: 'View All Appointments' },
-        { url: `/Appointment/Create/602b55ef4bff0f4ab039060f`, title: 'Create Appointment' },
+        { url: `/Appointment/Create`, title: 'Create Appointment' },
       ],
+      _id: localStorage.getItem('_id'),
       appointments: [],
       customer: {},
       account: {},
@@ -32,7 +33,7 @@ class Appointments extends React.Component {
   componentDidMount() {
     document.title = 'All Appointments | Body Contouring Clinic';
 
-    fetch(`${process.env.REACT_APP_API_URL}/customer?account=602aeb19e5e37f341e204809`)
+    fetch(`${process.env.REACT_APP_API_URL}/customer?account=${this.state._id}`)
     .then(response => response.json())
     .then((data) => {
       this.setState({

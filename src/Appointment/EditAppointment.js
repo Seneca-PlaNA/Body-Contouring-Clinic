@@ -13,7 +13,7 @@ class EditAppointment extends React.Component {
       items: [
         { url: '/Appointment', title: 'Appointment Home' },
         { url: '/Appointment/Appointments', title: 'View All Appointments' },
-        { url: '/Appointment/Create/602b55ef4bff0f4ab039060f', title: 'Create Appointment' },
+        { url: '/Appointment/Create', title: 'Create Appointment' },
       ],
       saveModal: false,
       title: 'Appointment saved!',

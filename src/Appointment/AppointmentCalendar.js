@@ -16,21 +16,35 @@ class AppointmentCalendar extends React.Component {
     this.state ={
       appointment:[],
       schedule:[],
-      month: Number,
+      customer: [],
+      month: 0,
       monthText: String,
+      _id: localStorage.getItem('_id'),
     };
     this.calendarRef = React.createRef();
   }
+  getAppointment(custId){
+    fetch(`${process.env.REACT_APP_API_URL}/appointment?customer=${custId}`)
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({
+        appointment: data
+      });
+      console.log(this.state.appointment);
+      this.formatCalendar(this.state.appointment);
+    });
+  }
 
   componentDidMount() {
-    fetch(`${process.env.REACT_APP_API_URL}/appointment?customer=602b55ef4bff0f4ab039060f`)
-      .then(response => response.json())
-      .then((data) => {
-        this.setState({
-          appointment: data
-        });
-        this.formatCalendar(this.state.appointment);
+    fetch(`${process.env.REACT_APP_API_URL}/customer?account=${this.state._id}`)
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({
+        customer: data,
       });
+      console.log(this.state.customer);
+      this.getAppointment(this.state.customer._id);
+    });
   }
 
   formatCalendar = (appointments) => {
@@ -79,7 +93,11 @@ class AppointmentCalendar extends React.Component {
 
   handleMonthText = (month) =>{
     var tempText = "";
+
     switch (month){
+      case 0:
+        tempText= "This Month";
+        break;
       case 1:
         tempText = "January";
         break;
@@ -169,7 +187,7 @@ class AppointmentCalendar extends React.Component {
 
   render() {
     const selectedView = this.props.view; // default view
-
+    console.log(this.state.month);
     return (
       <>
         {/* <button onClick={this.weekChangeButton}>Week</button> */}
