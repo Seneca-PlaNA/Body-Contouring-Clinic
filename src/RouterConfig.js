@@ -49,6 +49,7 @@ import ViewStaffSchedule from './StaffSchedule/ViewStaffSchedule';
 import EditStaffSchedule from './StaffSchedule/EditStaffSchedule';
 import AppointmentDeleted from './Appointment/AppointmentDeleted';
 import AppointmentDeletedAdmin from './Appointment/Admin/AppointmentDeletedAdmin';
+//import ManageBalance from './Customer/Admin/ManageBalance';
 
 class RouterConfig extends React.Component {
   render() {
@@ -170,7 +171,8 @@ class RouterConfig extends React.Component {
             path="/Customer/Admin/Account/Edit"
             render={() => <CustomerAccountEditAdmin />}
           />
-
+{/*           <Route exact path="/Customer/Admin/ManageBalance" render={() => <ManageBalance />} />
+ */}
           {/* Register URL */}
           <Route exact path="/Register/Login" render={() => <Login />} />
           <Route exact path="/Register/SignUp" render={() => <SignUp />} />
