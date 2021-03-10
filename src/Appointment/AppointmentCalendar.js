@@ -16,6 +16,8 @@ class AppointmentCalendar extends React.Component {
     this.state ={
       appointment:[],
       schedule:[],
+      month: Number,
+      monthText: String,
     };
     this.calendarRef = React.createRef();
   }
@@ -66,24 +68,80 @@ class AppointmentCalendar extends React.Component {
 
         this.setState({
           schedule: this.state.schedule.concat(tempAppnmt),
+          month: Number(pureDate[0]) + 1,
         });
+
+        this.handleMonthText(this.state.month);
         console.log(this.state.schedule);
       });
     }
+  }
+
+  handleMonthText = (month) =>{
+    var tempText = "";
+    switch (month){
+      case 1:
+        tempText = "January";
+        break;
+      case 2:
+        tempText = "Feburary"
+        break;
+      case 3:
+        tempText = "March";
+        break;
+      case 4:
+        tempText = "April";
+        break;
+      case 5:
+        tempText = "May";
+        break;
+      case 6:
+        tempText = "June";
+        break;
+      case 7:
+        tempText = "July";
+        break;
+      case 8:
+        tempText = "August";
+        break;
+      case 9:
+        tempText = "September";
+        break;
+      case 10:
+        tempText = "October";
+        break;
+      case 11:
+        tempText = "November";
+        break;
+      case 12:
+        tempText = "December";
+        break;
+    }
+    this.setState({
+      monthText: tempText,
+    });
   }
   // ---------- Instance method ---------- //
 
   // Button to move next month
   handleClickNextButton = () => {
     const calendarInstance = this.calendarRef.current.getInstance();
-
+    var tempNum = this.state.month + 1;
+    this.setState({
+      month: tempNum,
+    });
+    this.handleMonthText(tempNum);
     calendarInstance.next();
   };
 
   // Button to move next month
   handleClickPrevButton = () => {
     const calendarInstance = this.calendarRef.current.getInstance();
-
+    var tempNum = this.state.month - 1;
+    this.setState({
+      month: tempNum,
+    });
+    this.handleMonthText(tempNum);
     calendarInstance.prev();
   };
 
@@ -119,7 +177,7 @@ class AppointmentCalendar extends React.Component {
           {' '}
           &laquo;{' '}
         </Button>
-        <span>This month </span>
+        <span>{this.state.monthText}</span>
         <Button variant="outline-*" onClick={this.handleClickNextButton}>
           {' '}
           &raquo;{' '}
