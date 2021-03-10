@@ -13,6 +13,9 @@ const offerSchema = new Schema(
         ref: 'services',
       },
     ],
+    price:{
+      type: Number,
+    },
     startDate: {
       type: Date,
       required: true,

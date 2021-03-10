@@ -2,6 +2,7 @@
 import React from 'react';
 import '../App.css';
 import { Button, Card, CardColumns } from 'react-bootstrap';
+import moment from 'moment';
 
 class ListAllOffer extends React.Component {
   constructor(props) {
@@ -39,7 +40,9 @@ class ListAllOffer extends React.Component {
               <Card.Img variant="top" src={result.imageURL} />
               <Card.Body>
                 <Card.Title>{result.name}</Card.Title>
+                <Card.Text>{moment(result.startDate).format('ll')} ~ {moment(result.endDate).format('ll')}</Card.Text>
                 <Card.Text>{result.description}</Card.Text>
+                <Card.Text>$ {result.price}</Card.Text>
                 <Button variant="outline-info" href={`/Appointment/Create?offerId=${result._id}`}>
                   Book
                 </Button>

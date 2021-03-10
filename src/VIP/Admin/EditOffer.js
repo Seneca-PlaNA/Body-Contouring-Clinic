@@ -54,6 +54,15 @@ class EditOffer extends React.Component {
     }));
   }
 
+  onPriceChange(event) {
+    this.setState(() => ({
+      offer: {
+        ...this.state.offer,
+        price: event.target.value,
+      },
+    }));
+  }
+
   onStartDateChange(event) {
     this.setState(() => ({
       offer:{
@@ -112,6 +121,14 @@ class EditOffer extends React.Component {
                 </Form.Label>
                 <Col sm={6}>
                   <Form.Control as="textarea" rows={3} value={this.state.offer.description} onChange={this.onDescriptionChange.bind(this)} />
+                </Col>
+              </Form.Group>
+              <Form.Group as={Row}>
+                <Form.Label column sm={2}>
+                  Price:
+                </Form.Label>
+                <Col sm={6}>
+                  <Form.Control rows={3} value={this.state.offer.price} onChange={this.onPriceChange.bind(this)}></Form.Control>
                 </Col>
               </Form.Group>
               <Form.Group as={Row} inline>

@@ -4,6 +4,7 @@ import SideBar from '../../SideBar/SideBar';
 import { Row, Col, Button } from 'react-bootstrap';
 import PopUp from '../../PopUp';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 class ManageOffer extends React.Component {
   constructor() {
@@ -95,6 +96,8 @@ class ManageOffer extends React.Component {
                   <input type="checkbox" />
                 </th>
                 <th>ID</th>
+                <th>Date</th>
+                <th>Price</th>
                 <th>Title</th>
                 <th>Contents</th>
                 <td></td>
@@ -107,6 +110,8 @@ class ManageOffer extends React.Component {
                     <input type="checkbox" />
                   </td>
                   <td>{index}</td>
+                  <td>{moment(result.startDate).format('ll')} ~ {moment(result.endDate).format('ll')}</td>
+                  <td>${result.price}</td>
                   <td>{result.name}</td>
                   <td>{result.description}</td>
                   <td>

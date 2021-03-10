@@ -70,7 +70,7 @@ class Appointments extends React.Component {
                         <td>{appointment.schedule == null ? '' : appointment.schedule.date.date}</td>
                         <td>{appointment.schedule == null ? '' : appointment.schedule.time.time}</td>
                         <td>{appointment.service.name}</td>
-                        <td>$99</td>
+                        <td>${appointment.service.price}</td>
                         <td>
                           <Link to={`/Appointment/Appointment/${appointment._id}`}>
                             <Button variant="outline-secondary">

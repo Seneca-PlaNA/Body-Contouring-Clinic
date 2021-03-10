@@ -115,6 +115,10 @@ class AppointmentAdmin extends React.Component {
                       <td>{this.state.service.name}</td>
                     </tr>
                     <tr>
+                      <td>Price:</td>
+                      <td>${this.state.service.price}</td>
+                    </tr>
+                    <tr>
                       <td>Contact #:</td>
                       <td>{this.state.appointment.contactNumber}</td>
                     </tr>
