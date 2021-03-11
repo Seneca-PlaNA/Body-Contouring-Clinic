@@ -8,28 +8,33 @@ class ListAllRequest extends React.Component {
     super(props);
     this.state = {
       requests: [],
+      _id: localStorage.getItem('_id'),
+      account: [],
     };
   }
 
-  getRequests() {
-    moment();
-    return new Promise((resolve) => {
-      fetch('http://localhost:3001/requests')
-        .then((response) => response.json())
-        .then((results) => {
-          resolve(results);
+  getRequests(id) {
+    fetch(`${process.env.REACT_APP_API_URL}/request?customer=${id}`)
+      .then((response) => response.json())
+      .then((results) => {
+        console.log(results);
+        this.setState({
+          requests: results,
         });
-    });
+      });
   }
   componentDidMount() {
-    this.getRequests().then((data) => {
-      this.setState({
-        requests: data,
+    fetch(`${process.env.REACT_APP_API_URL}/customer?account=${this.state._id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          account: data,
+        });
+        console.log(this.state.account._id);
+        this.getRequests(this.state.account._id);
       });
-    });
   }
   render() {
-    console.log(this.state.requests);
     const pagination = {
       color: '#B58970',
     };

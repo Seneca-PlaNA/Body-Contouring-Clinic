@@ -72,8 +72,6 @@ class StaffScheduleCalendar extends React.Component {
 
   render() {
     const selectedView = this.props.view; // default view
-    // let td = new Date();
-    console.log(this.props.today);
     return (
       <>
         {/* <button onClick={this.weekChangeButton}>Week</button> */}

@@ -18,11 +18,13 @@ class CreateRequest extends React.Component {
         requestCategory: String,
         serviceCategory: String,
         contents: String,
+        customer: {},
         date: new Date(),
         lastRequestTime: new Date(),
-        customer: '602b55ef4bff0f4ab039060f', // change this after implement authorization
-        status: 'unsolved'
+        status: 'unsolved',
       },
+      _id: localStorage.getItem('_id'),
+      customer: {},
       requestCategories: [],
       serviceCategories: [],
       completed: false,
@@ -49,6 +51,7 @@ class CreateRequest extends React.Component {
     this.setState(() => ({
       request: {
         ...this.state.request,
+        customer: this.state.customer._id,
         title: e.target.value,
       },
     }));
@@ -100,6 +103,15 @@ class CreateRequest extends React.Component {
     });
   }
   componentDidMount() {
+    fetch(`${process.env.REACT_APP_API_URL}/customer?account=${this.state._id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        this.setState({
+          customer: data,
+        });
+      });
+    console.log(this.state._id);
     this.getRequestCategories().then((data) => {
       this.setState({
         requestCategories: data,
@@ -201,7 +213,7 @@ class CreateRequest extends React.Component {
                     </Button>
                   </Col>
                   <Col xs={1}>
-                    <Button variant="outline-info" type="submit" >
+                    <Button variant="outline-info" type="submit">
                       Save
                     </Button>
                   </Col>

@@ -13,7 +13,7 @@ class CreateAppointment extends React.Component {
       items: [
         { url: '/Appointment', title: 'Appointment Home' },
         { url: '/Appointment/Appointments', title: 'View All Appointments' },
-        { url: `/Appointment/Create/602b55ef4bff0f4ab039060f`, title: 'Create Appointment' },
+        { url: `/Appointment/Create`, title: 'Create Appointment' },
       ],
       saveModal: false,
       savedBackLink: '/Appointment/Appointment',
@@ -21,6 +21,7 @@ class CreateAppointment extends React.Component {
       title: 'Appointment Saved!',
 
       completed: false,
+      _id: localStorage.getItem('_id'),
       appointment: {
         customer: String,
         contactNumber: String,
@@ -29,7 +30,7 @@ class CreateAppointment extends React.Component {
         schedule: String,
       },
       services: [],
-      customer: String,
+      customer: {},
       filterData: [],
       technician:[],
     };
@@ -63,7 +64,7 @@ class CreateAppointment extends React.Component {
     this.setState(() => ({
       appointment:{
         ...this.state.appointment,
-        customer: this.props.id,
+        customer: this.state.customer._id,
         service: event.target.value,
       }
     }));
@@ -125,15 +126,25 @@ class CreateAppointment extends React.Component {
     });
   }
 
-  componentDidMount() {
-    document.title = 'Create New Appointment | Body Contouring Clinic';
-
+  getService(){
     fetch(`${process.env.REACT_APP_API_URL}/services`)
     .then(response => response.json())  
     .then((data)=>{
       this.setState({
         services: data
       })
+    });
+  }
+  componentDidMount() {
+    document.title = 'Create New Appointment | Body Contouring Clinic';
+
+    fetch(`${process.env.REACT_APP_API_URL}/customer?account=${this.state._id}`)
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({
+        customer: data,
+      });
+      this.getService();
     });
 
   }

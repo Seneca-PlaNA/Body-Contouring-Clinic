@@ -2,8 +2,6 @@ import React from 'react';
 import '../App.css';
 import SideBar from '../SideBar/SideBar';
 import { Button, Container, Form, Row, Col } from 'react-bootstrap';
-// import { Link } from 'react-router-dom';
-// import moment from 'moment';
 
 class ViewSchedulesList extends React.Component {
   constructor() {
@@ -16,30 +14,37 @@ class ViewSchedulesList extends React.Component {
         { url: '/Staff/Schedules', title: 'View Schedule List' },
       ],
       loaded: true,
-      staff: '602b54964bff0f4ab039060d', // temporary till the login auth
+      _id: localStorage.getItem('_id'),
+      staff: [],
+      account: [],
       workSchedules: [],
       date: [],
       time: [],
     };
   }
 
-  getWorkSchedules() {
-    return new Promise((resolve) => {
-      fetch(`${process.env.REACT_APP_API_URL}/staffWorkSchedules?staff=${this.state.staff}`)
-        .then((response) => response.json())
-        .then((data) => {
-          resolve(data);
+  getWorkSchedules(id) {
+    document.title = 'Your Schedule List | Body Contouring Clinic';
+    fetch(`${process.env.REACT_APP_API_URL}/staffWorkSchedules?staff=${id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          workSchedules: data,
         });
-    });
+      });
   }
 
   componentDidMount() {
-    this.getWorkSchedules().then((data) => {
-      this.setState({
-        workSchedules: data,
-        loaded: true,
+    fetch(`${process.env.REACT_APP_API_URL}/staff?account=${this.state._id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          staff: data,
+          account: data.account,
+        });
+        console.log(this.state.staff);
+        this.getWorkSchedules(this.state.staff._id);
       });
-    });
   }
 
   render() {
@@ -50,7 +55,7 @@ class ViewSchedulesList extends React.Component {
           <div className="col-md-1"></div>
           <SideBar items={this.state.items} />
           <div className="col-md-8" style={{ 'margin-left': '80px' }}>
-            <h2 className="PageTitle">View All Schedule</h2>
+            <h2 className="PageTitle">Hi, {this.state.account.firstName + ' ' + this.state.account.lastName}, these are your schedules</h2>
             <br />
             <div className="contents">
               <Form inline>

@@ -21,7 +21,9 @@ class ViewStaffScheduleCalendar extends React.Component {
       button: 'Back to schedule',
       saveModal: false,
 
-      staff: '602b54964bff0f4ab039060d', // temporary till the login auth
+      _id: localStorage.getItem('_id'),
+      staff: [],
+      account: [],
       workSchedules: [],
       schedules: [],
       today: new Date(),
@@ -39,15 +41,28 @@ class ViewStaffScheduleCalendar extends React.Component {
     console.log('hey');
   };
 
-  componentDidMount() {
-    document.title = 'Your Schedule Calendar | Body Contouring Clinic';
-    fetch(`${process.env.REACT_APP_API_URL}/staffWorkSchedules?staff=${this.state.staff}`)
+  getWorkSchedules(id) {
+    fetch(`${process.env.REACT_APP_API_URL}/staffWorkSchedules?staff=${id}`)
       .then((response) => response.json())
       .then((data) => {
         this.setState({
           workSchedules: data,
         });
         this.formatDateTimeForCalendar(this.state.workSchedules);
+      });
+  }
+
+  componentDidMount() {
+    document.title = 'Your Schedule Calendar | Body Contouring Clinic';
+    fetch(`${process.env.REACT_APP_API_URL}/staff?account=${this.state._id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          staff: data,
+          account: data.account,
+        });
+        console.log(this.state.staff);
+        this.getWorkSchedules(this.state.staff._id);
       });
   }
 
@@ -61,19 +76,16 @@ class ViewStaffScheduleCalendar extends React.Component {
         let startTimeInts = timeInts[0].split(':');
         let endTimeInts = timeInts[1].split(':');
 
-        console.log(startTimeInts);
-        console.log(endTimeInts);
-        console.log(dateInts);
         let startTime = new Date(
           dateInts[2],
-          (dateInts[0]-1),
+          dateInts[0] - 1,
           dateInts[1],
           startTimeInts[0],
           startTimeInts[1]
         );
         let endTime = new Date(
           dateInts[2],
-          (dateInts[0]-1),
+          dateInts[0] - 1,
           dateInts[1],
           endTimeInts[0],
           endTimeInts[1]
@@ -102,7 +114,7 @@ class ViewStaffScheduleCalendar extends React.Component {
           <SideBar items={this.state.items} />
           <div className="col-md-9">
             <Container style={{ marginLeft: '0px', marginRight: '0px', float: 'center' }}>
-              <h2>Your schedule</h2>
+              <h2>Hi, {this.state.account.firstName + ' ' + this.state.account.lastName}, here is your schedule</h2>
               <SavedPopUp
                 show={this.state.saveModal}
                 handelClose={this.hideSave}
@@ -112,11 +124,19 @@ class ViewStaffScheduleCalendar extends React.Component {
               />
               <Row>
                 <Col sm={5}>
-                  <StaffScheduleCalendar view={this.state.dayCalendarView} schedule={this.state.schedules} today={this.state.today} />
+                  <StaffScheduleCalendar
+                    view={this.state.dayCalendarView}
+                    schedule={this.state.schedules}
+                    today={this.state.today}
+                  />
                 </Col>
                 <Col sm={2}></Col>
                 <Col>
-                  <StaffScheduleCalendar view={this.state.weekCalendarView} schedule={this.state.schedules} today={this.state.today} />
+                  <StaffScheduleCalendar
+                    view={this.state.weekCalendarView}
+                    schedule={this.state.schedules}
+                    today={this.state.today}
+                  />
                 </Col>
               </Row>
             </Container>

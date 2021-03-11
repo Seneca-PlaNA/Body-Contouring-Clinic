@@ -18,6 +18,8 @@ class RequestHome extends React.Component {
       ],
       children: 'Request',
       auth: 'General',
+      _id: localStorage.getItem('_id'),
+      user: [],
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -36,13 +38,23 @@ class RequestHome extends React.Component {
     this.setState({ show: false });
   };
 
+  componentDidMount() {
+    fetch(`${process.env.REACT_APP_API_URL}/customer?account=${this.state._id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          user: data.account,
+        });
+      });
+  }
+
   render() {
     return (
       <div className="row">
         <div className="col-md-1"></div>
         <SideBar items={this.state.items} />
         <div className="col-md-8" style={{ 'margin-left': '80px' }}>
-          <h2 className="PageTitle">View All Request</h2>
+          <h2 className="PageTitle">Hi, {this.state.user.firstName + ' ' + this.state.user.lastName}, these are your request</h2>
           <br />
           <div className="contents">
             <Form inline>

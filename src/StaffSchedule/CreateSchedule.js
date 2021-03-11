@@ -13,8 +13,9 @@ class CreateSchedule extends React.Component {
         { url: '/Staff/Schedule/Create', title: 'Create Schedule' },
         { url: '/Staff/Schedules', title: 'View Schedule List' },
       ],
+      _id: localStorage.getItem('_id'),
       workSchedule: {
-        staff: '602b54964bff0f4ab039060d',  // temporary till the login auth
+        staff: {}, // temporary till the login auth
         date: String,
         time: String,
         description: String,
@@ -54,6 +55,7 @@ class CreateSchedule extends React.Component {
     this.setState(() => ({
       workSchedule: {
         ...this.state.workSchedule,
+        staff: this.state.staff._id,
         time: e.target.value,
       },
     }));
@@ -88,6 +90,13 @@ class CreateSchedule extends React.Component {
     });
   }
   componentDidMount() {
+    fetch(`${process.env.REACT_APP_API_URL}/staff?account=${this.state._id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          staff: data,
+        });
+      });
     this.getDates().then((data) => {
       this.setState({
         dates: data,

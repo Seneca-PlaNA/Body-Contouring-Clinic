@@ -331,6 +331,13 @@ app.delete('/staff/:id', (req, res) => {
     .catch((err) => res.json(err));
 });
 
+app.get('/staff', (req, res) => {
+  staffHandler
+    .viewStaffByInput(req.query)
+    .then((staff) => res.json(staff))
+    .catch((err) => res.json(err));
+});
+
 // customer
 app.post('/create-customer', (req, res) => {
   customerHandler.addNewCustomer(req.body).then((msg) => res.json(msg));
@@ -603,7 +610,6 @@ app.get('/appointment', (req, res) => {
     .then((appointment) => res.json(appointment))
     .catch((err) => res.json(err));
 });
-
 
 // faq
 app.post('/create-faq', (req, res) => {

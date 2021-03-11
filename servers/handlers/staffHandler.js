@@ -83,3 +83,17 @@ exports.deleteStaffById = function (id) {
       });
   });
 };
+
+exports.viewStaffByInput = function (query) {
+  return new Promise((resolve, reject) => {
+    Staff.findOne(query)
+      .populate('account')
+      .exec()
+      .then((staff) => {
+        resolve(staff);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
