@@ -19,7 +19,6 @@ class EditAppointmentAdmin extends React.Component {
       savedBackLink: '/Appointment/Admin',
       button: 'Back To Appointment',
       title: 'Appointment Saved!',
-      serviceToggle: false,
       appointment: [],
       customer: [],
       schedule: [],
@@ -37,10 +36,6 @@ class EditAppointmentAdmin extends React.Component {
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
   }
-
-  multipleService = () => {
-    this.setState({ serviceToggle: !this.state.serviceToggle });
-  };
 
   showSave = () => {
     this.setState({ saveModal: true });
@@ -83,15 +78,6 @@ class EditAppointmentAdmin extends React.Component {
   }
 
   onServiceChange(event) {
-    this.setState(() => ({
-      appointment:{
-        ...this.state.appointment,
-        service: event.target.value,
-      }
-    }));
-  }
-
-  onAddServiceChange(event){
     this.setState(() => ({
       appointment:{
         ...this.state.appointment,
@@ -193,43 +179,28 @@ class EditAppointmentAdmin extends React.Component {
         <div className="row">
           <div className="col-md-1"></div>
           <SideBar items={this.state.items} />
-          <div className="col-md-8" style={{ 'margin-left': '80px' }}>
-            <h2 className="PageTitle">Edit Appointment</h2>
+          <div className="col-md-6" style={{ 'margin-left': '80px' }}>
+            <h2>Edit Appointment</h2>
+            <br/>
             <Container>
               <Row>
-                <Col>
+                <Col></Col>
+                <Col xs={8}>
                   <Form onSubmit={this.handlSubmit.bind(this)}>
                     <Form.Group as={Row} inline>
                       <Form.Label column sm="4">
                         Service(s):
                       </Form.Label>
-                      <Col sm="8" style={{ marginLeft: '0px' }} className="row">
-                        <Form.Control inline controlId="service" as="select" className="col-md-7" value={this.state.service._id} onChange={this.onServiceChange.bind(this)}>
+                      <Col sm="8">
+                        <Form.Control inline controlId="service" as="select" value={this.state.service._id} onChange={this.onServiceChange.bind(this)}>
                           <option value="">-- select service --</option>
                           {this.state.allServices.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
                             <option key={result._id} value={result._id}>{result.name}</option>
                           ))}
                         </Form.Control>
-                        <Button onClick={this.multipleService} style={{ marginLeft: '35px' }}>
-                          Add Services
-                        </Button>
                       </Col>
                     </Form.Group>
-                    {this.state.serviceToggle && (
-                      <Form.Group as={Row}>
-                        <Form.Label column sm="4"></Form.Label>
-                        <Col sm="8" style={{ marginLeft: '0px' }} className="row">
-                          <Form.Control inline as="select" className="col-md-7">
-                          <option value="">-- select service --</option>
-                          {this.state.allServices.map((result)=>(
-                            // eslint-disable-next-line react/jsx-key
-                            <option value={result._id}>{result.name}</option>
-                          ))}
-                          </Form.Control>
-                        </Col>
-                      </Form.Group>
-                    )}
                     <Form.Group as={Row}>
                       <Form.Label column sm="4">
                         Date
@@ -242,7 +213,7 @@ class EditAppointmentAdmin extends React.Component {
                       <Form.Label column sm="4">
                         Time
                       </Form.Label>
-                      <Col sm="6">
+                      <Col sm="8">
                         <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)}>
                           <option value="">-- select time --</option>
                           {this.state.filterData.map((result)=>(

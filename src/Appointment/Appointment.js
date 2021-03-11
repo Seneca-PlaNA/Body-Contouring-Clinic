@@ -97,6 +97,7 @@ class Appointment extends React.Component {
           <SideBar items={this.state.items} />
           <div className="col-md-6">
             <h2>Appointment Details</h2>
+            <br/>
             <Container>
               <Row>
                 <Col></Col>
@@ -138,6 +139,7 @@ class Appointment extends React.Component {
                 </Col>
                 <Col></Col>
               </Row>
+              <br/>
               <Row>
                 <Col></Col>
                 <Col>

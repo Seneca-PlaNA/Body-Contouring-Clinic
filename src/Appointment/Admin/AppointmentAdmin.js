@@ -88,8 +88,9 @@ class AppointmentAdmin extends React.Component {
         <div className="row">
           <div className="col-md-1"></div>
           <SideBar items={this.state.items} />
-          <div className="col-md-8" style={{ 'margin-left': '80px' }}>
-            <h2 className="PageTitle">Appointment Details</h2>
+          <div className="col-md-6" style={{ 'margin-left': '80px' }}>
+            <h2>Appointment Details</h2>
+            <br/>
             <Container>
               <Row>
                 <Col>
@@ -130,6 +131,7 @@ class AppointmentAdmin extends React.Component {
                 </Col>
                 <Col></Col>
               </Row>
+              <br/>
               <Row>
                 <Col></Col>
                 <Col>

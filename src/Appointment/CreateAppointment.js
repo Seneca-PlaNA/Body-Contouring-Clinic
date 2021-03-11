@@ -2,7 +2,6 @@ import React from 'react';
 import '../App.css';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 import SideBar from '../SideBar/SideBar';
-import styles from '../app.module.css';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
 
@@ -164,7 +163,8 @@ class CreateAppointment extends React.Component {
           <div className="col-md-1"></div>
           <SideBar items={this.state.items} />
           <div className="col-md-6">
-            <h2 className={styles.appointmentTitle}>New Appointment</h2>
+            <h2>New Appointment</h2>
+            <br/>
             <Container>
               <Row>
                 <Col></Col>
@@ -174,17 +174,14 @@ class CreateAppointment extends React.Component {
                       <Form.Label column sm="4">
                         Service(s):
                       </Form.Label>
-                      <Col sm="8" style={{ marginLeft: '0px' }} className="row">
-                        <Form.Control inline as="select" className="col-md-7" onChange={this.onServiceChange.bind(this)}>
+                      <Col sm="8">
+                        <Form.Control inline as="select" onChange={this.onServiceChange.bind(this)}>
                         <option>-- select service --</option>
                         {this.state.services.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
                             <option key={result._id} value={result._id}>{result.name}</option>
                           ))}
                         </Form.Control>
-                        <Button onClick={this.multipleService} style={{ marginLeft: '50px' }}>
-                          Add Services
-                        </Button>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
@@ -199,7 +196,7 @@ class CreateAppointment extends React.Component {
                       <Form.Label column sm="4">
                         Time
                       </Form.Label>
-                      <Col sm="6">
+                      <Col sm="8">
                         <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)}>
                           <option value="">-- select time --</option>
                           {this.state.filterData.map((result)=>(
