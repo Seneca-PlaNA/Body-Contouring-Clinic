@@ -3,14 +3,20 @@ const Schema = mongoose.Schema;
 
 const balanceSchema = new Schema(
   {
-    service: {
+    account:{
       type: Schema.Types.ObjectId,
-      ref: 'services',
+      ref: 'accounts',
       required: true,
     },
 
     balanceAccount: {
       type: Number,
+      required: true,
+    },
+
+    accountLevel: {
+      type: Schema.Types.ObjectId,
+      ref: 'accountLevels',
       required: true,
     },
 
