@@ -34,6 +34,11 @@ const accountSchema = new Schema(
       ref: 'accountLevels',
       required: true,
     },
+    balanceHistory: {
+      type: Schema.Types.ObjectId,
+      ref: 'balanceHistories',
+      required: true,
+    }
   },
   { timestamps: true }
 );
