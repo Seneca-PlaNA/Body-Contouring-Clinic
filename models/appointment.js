@@ -23,7 +23,10 @@ const AppointmentSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'services',
       required: true
-  }  
+    },
+    confirmation: {
+      type: Boolean,
+    }  
 
 }, { timestamps: true });
 

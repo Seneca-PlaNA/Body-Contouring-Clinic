@@ -61,6 +61,29 @@ class AppointmentAdmin extends React.Component {
       .catch((err) => (console.log(err)));
   };
 
+  handleConfirm = (e) => {
+    return new Promise((resolve)=>{
+      e.preventDefault();
+      
+      this.setState({
+        appointment:{
+          ...this.state.appointment,
+          confirmation: e == "true"? true : false,
+        }
+      });
+  
+      fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`,{
+        method: "PUT",
+        body: JSON.stringify(this.state.appointment),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },})
+      .then((response) => (response.json()))
+      .then((results)=>{resolve(results)});
+    })
+  }
+
   componentDidMount() {
     fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`)
       .then(response => response.json())
@@ -105,6 +128,17 @@ class AppointmentAdmin extends React.Component {
                     <tr>
                       <td>Time:</td>
                       <td>{this.state.time == null ? '' : this.state.time.time}</td>
+                    </tr>
+                    <tr>
+                      <td>Status:</td>
+                      <td>{this.state.appointment.confirmation == false ?
+                        <Button variant="outline-success" value="false" onClick={this.handleConfirm}>
+                           Wait
+                        </Button>: 
+                        <Button variant="outline-success" value="true" onClick={this.handleConfirm}>
+                          Confirmed
+                        </Button>
+                        }</td>
                     </tr>
                     <tr>
                       <td>Technician:</td>
@@ -167,5 +201,6 @@ class AppointmentAdmin extends React.Component {
 AppointmentAdmin.propTypes = {
   id : PropTypes.string.isRequired
 }
+
 
 export default AppointmentAdmin;
