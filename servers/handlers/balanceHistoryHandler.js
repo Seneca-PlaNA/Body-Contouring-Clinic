@@ -18,6 +18,14 @@ exports.addNewBalanceHistory = function (data) {
 exports.viewAllBalanceHistory = function () {
   return new Promise((resolve, reject) => {
     BalanceHistory.find()
+    .populate({
+      path: 'services',
+      populate: [{ path: 'serviceCategory'}]
+    })
+    .populate({
+      path: 'balances',
+      populate: [{ path: 'account'},{ path: 'balanceAccount'},{ path: 'accountLevel'}]
+    })
       .then((data) => {
         resolve(data);
       })
@@ -31,6 +39,14 @@ exports.viewAllBalanceHistory = function () {
 exports.viewOneBalanceHistoryById = function (id) {
   return new Promise((resolve, reject) => {
     BalanceHistory.findOne({ _id: id })
+    .populate({
+      path: 'services',
+      populate: [{ path: 'serviceCategory'}]
+    })
+    .populate({
+      path: 'balances',
+      populate: [{ path: 'account'},{ path: 'accountLevel'}]
+    })
       .exec()
       .then((data) => {
         resolve(data);
