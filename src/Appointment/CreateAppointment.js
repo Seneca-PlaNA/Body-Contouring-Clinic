@@ -19,7 +19,7 @@ class CreateAppointment extends React.Component {
       savedBackLink: '/Appointment/Appointment',
       button: 'Back To Appointment',
       title: 'Appointment Saved!',
-      serviceToggle: false,
+
       completed: false,
       appointment: {
         customer: String,
@@ -37,9 +37,6 @@ class CreateAppointment extends React.Component {
     this.hideSave = this.hideSave.bind(this);
   }
 
-  multipleService = () => {
-    this.setState({ serviceToggle: !this.state.serviceToggle });
-  };
   showSave = () => {
     this.setState({ saveModal: true });
   };
@@ -70,18 +67,6 @@ class CreateAppointment extends React.Component {
         service: event.target.value,
       }
     }));
-  }
-
-  onAddServiceChange(event){
-    console.log(this.state.appointment);
-    console.log(this.state.appointment.service);
-    this.setState(() => ({
-      appointment:{
-        ...this.state.appointment,
-        service: this.state.appointment.service.concat(event.target.value),
-      }
-    }));
-    console.log(this.appointment.service);
   }
 
   onContactNumChange(event){
@@ -191,20 +176,6 @@ class CreateAppointment extends React.Component {
                         </Button>
                       </Col>
                     </Form.Group>
-                    {this.state.serviceToggle && (
-                      <Form.Group as={Row}>
-                        <Form.Label column sm="4"></Form.Label>
-                        <Col sm="8" style={{ marginLeft: '0px' }} className="row">
-                          <Form.Control inline as="select" className="col-md-7" onChange={this.onAddServiceChange.bind(this)}>
-                            <option value="">-- select service --</option>
-                            {this.state.services.map((result)=>(
-                              // eslint-disable-next-line react/jsx-key
-                              <option value={result._id}>{result.name}</option>
-                            ))}
-                          </Form.Control>
-                        </Col>
-                      </Form.Group>
-                    )}
                     <Form.Group as={Row}>
                       <Form.Label column sm="4">
                         Date
