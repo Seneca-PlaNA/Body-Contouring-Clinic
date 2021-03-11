@@ -22,10 +22,11 @@ exports.viewAllBalanceHistory = function () {
       path: 'services',
       populate: [{ path: 'serviceCategory'}]
     })
-    .populate({
+    .populate('balances')
+/*     .populate({
       path: 'balances',
-      populate: [{ path: 'account'},{ path: 'balanceAccount'},{ path: 'accountLevel'}]
-    })
+      populate: [{ path: 'accountLevel'}]
+    }) */
       .then((data) => {
         resolve(data);
       })
@@ -43,10 +44,11 @@ exports.viewOneBalanceHistoryById = function (id) {
       path: 'services',
       populate: [{ path: 'serviceCategory'}]
     })
-    .populate({
+    .populate('balances')
+/*     .populate({
       path: 'balances',
-      populate: [{ path: 'account'},{ path: 'accountLevel'}]
-    })
+      populate: [{ path: 'accountLevel'}]
+    }) */
       .exec()
       .then((data) => {
         resolve(data);
