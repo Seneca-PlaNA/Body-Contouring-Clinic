@@ -78,6 +78,16 @@ class CustomerProfile extends React.Component {
                   </Form.Label>
                 </Col>
               </Form.Group>
+              <Form.Group as={Row}>
+                <Form.Label column sm={3}>
+                  Address:
+                </Form.Label>
+                <Col sm={1}>
+                  <Form.Label column md={0}>
+                    {this.state.profile.address}
+                  </Form.Label>
+                </Col>
+              </Form.Group>
               {/* <Form.Group as={Row}>
                 <Form.Label column sm={3}>
                   Current Balance:

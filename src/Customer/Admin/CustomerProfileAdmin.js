@@ -9,7 +9,7 @@ class CustomerProfileAdmin extends React.Component {
     super(prop);
     this.state = {
       profile: {},
-      items: [{ url: '/Customer/Admin', title: 'Home' }],
+      items: [{ url: `/Customer/Admin/${this.props.id}`, title: 'Home' }],
     };
   }
 
@@ -68,7 +68,7 @@ class CustomerProfileAdmin extends React.Component {
                 </Form.Label>
                 <Col sm={1}>
                   <Form.Label column md={0}>
-                    User.Address
+                    {this.state.profile.address}
                   </Form.Label>
                 </Col>
               </Form.Group>

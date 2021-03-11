@@ -2,7 +2,6 @@ import React from 'react';
 import '../App.css';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 import SideBar from '../SideBar/SideBar';
-import styles from '../app.module.css';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
 
@@ -19,7 +18,7 @@ class CreateAppointment extends React.Component {
       savedBackLink: '/Appointment/Appointment',
       button: 'Back To Appointment',
       title: 'Appointment Saved!',
-      serviceToggle: false,
+
       completed: false,
       _id: localStorage.getItem('_id'),
       appointment: {
@@ -38,9 +37,6 @@ class CreateAppointment extends React.Component {
     this.hideSave = this.hideSave.bind(this);
   }
 
-  multipleService = () => {
-    this.setState({ serviceToggle: !this.state.serviceToggle });
-  };
   showSave = () => {
     this.setState({ saveModal: true });
   };
@@ -167,7 +163,8 @@ class CreateAppointment extends React.Component {
           <div className="col-md-1"></div>
           <SideBar items={this.state.items} />
           <div className="col-md-6">
-            <h2 className={styles.appointmentTitle}>New Appointment</h2>
+            <h2>New Appointment</h2>
+            <br/>
             <Container>
               <Row>
                 <Col></Col>
@@ -177,33 +174,16 @@ class CreateAppointment extends React.Component {
                       <Form.Label column sm="4">
                         Service(s):
                       </Form.Label>
-                      <Col sm="8" style={{ marginLeft: '0px' }} className="row">
-                        <Form.Control inline as="select" className="col-md-7" onChange={this.onServiceChange.bind(this)}>
+                      <Col sm="8">
+                        <Form.Control inline as="select" onChange={this.onServiceChange.bind(this)}>
                         <option>-- select service --</option>
                         {this.state.services.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
                             <option key={result._id} value={result._id}>{result.name}</option>
                           ))}
                         </Form.Control>
-                        <Button onClick={this.multipleService} style={{ marginLeft: '50px' }}>
-                          Add Services
-                        </Button>
                       </Col>
                     </Form.Group>
-                    {this.state.serviceToggle && (
-                      <Form.Group as={Row}>
-                        <Form.Label column sm="4"></Form.Label>
-                        <Col sm="8" style={{ marginLeft: '0px' }} className="row">
-                          <Form.Control inline as="select" className="col-md-7">
-                            <option value="">-- select service --</option>
-                            {this.state.services.map((result)=>(
-                              // eslint-disable-next-line react/jsx-key
-                              <option value={result._id}>{result.name}</option>
-                            ))}
-                          </Form.Control>
-                        </Col>
-                      </Form.Group>
-                    )}
                     <Form.Group as={Row}>
                       <Form.Label column sm="4">
                         Date
@@ -216,7 +196,7 @@ class CreateAppointment extends React.Component {
                       <Form.Label column sm="4">
                         Time
                       </Form.Label>
-                      <Col sm="6">
+                      <Col sm="8">
                         <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)}>
                           <option value="">-- select time --</option>
                           {this.state.filterData.map((result)=>(

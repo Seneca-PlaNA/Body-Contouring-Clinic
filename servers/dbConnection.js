@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
-// const dbkey = require('../dbConnectionStr.json');
+const dbkey = require('../dbConnectionStr.json');
 
 // const mongodbConnectionStr = process.env.MONGODB_URI;
-const mongodbConnectionStr =
-  'mongodb+srv://plana:Uvc1UKYcdzQJlQsG@cluster0.xwobk.mongodb.net/PlaNA?retryWrites=true&w=majority';
+const mongodbConnectionStr = dbkey.connectionStr;
 
 module.exports = () => {
   function connect() {

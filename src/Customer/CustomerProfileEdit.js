@@ -64,6 +64,15 @@ class CustomerProfileEdit extends React.Component {
     }));
   }
 
+  onAddressChange(event) {
+    this.setState(() => ({
+      profile: {
+        ...this.state.profile,
+        address: event.target.value,
+      },
+    }));
+  }
+
   componentDidMount() {
     fetch(`${process.env.REACT_APP_API_URL}/account/${this.props.id}`)
       .then((response) => response.json())
@@ -85,6 +94,7 @@ class CustomerProfileEdit extends React.Component {
         />
       );
     }
+
     return (
       <div className="row">
         <div className="col-md-1"></div>
@@ -153,18 +163,19 @@ class CustomerProfileEdit extends React.Component {
                 <Col sm={6}>
                   <Form.Control
                     type="text"
-                    placeholder="Finch Ave, North York, ON. 1A1 2A2"
+                    value={this.state.profile.address}
+                    onChange={this.onAddressChange.bind(this)}
                   ></Form.Control>
                 </Col>
               </Form.Group>
-              <Form.Group as={Row}>
+              {/* <Form.Group as={Row}>
                 <Form.Label column sm={2}>
                   Memo:
                 </Form.Label>
                 <Col sm={6}>
                   <Form.Control as="textarea" rows={3} />
                 </Col>
-              </Form.Group>
+              </Form.Group> */}
               <Form.Group as={Row}>
                 <Col xs={1}></Col>
                 <Col>

@@ -48,7 +48,7 @@ import servicePic from './resources/SerivcePic.png';
 import ViewSchedulesList from './StaffSchedule/ViewSchedulesList';
 import CreateSchedule from './StaffSchedule/CreateSchedule';
 import ViewScheduleDetail from './StaffSchedule/ViewScheduleDetail';
-import ViewStaffScheduleCalendar from './StaffSchedule/ViewStaffScheduleCalendar'
+import ViewStaffScheduleCalendar from './StaffSchedule/ViewStaffScheduleCalendar';
 import EditStaffSchedule from './StaffSchedule/EditStaffSchedule';
 import AppointmentDeleted from './Appointment/AppointmentDeleted';
 import AppointmentDeletedAdmin from './Appointment/Admin/AppointmentDeletedAdmin';
@@ -73,9 +73,21 @@ class RouterConfig extends React.Component {
           {/* Appointment URL */}
           <Route exact path="/Appointment" render={() => <AppointmentHome />} />
           <Route exact path="/Appointment/Appointments" render={() => <Appointments />} />
-          <Route exact path="/Appointment/Create" render={(props) => <CreateAppointment id={props.match.params.id}/>} />
-          <Route exact path="/Appointment/Appointment/:id" render={(props) => <Appointment id={props.match.params.id}/>} />
-          <Route exact path="/Appointment/Edit/:id" render={(props) => <EditAppointment id={props.match.params.id}/>} />
+          <Route
+            exact
+            path="/Appointment/Create/:id"
+            render={(props) => <CreateAppointment id={props.match.params.id} />}
+          />
+          <Route
+            exact
+            path="/Appointment/Appointment/:id"
+            render={(props) => <Appointment id={props.match.params.id} />}
+          />
+          <Route
+            exact
+            path="/Appointment/Edit/:id"
+            render={(props) => <EditAppointment id={props.match.params.id} />}
+          />
           <Route exact path="/Appointment/Deleted" render={() => <AppointmentDeleted />} />
 
           {/* Appointment Admin URL */}
@@ -104,9 +116,21 @@ class RouterConfig extends React.Component {
 
           {/* Staff Schedule URL */}
           <Route exact path="/Staff/Schedules" render={() => <ViewSchedulesList />} />
-          <Route exact path="/Staff/Schedules/Calendar" render={() => <ViewStaffScheduleCalendar />} />
-          <Route exact path="/Staff/Schedule/Detail/:id" render={(props) => <ViewScheduleDetail id={props.match.params.id} />} />
-          <Route exact path="/Staff/Schedule/Edit/:id" render={(props) => <EditStaffSchedule id={props.match.params.id} />} />
+          <Route
+            exact
+            path="/Staff/Schedules/Calendar"
+            render={() => <ViewStaffScheduleCalendar />}
+          />
+          <Route
+            exact
+            path="/Staff/Schedule/Detail/:id"
+            render={(props) => <ViewScheduleDetail id={props.match.params.id} />}
+          />
+          <Route
+            exact
+            path="/Staff/Schedule/Edit/:id"
+            render={(props) => <EditStaffSchedule id={props.match.params.id} />}
+          />
           <Route exact path="/Staff/Schedule/Create" render={() => <CreateSchedule />} />
 
           {/* Service URL */}
@@ -176,9 +200,21 @@ class RouterConfig extends React.Component {
           />
 
           {/* Customer Admin URL*/}
-          <Route exact path="/Customer/Admin" render={() => <CustomerHomeAdmin />} />
-          <Route exact path="/Customer/Admin/profile" render={() => <CustomerProfileAdmin />} />
-          <Route exact path="/Customer/Admin/Account" render={() => <CustomerAccountAdmin />} />
+          <Route
+            exact
+            path="/Customer/Admin/:id"
+            render={() => <CustomerHomeAdmin id={localStorage.getItem('_id')} />}
+          />
+          <Route
+            exact
+            path="/Customer/Admin/profile/:id"
+            render={(props) => <CustomerProfileAdmin id={props.match.params.id} />}
+          />
+          <Route
+            exact
+            path="/Customer/Admin/Account/:id"
+            render={(props) => <CustomerAccountAdmin id={props.match.params.id} />}
+          />
           <Route
             exact
             path="/Customer/Admin/Account/Edit"

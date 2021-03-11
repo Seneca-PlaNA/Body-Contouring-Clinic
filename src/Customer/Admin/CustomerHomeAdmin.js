@@ -9,9 +9,20 @@ class CustomerHomeAdmin extends React.Component {
   constructor(prop) {
     super(prop);
     this.state = {
+      admin: {},
       profile: [],
-      items: [{ url: '/Customer/Admin', title: 'Home' }],
+      items: [{ url: `/Customer/Admin/${this.props.id}`, title: 'Home' }],
+      _id: localStorage.getItem('_id'),
     };
+  }
+  getCustomerProfile(id) {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/account/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        });
+    });
   }
 
   getAllCustomer() {
@@ -30,6 +41,12 @@ class CustomerHomeAdmin extends React.Component {
         profile: data,
       });
     });
+
+    this.getCustomerProfile(this.state._id).then((data) => {
+      this.setState({
+        admin: data,
+      });
+    });
   }
 
   render() {
@@ -38,7 +55,9 @@ class CustomerHomeAdmin extends React.Component {
         <div className="col-md-1"></div>
         <SideBar items={this.state.items} />
         <div className="col-md-8" style={{ 'margin-left': '80px' }}>
-          <h2 className="PageTitle">Hi, Staff.fullName</h2>
+          <h2 className="PageTitle">
+            Hi, {this.state.admin.firstName} {this.state.admin.lastName}{' '}
+          </h2>
           <hr />
           <div className="contents">
             <Form inline>

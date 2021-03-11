@@ -19,7 +19,6 @@ class EditAppointment extends React.Component {
       title: 'Appointment saved!',
       savedBackLink: '/Appointment/Appointment',
       button: 'Back To Appointment',
-      serviceToggle: false,
       appointment: [],
       customer: [],
       schedule: [],
@@ -37,10 +36,6 @@ class EditAppointment extends React.Component {
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
   }
-
-  multipleService = () => {
-    this.setState({ serviceToggle: !this.state.serviceToggle });
-  };
 
   showSave = () => {
     this.setState({ saveModal: true });
@@ -83,15 +78,6 @@ class EditAppointment extends React.Component {
   }
 
   onServiceChange(event) {
-    this.setState(() => ({
-      appointment:{
-        ...this.state.appointment,
-        service: event.target.value,
-      }
-    }));
-  }
-
-  onAddServiceChange(event){
     this.setState(() => ({
       appointment:{
         ...this.state.appointment,
@@ -204,32 +190,15 @@ class EditAppointment extends React.Component {
                       <Form.Label column sm="4">
                         Service(s):
                       </Form.Label>
-                      <Col sm="8" style={{ marginLeft: '0px' }} className="row">
+                      <Col sm="8">
                         <Form.Control inline as="select" className="col-md-7" value={this.state.service._id} onChange={this.onServiceChange.bind(this)}>
                         {this.state.allServices.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
                             <option key={result._id} value={result._id}>{result.name}</option>
                           ))}
                         </Form.Control>
-                        <Button onClick={this.multipleService} style={{ marginLeft: '50px' }}>
-                          Add Services
-                        </Button>
                       </Col>
                     </Form.Group>
-                    {this.state.serviceToggle && (
-                      <Form.Group as={Row}>
-                        <Form.Label column sm="4"></Form.Label>
-                        <Col sm="8" style={{ marginLeft: '0px' }} className="row">
-                          <Form.Control inline as="select" className="col-md-7">
-                            <option value="">-- select service --</option>
-                            {this.state.allServices.map((result)=>(
-                              // eslint-disable-next-line react/jsx-key
-                              <option value={result._id}>{result.name}</option>
-                            ))}
-                          </Form.Control>
-                        </Col>
-                      </Form.Group>
-                    )}
                     <Form.Group as={Row}>
                       <Form.Label column sm="4">
                         Date
