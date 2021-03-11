@@ -18,10 +18,32 @@ exports.addNewBalance = function (data) {
 exports.viewAllBalance = function () {
   return new Promise((resolve, reject) => {
     Balance.find()
+<<<<<<< HEAD
       .populate('account')
       .populate('accountLevel')
       .then((balances) => {
         resolve(balances);
+=======
+    .populate({
+      path: 'balanceHistory',
+      populate: { path: 'date'},
+    })
+    .populate({
+      path: 'service',
+      populate: [{ path: 'serviceCategory'}, { path: 'name' }],
+    })
+    .populate({
+      path: 'accountLevel',
+      populate: { path: 'name'},
+    })
+    .populate({
+      path: 'customer',
+      populate: { path: 'account' },
+    })
+    .exec()
+      .then((balance) => {
+        resolve(balance);
+>>>>>>> c3c439d (balance(need to fix))
       })
       .catch((err) => {
         reject(err);
@@ -33,8 +55,27 @@ exports.viewAllBalance = function () {
 exports.viewOneBalanceById = function (id) {
   return new Promise((resolve, reject) => {
     Balance.findOne({ _id: id })
+<<<<<<< HEAD
       .populate('account')
       .populate('accountLevel')
+=======
+    .populate({
+      path: 'balanceHistory',
+      populate: { path: 'date'},
+    })
+    .populate({
+      path: 'service',
+      populate: [{ path: 'serviceCategory'}, { path: 'name' }],
+    })
+    .populate({
+      path: 'accountLevel',
+      populate: { path: 'name'},
+    })
+    .populate({
+      path: 'customer',
+      populate: { path: 'account' },
+    })
+>>>>>>> c3c439d (balance(need to fix))
       .exec()
       .then((balance) => {
         resolve(balance);

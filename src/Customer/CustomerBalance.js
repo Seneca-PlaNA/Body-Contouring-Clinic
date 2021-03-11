@@ -6,6 +6,7 @@ import { Form, Row, Col, Container, Table } from 'react-bootstrap';
 class CustomerBalance extends React.Component {
   constructor(props) {
     super(props);
+<<<<<<< HEAD
       this.state = {
         items: [
           { url: '/Customer/', title: 'Home' },
@@ -39,7 +40,49 @@ class CustomerBalance extends React.Component {
         customerBalance: data,
       });
     });
+=======
+    this.state = {
+     items: [
+      { url: '/Customer/', title: 'Home' },
+      { url: `/Customer/${this.props.id}`, title: 'Profile' },
+      { url: `/Customer/Edit/${this.props.id}`, title: 'Edit Profile' },
+      { url: `/Customer/Balance${this.props.id}`, title: 'Balance' },
+    ], 
+      auth: 'General',
+      _id: localStorage.getItem('_id'),
+      balance: [],
+      balanceId: '',
+      customer: [],
+      service: [],
+      accountLevel: [],
+      balanceHistory: [],
+    };
+>>>>>>> c3c439d (balance(need to fix))
   }
+
+getBalances(id){
+    fetch(`${process.env.REACT_APP_API_URL}/balance?customer=${id}`)
+    .then((response) => response.json())
+    .then((results) => {
+      console.log(results);
+      this.setState({
+        requests: results,
+    });
+  });
+}
+
+componentDidMount() {
+  this.getBalance(this.props.id).then((data) => {
+    this.setState({
+      balance: data,
+ //     balanceId: data._id,
+      balanceHistory: data.balanceHistory,
+      customer: data.customer.account,
+      service: data.service,
+      accountLevel: data.accountLevel,
+    });
+  });
+}
 
   render() {
     const pagination = {
@@ -49,10 +92,15 @@ class CustomerBalance extends React.Component {
     };
     return (
       <div className="row">
+        {console.log(this.state.customer)}
         <div className="col-md-1"></div>
         <SideBar items={this.state.items} />
         <div className="col-md-6" style={{ 'margin-left': '80px' }}>
+<<<<<<< HEAD
           <h2 className="PageTitle">Hi, {this.state.account.firstName + ' ' + this.state.accountLevel.lastName}</h2>
+=======
+          <h2 className="PageTitle">Hi, {this.state.customer.firstName + ' ' + this.state.customer.lastName}</h2>
+>>>>>>> c3c439d (balance(need to fix))
           <hr />
           <br />
           <h4>Balance Information</h4>
@@ -66,7 +114,11 @@ class CustomerBalance extends React.Component {
                 </Form.Label>
                 <Col sm={2}>
                   <Form.Label column md={0}>
+<<<<<<< HEAD
                     ${bal.balance.balanceAccount}
+=======
+                    ${this.state.balance.balanceAccount}
+>>>>>>> c3c439d (balance(need to fix))
                   </Form.Label>
                 </Col>
                 <Col sm={2}>
@@ -76,7 +128,11 @@ class CustomerBalance extends React.Component {
                 </Col>
                 <Col sm={2}>
                   <Form.Label column md={0}>
+<<<<<<< HEAD
                     {bal.accountLevel.name}
+=======
+                  ${this.state.accountLevel}
+>>>>>>> c3c439d (balance(need to fix))
                   </Form.Label>
                 </Col>
               </Form.Group>
@@ -101,10 +157,17 @@ class CustomerBalance extends React.Component {
                       <th>Price</th>
                     </tr>
                     <tr>
+<<<<<<< HEAD
                       <td>{result.balanceHistories.date}</td>
                       <td>{result.service.serviceCategory}</td>
                       <td>{result.service.name}</td>
                       <td>${result.service.price}</td>
+=======
+                      <td>${this.state.balance.balanceAccount}</td>
+                      <td>${this.state.service.serviceCategory}</td>
+                      <td>${this.state.service.name}</td>
+                      <td>$100</td>
+>>>>>>> c3c439d (balance(need to fix))
                       <td>
                         <a href="/Customer/BalanceDetail">details</a>
                       </td>
