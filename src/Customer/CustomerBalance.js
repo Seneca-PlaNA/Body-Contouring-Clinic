@@ -7,6 +7,9 @@ class CustomerBalance extends React.Component {
   constructor(props) {
     super(props);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b9de48a7345ce0aa402e365e805fba3673fe9465
       this.state = {
         items: [
           { url: '/Customer/', title: 'Home' },
@@ -40,6 +43,7 @@ class CustomerBalance extends React.Component {
         customerBalance: data,
       });
     });
+<<<<<<< HEAD
 =======
     this.state = {
      items: [
@@ -58,6 +62,8 @@ class CustomerBalance extends React.Component {
       balanceHistory: [],
     };
 >>>>>>> c3c439d (balance(need to fix))
+=======
+>>>>>>> b9de48a7345ce0aa402e365e805fba3673fe9465
   }
 
 getBalances(id){
@@ -97,10 +103,14 @@ componentDidMount() {
         <SideBar items={this.state.items} />
         <div className="col-md-6" style={{ 'margin-left': '80px' }}>
 <<<<<<< HEAD
+<<<<<<< HEAD
           <h2 className="PageTitle">Hi, {this.state.account.firstName + ' ' + this.state.accountLevel.lastName}</h2>
 =======
           <h2 className="PageTitle">Hi, {this.state.customer.firstName + ' ' + this.state.customer.lastName}</h2>
 >>>>>>> c3c439d (balance(need to fix))
+=======
+          <h2 className="PageTitle">Hi, {this.state.account.firstName + ' ' + this.state.accountLevel.lastName}</h2>
+>>>>>>> b9de48a7345ce0aa402e365e805fba3673fe9465
           <hr />
           <br />
           <h4>Balance Information</h4>
@@ -115,10 +125,14 @@ componentDidMount() {
                 <Col sm={2}>
                   <Form.Label column md={0}>
 <<<<<<< HEAD
+<<<<<<< HEAD
                     ${bal.balance.balanceAccount}
 =======
                     ${this.state.balance.balanceAccount}
 >>>>>>> c3c439d (balance(need to fix))
+=======
+                    ${bal.balance.balanceAccount}
+>>>>>>> b9de48a7345ce0aa402e365e805fba3673fe9465
                   </Form.Label>
                 </Col>
                 <Col sm={2}>
@@ -129,10 +143,14 @@ componentDidMount() {
                 <Col sm={2}>
                   <Form.Label column md={0}>
 <<<<<<< HEAD
+<<<<<<< HEAD
                     {bal.accountLevel.name}
 =======
                   ${this.state.accountLevel}
 >>>>>>> c3c439d (balance(need to fix))
+=======
+                    {bal.accountLevel.name}
+>>>>>>> b9de48a7345ce0aa402e365e805fba3673fe9465
                   </Form.Label>
                 </Col>
               </Form.Group>
@@ -158,16 +176,22 @@ componentDidMount() {
                     </tr>
                     <tr>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b9de48a7345ce0aa402e365e805fba3673fe9465
                       <td>{result.balanceHistories.date}</td>
                       <td>{result.service.serviceCategory}</td>
                       <td>{result.service.name}</td>
                       <td>${result.service.price}</td>
+<<<<<<< HEAD
 =======
                       <td>${this.state.balance.balanceAccount}</td>
                       <td>${this.state.service.serviceCategory}</td>
                       <td>${this.state.service.name}</td>
                       <td>$100</td>
 >>>>>>> c3c439d (balance(need to fix))
+=======
+>>>>>>> b9de48a7345ce0aa402e365e805fba3673fe9465
                       <td>
                         <a href="/Customer/BalanceDetail">details</a>
                       </td>

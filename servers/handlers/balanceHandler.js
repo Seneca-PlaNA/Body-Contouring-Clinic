@@ -19,10 +19,14 @@ exports.viewAllBalance = function () {
   return new Promise((resolve, reject) => {
     Balance.find()
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b9de48a7345ce0aa402e365e805fba3673fe9465
       .populate('account')
       .populate('accountLevel')
       .then((balances) => {
         resolve(balances);
+<<<<<<< HEAD
 =======
     .populate({
       path: 'balanceHistory',
@@ -44,6 +48,8 @@ exports.viewAllBalance = function () {
       .then((balance) => {
         resolve(balance);
 >>>>>>> c3c439d (balance(need to fix))
+=======
+>>>>>>> b9de48a7345ce0aa402e365e805fba3673fe9465
       })
       .catch((err) => {
         reject(err);
@@ -55,6 +61,7 @@ exports.viewAllBalance = function () {
 exports.viewOneBalanceById = function (id) {
   return new Promise((resolve, reject) => {
     Balance.findOne({ _id: id })
+<<<<<<< HEAD
 <<<<<<< HEAD
       .populate('account')
       .populate('accountLevel')
@@ -76,6 +83,10 @@ exports.viewOneBalanceById = function (id) {
       populate: { path: 'account' },
     })
 >>>>>>> c3c439d (balance(need to fix))
+=======
+      .populate('account')
+      .populate('accountLevel')
+>>>>>>> b9de48a7345ce0aa402e365e805fba3673fe9465
       .exec()
       .then((balance) => {
         resolve(balance);
