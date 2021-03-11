@@ -3,22 +3,22 @@ const Schema = mongoose.Schema;
 
 const balanceSchema = new Schema(
   {
-    account:{
+/*     account:{
       type: Schema.Types.ObjectId,
       ref: 'accounts',
       required: true,
-    },
+    }, */
 
     balanceAccount: {
       type: Number,
       required: true,
     },
-
+/* 
     accountLevel: {
       type: Schema.Types.ObjectId,
       ref: 'accountLevels',
       required: true,
-    },
+    }, */
 
     isActive: {
       type: Boolean,
