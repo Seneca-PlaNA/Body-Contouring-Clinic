@@ -32,6 +32,7 @@ class AppointmentAdmin extends React.Component {
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleConfirm = this.handleConfirm.bind(this);
   }
 
   showModal = () => {
@@ -61,17 +62,28 @@ class AppointmentAdmin extends React.Component {
       .catch((err) => (console.log(err)));
   };
 
-  handleConfirm = (e) => {
-    return new Promise((resolve)=>{
-      e.preventDefault();
-      
-      this.setState({
-        appointment:{
-          ...this.state.appointment,
-          confirmation: e == "true"? true : false,
-        }
-      });
+  handleConfirm(result){
+    console.log(result);
+    
+    this.setState({
+      appointment:{
+        ...this.state.appointment,
+        confirmation: result,
+      }
+    });
   
+    this.updateConfirmation()
+    .then((data) => {
+      this.setState({
+        appointment: data,
+      });
+    });
+
+
+  }
+
+  updateConfirmation(){
+    return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`,{
         method: "PUT",
         body: JSON.stringify(this.state.appointment),
@@ -79,24 +91,35 @@ class AppointmentAdmin extends React.Component {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },})
-      .then((response) => (response.json()))
-      .then((results)=>{resolve(results)});
-    })
+        .then((response) => response.json())
+        .then((results) => {
+          resolve(results);
+        });
+    });
+  }
+
+  getAppointment(){
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`)
+        .then((response) => response.json())
+        .then((results) => {
+          resolve(results);
+        });
+    });
   }
 
   componentDidMount() {
-    fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`)
-      .then(response => response.json())
-      .then((data) => {
-        this.setState({
-          appointment: data,
-          customer: data.customer.account,
-          schedule: data.schedule,
-          time: data.schedule.time,
-          date: data.schedule.date,
-          staff: data.schedule.staff.account,
-          service: data.service
-        });
+    this.getAppointment()
+    .then((data) => {
+      this.setState({
+        appointment: data,
+        customer: data.customer.account,
+        schedule: data.schedule,
+        time: data.schedule.time,
+        date: data.schedule.date,
+        staff: data.schedule.staff.account,
+        service: data.service,
+      });
     });
   }
 
@@ -133,13 +156,14 @@ class AppointmentAdmin extends React.Component {
                     <tr>
                       <td>Status:</td>
                       <td>{this.state.appointment.confirmation == false ?
-                        <Button variant="outline-success" value="false" onClick={this.handleConfirm}>
-                           Wait
-                        </Button>: 
-                        <Button variant="outline-success" value="true" onClick={this.handleConfirm}>
+                        <Button variant="outline-success"  onClick={()=>{this.handleConfirm(true)}}>
+                          Wait
+                        </Button>
+                      : <Button variant="outline-success"  onClick={()=>{this.handleConfirm(false)}}>
                           Confirmed
                         </Button>
-                        }</td>
+                      }</td>
+                      
                     </tr>
                     <tr>
                       <td>Technician:</td>
