@@ -20,7 +20,8 @@ exports.viewAllBalanceHistory = function () {
     BalanceHistory.find()
     .populate({
       path: 'balances',
-      populate: [{ path: 'services' }]
+      populate: [{ path: 'services',
+                   populate: 'serviceCategory' }]
     })
       .then((data) => {
         resolve(data);
@@ -37,7 +38,8 @@ exports.viewOneBalanceHistoryById = function (id) {
     BalanceHistory.findOne({ _id: id })
     .populate({
       path: 'balances',
-      populate: [{ path: 'services' }]
+      populate: [{ path: 'services',
+                   populate: 'serviceCategory' }]
     })
       .exec()
       .then((data) => {

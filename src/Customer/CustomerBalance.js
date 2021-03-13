@@ -19,7 +19,6 @@ class CustomerBalance extends React.Component {
       balance: [],
       profile:{},
       services: [],
-      serviceCategory: [],
     };
   }
   getCustomerProfile(id) {
@@ -56,11 +55,9 @@ class CustomerBalance extends React.Component {
         this.setState({
           balance: data.balances,
           services: data.balances.services,
-          serviceCategory: data.balances.serviceCategory,
         });
         console.log("second: " + this.state.balance);
         console.log("third: " + this.state.services);
-        console.log("fourth: " + this.state.serviceCategory);
     });
 
   });
@@ -122,7 +119,7 @@ class CustomerBalance extends React.Component {
                     {this.state.balance.map((result) => (
                     <tr key={result._id}>
                       <td>{result.date}</td>
-                      <td>{result.serviceCategory.name}</td>
+                      <td>{result.services[0].serviceCategory.name}</td>
                       <td>{result.services[0].name}</td>
                       <td>${result.services[0].price}</td>
                       <td>

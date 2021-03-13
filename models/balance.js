@@ -21,13 +21,7 @@ const balanceSchema = new Schema(
         required: true,
       },
     ],
-
-    serviceCategory: {
-      type: Schema.Types.ObjectId,
-      ref: 'serviceCategories',
-      required: true,
-    },
-
+    
     date: {
       type: Date,
       required: true,   
