@@ -18,6 +18,12 @@ exports.addNewBalance = function (data) {
 exports.viewAllBalance = function () {
   return new Promise((resolve, reject) => {
     Balance.find()
+/*       .populate({
+        path: 'services',
+        populate: [{ path: 'serviceCategory'}]
+      }) */
+      .populate('services')
+      .populate ('serviceCategory')
    /* .populate('accountLevel') */
       .then((balances) => {
         resolve(balances);
@@ -32,7 +38,12 @@ exports.viewAllBalance = function () {
 exports.viewOneBalanceById = function (id) {
   return new Promise((resolve, reject) => {
     Balance.findOne({ _id: id })
-   /* .populate('accountLevel') */
+/*       .populate({
+        path: 'services',
+        populate: [{ path: 'serviceCategory'}]
+      }) */
+      .populate('services')
+      .populate ('serviceCategory')
       .exec()
       .then((balance) => {
         resolve(balance);

@@ -3,12 +3,6 @@ const Schema = mongoose.Schema;
 
 const balanceSchema = new Schema(
   {
-/*     account:{
-      type: Schema.Types.ObjectId,
-      ref: 'accounts',
-      required: true,
-    }, */
-
     balanceAccount: {
       type: Number,
       required: true,
@@ -19,6 +13,25 @@ const balanceSchema = new Schema(
       ref: 'accountLevels',
       required: true,
     }, */
+
+    services: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'services',
+        required: true,
+      },
+    ],
+
+    serviceCategory: {
+      type: Schema.Types.ObjectId,
+      ref: 'serviceCategories',
+      required: true,
+    },
+
+    date: {
+      type: Date,
+      required: true,   
+    },
 
     isActive: {
       type: Boolean,

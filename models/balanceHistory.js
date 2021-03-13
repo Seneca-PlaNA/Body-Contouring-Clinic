@@ -10,19 +10,6 @@ const balanceHistorySchema = new Schema(
         required: true,
       },
     ],
-
-    services: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'services',
-        required: true,
-      },
-    ],
-
-    date: {
-      type: Date,
-      required: true,
-    },
   },
   { timestamps: true }
 );
