@@ -32,7 +32,6 @@ class AppointmentAdmin extends React.Component {
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
-    this.handleConfirm = this.handleConfirm.bind(this);
   }
 
   showModal = () => {
@@ -62,24 +61,23 @@ class AppointmentAdmin extends React.Component {
       .catch((err) => (console.log(err)));
   };
 
-  handleConfirm(result){
-    console.log(result);
-    
+  handleConfirm(){ 
+
+    console.log("Current: " + this.state.appointment.confirmation);
+    var test = this.state.appointment.confirmation == false? true: false;
+    console.log("Update Value: " + test);
+
     this.setState({
       appointment:{
-        ...this.state.appointment,
-        confirmation: result,
+        confirmation: test,
       }
     });
   
-    this.updateConfirmation()
-    .then((data) => {
-      this.setState({
-        appointment: data,
-      });
-    });
+    console.log("After Set: " + this.state.appointment.confirmation);
 
-
+    this.updateConfirmation();
+    
+    console.log(this.state.appointment);
   }
 
   updateConfirmation(){
