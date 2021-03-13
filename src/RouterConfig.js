@@ -191,7 +191,7 @@ class RouterConfig extends React.Component {
           <Route
             exact
             path="/Customer/Balance/:id"
-            render={() => <CustomerBalance id={localStorage.getItem('_id')} />}
+            render={(props) => <CustomerBalance  id={props.match.params.id}/>}
           />
           <Route
             exact

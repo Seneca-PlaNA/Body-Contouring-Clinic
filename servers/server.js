@@ -112,6 +112,13 @@ app.get('/balances', (req, res) => {
     .catch((err) => res.json(err));
 });
 
+app.get('/balance', (req, res) => {
+  balanceHandler
+    .viewOneBalanceById(req.query)
+    .then((balance) => res.json(balance))
+    .catch((err) => res.json(err));
+});
+
 app.get('/balance/:id', (req, res) => {
   balanceHandler
     .viewOneBalanceById(req.params.id)
