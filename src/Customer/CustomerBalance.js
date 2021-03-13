@@ -50,14 +50,11 @@ class CustomerBalance extends React.Component {
       this.setState({
         profile: data,
       });
-      console.log("first: " + this.state.profile.balanceHistory);
       this.getBalance(this.state.profile.balanceHistory).then((data) =>{
         this.setState({
           balance: data.balances,
           services: data.balances.services,
         });
-        console.log("second: " + this.state.balance);
-        console.log("third: " + this.state.services);
     });
 
   });
