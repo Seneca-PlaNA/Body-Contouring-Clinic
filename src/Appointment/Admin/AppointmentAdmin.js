@@ -89,7 +89,7 @@ class AppointmentAdmin extends React.Component {
   updateConfirmation(event){
     event.preventDefault();
 
-    fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`,{
+    fetch(`${process.env.REACT_APP_API_URL}/appointment/confirm/${this.props.id}`,{
         method: "PUT",
         body: JSON.stringify(this.state.appointment),
         headers: {

@@ -611,6 +611,13 @@ app.get('/appointment', (req, res) => {
     .catch((err) => res.json(err));
 });
 
+app.put('/appointment/confirm/:id', (req, res) => {
+  appointmentHandler
+    .editAppointmentById(req.body, req.params.id)
+    .then((msg) => res.json(msg))
+    .catch((err) => res.json(err));
+});
+
 // faq
 app.post('/create-faq', (req, res) => {
   faqHandler.addNewFAQ(req.body).then((msg) => res.json(msg));
