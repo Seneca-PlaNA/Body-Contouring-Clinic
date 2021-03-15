@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button, Dropdown, Form, Modal } from 'react-bootstrap';
 import '../../App.css';
 import styles from '../../app.module.css';
 import SideBar from '../../SideBar/SideBar';
@@ -28,10 +28,14 @@ class AppointmentAdmin extends React.Component {
       service: [],
       staff: [],
       completed: false,
+      alert: false,
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+
+    this.showAlert = this.showAlert.bind(this);
+    this.hideAlert = this.hideAlert.bind(this);
   }
 
   showModal = () => {
@@ -40,6 +44,14 @@ class AppointmentAdmin extends React.Component {
 
   hideModal = () => {
     this.setState({ show: false });
+  };
+
+  showAlert = () => {
+    this.setState({ alert: true });
+  };
+
+  hideAlert = () => {
+    this.setState({ alert: false });
   };
 
   deleteAppointment = () => {
@@ -61,28 +73,23 @@ class AppointmentAdmin extends React.Component {
       .catch((err) => (console.log(err)));
   };
 
-  handleConfirm(){ 
+  onConfirmChange(event){ 
+    console.log("event : " + event);
 
-    console.log("Current: " + this.state.appointment.confirmation);
-    var test = this.state.appointment.confirmation == false? true: false;
-    console.log("Update Value: " + test);
-
-    this.setState({
+    console.log("Current : "+ this.state.appointment.confirmation);
+    this.setState(() => ({
       appointment:{
-        confirmation: test,
+        ...this.state.appointment,
+        confirmation: event,
       }
-    });
-  
-    console.log("After Set: " + this.state.appointment.confirmation);
-
-    this.updateConfirmation();
-    
-    console.log(this.state.appointment);
+    }));
+    console.log("After : "+ this.state.appointment.confirmation);
   }
 
-  updateConfirmation(){
-    return new Promise((resolve) => {
-      fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`,{
+  updateConfirmation(event){
+    event.preventDefault();
+
+    fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`,{
         method: "PUT",
         body: JSON.stringify(this.state.appointment),
         headers: {
@@ -90,10 +97,21 @@ class AppointmentAdmin extends React.Component {
           'Content-Type': 'application/json'
         },})
         .then((response) => response.json())
-        .then((results) => {
-          resolve(results);
+        .then(()=>{this.setState({alert: true})})
+        .then(() => {
+          this.getAppointment()
+          .then((data) => {
+            this.setState({
+              appointment: data,
+              customer: data.customer.account,
+              schedule: data.schedule,
+              time: data.schedule.time,
+              date: data.schedule.date,
+              staff: data.schedule.staff.account,
+              service: data.service,
+            });
+          });
         });
-    });
   }
 
   getAppointment(){
@@ -136,6 +154,7 @@ class AppointmentAdmin extends React.Component {
             <h2>Appointment Details</h2>
             <br/>
             <Container>
+            <Form onSubmit={this.updateConfirmation.bind(this)}>
               <Row>
                 <Col>
                   <table className={styles.appointmentTable}>
@@ -153,15 +172,18 @@ class AppointmentAdmin extends React.Component {
                     </tr>
                     <tr>
                       <td>Status:</td>
-                      <td>{this.state.appointment.confirmation == false ?
-                        <Button variant="outline-success"  onClick={()=>{this.handleConfirm(true)}}>
-                          Wait
-                        </Button>
-                      : <Button variant="outline-success"  onClick={()=>{this.handleConfirm(false)}}>
-                          Confirmed
-                        </Button>
-                      }</td>
-                      
+                      <td>
+                          <Dropdown>
+                            <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
+                              {this.state.appointment.confirmation == "false"? "Wait":"Confirmed"}
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                              <Dropdown.Item eventKey="false" variant="outline-secondary" onSelect={this.onConfirmChange.bind(this)}>Wait</Dropdown.Item>
+                              <Dropdown.Item eventKey="true" variant="outline-success" onSelect={this.onConfirmChange.bind(this)}>Confirmed</Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                      </td>
                     </tr>
                     <tr>
                       <td>Technician:</td>
@@ -191,6 +213,7 @@ class AppointmentAdmin extends React.Component {
               <Row>
                 <Col></Col>
                 <Col>
+                  <Button variant="outline-success" action type="submit" style={{'margin-right': '5px' }}>Confirm</Button>
                   <Link to={`/Appointment/Admin/Message/${this.props.id}`}>
                       <Button variant="outline-secondary">
                         Leave Message
@@ -214,7 +237,16 @@ class AppointmentAdmin extends React.Component {
                   btn1="Cancel"
                   btn2="Delete"
                 />
+                <Modal show={this.state.alert} centered>
+                  <Modal.Header closeButton onClick={this.hideAlert}>
+                    <Modal.Title>Appointment Status</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <p>{this.state.appointment.confirmation == 'true'? 'This Appointment is confirmed': 'This appointment is in wait'}</p>
+                  </Modal.Body>
+                </Modal>
               </Row>
+              </Form>
             </Container>
           </div>
         </div>

@@ -25,7 +25,7 @@ const AppointmentSchema = new Schema({
       required: true
     },
     confirmation: {
-      type: Boolean,
+      type: String,
     }  
 
 }, { timestamps: true });

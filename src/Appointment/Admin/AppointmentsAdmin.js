@@ -92,7 +92,7 @@ class AppointmentsAdmin extends React.Component {
                       <td>{result.schedule == null ? '' : result.schedule.time.time}</td>
                       <td>{result.service.name}</td>
                       <td>${result.service.price}</td>
-                      <td>{result.confirmation == false ? "Wait" : "Confirmed"}</td>
+                      <td>{result.confirmation == "false" ? "Wait" : "Confirmed"}</td>
                       <td>
                         <Link to={`/Appointment/Admin/Appointment/${result._id}`}>
                           <Button variant="outline-secondary">

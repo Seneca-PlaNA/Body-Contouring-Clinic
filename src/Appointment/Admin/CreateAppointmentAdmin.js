@@ -28,6 +28,7 @@ class CreateAppointmentAdmin extends React.Component {
         specialRequest: String,
         service: String,
         schedule: String,
+        confirmation: "false",
       },
       services: [],
       customers: [],
