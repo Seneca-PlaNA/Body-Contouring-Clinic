@@ -62,7 +62,7 @@ class Appointments extends React.Component {
                     <tr>
                       <th>Date</th>
                       <th>Time</th>
-                      <th>Info</th>
+                      <th>Service</th>
                       <th>Price</th>
                     </tr>
                     {this.state.appointments.map((appointment)=>(
