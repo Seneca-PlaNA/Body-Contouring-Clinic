@@ -90,6 +90,8 @@ class AppointmentsAdmin extends React.Component {
       this.setState({
         appointments: data, 
         filterAppointments: data,
+        searchDate: "",
+        dayValue: 9999,
       });
   });
   };
@@ -127,13 +129,13 @@ class AppointmentsAdmin extends React.Component {
             <h2 className="PageTitle">Appointments</h2>
             <div className="contents">
               <Form inline >
-                <Form.Control as="select" name="days" defaultValue="9999" onChange={this.handleDayChange}>
+                <Form.Control as="select" name="days" value={this.state.dayValue} onChange={this.handleDayChange}>
                   <option value="9999">All</option>
                   <option value="7">within 7 days</option>
                   <option value="30">within 30 days</option>
                   <option value="60">within 60 days</option>
                 </Form.Control>
-                <Form.Control type="date" style={{ 'margin-left': '30px' }} onChange={this.handleSearchDateChange.bind(this)}/>
+                <Form.Control type="date" style={{ 'margin-left': '30px' }} value={this.state.searchDate} onChange={this.handleSearchDateChange.bind(this)}/>
                 <Form.Control as="select" style={{ 'margin-left': '30px' }} value={this.state.searchType} onChange={this.handleSearchTypeChange.bind(this)}>
                   <option>-- select --</option>
                   <option value="customer">Customer</option>
@@ -168,7 +170,7 @@ class AppointmentsAdmin extends React.Component {
                       // eslint-disable-next-line react/jsx-key
                       <tr>
                       <td>{result.customer.account.firstName} {result.customer.account.lastName}</td>
-                      <td>{result.schedule == null ? '' : moment(result.schedule.date.date).format('lll')}</td>
+                      <td>{result.schedule == null ? '' : moment(result.schedule.date.date).format('ll')}</td>
                       <td>{result.schedule == null ? '' : result.schedule.time.time}</td>
                       <td>{result.service.name}</td>
                       <td>${result.service.price}</td>
