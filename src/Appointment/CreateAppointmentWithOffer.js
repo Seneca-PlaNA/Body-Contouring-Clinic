@@ -35,7 +35,6 @@ class CreateAppointmentWithOffer extends React.Component {
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
-    this.getOffer = this.getOffer.bind(this);
   }
 
   showSave = () => {
@@ -59,16 +58,6 @@ class CreateAppointmentWithOffer extends React.Component {
     .then(()=> this.setState({completed: true}))
     .catch((err) => (console.log(err)));
   }
-
-  // onServiceChange(event){
-  //   this.setState(() => ({
-  //     appointment:{
-  //       ...this.state.appointment,
-  //       customer: this.state.customer._id,
-  //       service: event.target.value,
-  //     }
-  //   }));
-  // }
 
   onContactNumChange(event){
     this.setState(() => ({
@@ -136,6 +125,7 @@ class CreateAppointmentWithOffer extends React.Component {
         offer: data,
       })
     });
+    console.log(this.state.offer);
   }
   componentDidMount() {
     document.title = 'Create New Offer Appointment | Body Contouring Clinic';

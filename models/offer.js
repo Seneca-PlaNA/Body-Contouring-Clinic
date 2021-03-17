@@ -7,7 +7,7 @@ const offerSchema = new Schema(
       type: String,
       required: true,
     },
-    service: [
+    services: [
       {
         type: Schema.Types.ObjectId,
         ref: 'services',
