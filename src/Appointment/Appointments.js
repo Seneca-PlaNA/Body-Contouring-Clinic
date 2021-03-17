@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Pagination } from 'react-bootstrap';
 import '../App.css';
 import SideBar from '../SideBar/SideBar';
 import { Link } from 'react-router-dom';
@@ -17,8 +17,33 @@ class Appointments extends React.Component {
       appointments: [],
       customer: {},
       account: {},
+      currentPage: 1,
+      perPage: 8,
     };
   }
+
+  prevPage() {
+    if (this.state.currentPage > 1) {
+      this.setState({
+        currentPage: parseInt(this.state.currentPage) - 1,
+      });
+    }
+  }
+  nextPage() {
+    if (
+      this.state.currentPage < Math.ceil(this.state.appointments.length / this.state.perPage)
+    ) {
+      this.setState({
+        currentPage: parseInt(this.state.currentPage) + 1,
+      });
+    }
+  }
+  handlePage(e) {
+    this.setState({
+      currentPage: Number(e.target.id),
+    });
+  }
+
 
   getAppointment(custId){
     fetch(`${process.env.REACT_APP_API_URL}/appointment?customer=${custId}`)
@@ -45,9 +70,18 @@ class Appointments extends React.Component {
   }
 
   render() {
-    const pagination = {
-      color: '#B58970',
-    };
+    const indexOfLast = this.state.currentPage * this.state.perPage;
+    const indexOfFirst = indexOfLast - this.state.perPage;
+    const currentItems = this.state.appointments.slice(indexOfFirst, indexOfLast);
+
+    const pageNums = [];
+    for (let i = 1; i <= Math.ceil(this.state.appointments.length / this.state.perPage); i++) {
+      pageNums.push(
+        <Pagination.Item key={i} id={i} onClick={this.handlePage.bind(this)}>
+          {i}
+        </Pagination.Item>
+      );
+    }
 
     return (
       <>
@@ -65,9 +99,9 @@ class Appointments extends React.Component {
                       <th>Service</th>
                       <th>Price</th>
                     </tr>
-                    {this.state.appointments.map((appointment)=>(
+                    {currentItems.map((appointment, index)=>(
                       // eslint-disable-next-line react/jsx-key
-                      <tr>
+                      <tr key={index}>
                         <td>{appointment.schedule == null ? '' : appointment.schedule.date.date}</td>
                         <td>{appointment.schedule == null ? '' : appointment.schedule.time.time}</td>
                         <td>{appointment.service.name}</td>
@@ -83,9 +117,11 @@ class Appointments extends React.Component {
                     ))}
                   </table>
                   <br />
-                  <span style={pagination}>
-                    {'<'} 1 2 3 4 5 {'>'}
-                  </span>
+                  <Pagination style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Pagination.Prev onClick={this.prevPage.bind(this)} />
+                    <Pagination>{pageNums}</Pagination>
+                    <Pagination.Next onClick={this.nextPage.bind(this)} />
+                  </Pagination>
             </div>
           </div>
         </div>

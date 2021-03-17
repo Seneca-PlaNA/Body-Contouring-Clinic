@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Pagination } from 'react-bootstrap';
 import searchIcon from '../../resources/searchIcon.png';
 import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
@@ -21,8 +21,32 @@ class AppointmentsAdmin extends React.Component {
       searchType: [],
       searchDate: '',
       filter: '',
+      currentPage: 1,
+      perPage: 8,
     };
     this.handleDayChange = this.handleDayChange.bind(this);
+  }
+
+  prevPage() {
+    if (this.state.currentPage > 1) {
+      this.setState({
+        currentPage: parseInt(this.state.currentPage) - 1,
+      });
+    }
+  }
+  nextPage() {
+    if (
+      this.state.currentPage < Math.ceil(this.state.filterAppointments.length / this.state.perPage)
+    ) {
+      this.setState({
+        currentPage: parseInt(this.state.currentPage) + 1,
+      });
+    }
+  }
+  handlePage(e) {
+    this.setState({
+      currentPage: Number(e.target.id),
+    });
   }
 
   handleDayChange(e) {
@@ -116,9 +140,18 @@ class AppointmentsAdmin extends React.Component {
   }
 
   render() {
-    const pagination = {
-      color: '#B58970',
-    };
+    const indexOfLast = this.state.currentPage * this.state.perPage;
+    const indexOfFirst = indexOfLast - this.state.perPage;
+    const currentItems = this.state.filterAppointments.slice(indexOfFirst, indexOfLast);
+
+    const pageNums = [];
+    for (let i = 1; i <= Math.ceil(this.state.filterAppointments.length / this.state.perPage); i++) {
+      pageNums.push(
+        <Pagination.Item key={i} id={i} onClick={this.handlePage.bind(this)}>
+          {i}
+        </Pagination.Item>
+      );
+    }
     return (
         <div className="row">
           <div className="col-md-1"></div>
@@ -164,9 +197,9 @@ class AppointmentsAdmin extends React.Component {
                       <th>Price</th>
                       <th>Status</th>
                     </tr>
-                    {this.state.filterAppointments.map((result)=>(
+                    {currentItems.map((result, index)=>(
                       // eslint-disable-next-line react/jsx-key
-                      <tr>
+                      <tr key={index}>
                       <td>{result.customer.account.firstName} {result.customer.account.lastName}</td>
                       <td>{result.schedule == null ? '' : moment(result.schedule.date.date).format('lll')}</td>
                       <td>{result.schedule == null ? '' : result.schedule.time.time}</td>
@@ -184,9 +217,11 @@ class AppointmentsAdmin extends React.Component {
                     ))}
                </table>
                   <br />
-                  <span style={pagination}>
-                    {'<'} 1 2 3 4 5 {'>'}
-                  </span>
+                  <Pagination style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Pagination.Prev onClick={this.prevPage.bind(this)} />
+                    <Pagination>{pageNums}</Pagination>
+                    <Pagination.Next onClick={this.nextPage.bind(this)} />
+                  </Pagination>
             </div>
             <br/><br/>
           </div>
