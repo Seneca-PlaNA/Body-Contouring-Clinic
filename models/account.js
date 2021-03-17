@@ -29,6 +29,10 @@ const accountSchema = new Schema(
     address: {
       type: String,
     },
+    contactNumber: {
+      type: String,
+      required: true,
+    },
     accountLevelId: {
       type: Schema.Types.ObjectId,
       ref: 'accountLevels',

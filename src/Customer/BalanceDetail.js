@@ -14,7 +14,49 @@ class BalanceDetail extends React.Component {
         { url: '/Customer/Edit', title: 'Edit Profile' },
         { url: '/Customer/Balance', title: 'Balance' },
       ],
+//      _id: localStorage.getItem('_id'),
+      children: 'Balance',
+      balances: [],
+      balanceHistory: [],
+      balance: [],
+      profile:{},
+      services: [],
     };
+  }
+
+  getCustomerProfile(id) {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/account/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        });
+    
+    });
+  }
+
+  getBalance(id){
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/balance-history/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+      });
+    });
+  }
+
+  componentDidMount() {
+    this.getCustomerProfile(this.state._id).then((data) => {
+      this.setState({
+        profile: data,
+      });
+      this.getBalance(this.state.profile.balanceHistory).then((data) =>{
+        this.setState({
+          balance: data.balances,
+          services: data.balances.services,
+        });
+      });
+    });
   }
 
   render() {
@@ -29,32 +71,31 @@ class BalanceDetail extends React.Component {
             <Row>
               <Col></Col>
               <Col xs={7}>
-                <table className={styles.appointmentTable}>
+                
+              {this.state.balance.map((result) => (
+                <table className={styles.appointmentTable} key={result._id}>
                   <tr>
                     <td>Customer Name: </td>
-                    <td>Harry Potter</td>
+                    <td>{this.state.profile.firstName + ' ' + this.state.profile.lastName}</td>
                   </tr>
                   <tr>
                     <td>Date:</td>
-                    <td>2021/01/14</td>
+                    <td>{result.date}</td>
                   </tr>
                   <tr>
                     <td>Price:</td>
-                    <td>$100</td>
-                  </tr>
-                  <tr>
-                    <td>Technician:</td>
-                    <td>Mintae Kim</td>
+                    <td>${result.services[0].price}</td>
                   </tr>
                   <tr>
                     <td>Service:</td>
-                    <td>Laser skin clean therapy</td>
+                    <td>{result.services[0].name}</td>
                   </tr>
                   <tr>
                     <td>Contact #:</td>
-                    <td>(437)988-1678</td>
+                    <td>{this.state.profile.contactNumber}</td>
                   </tr>
                 </table>
+              ))}
               </Col>
               <Col></Col>
             </Row>

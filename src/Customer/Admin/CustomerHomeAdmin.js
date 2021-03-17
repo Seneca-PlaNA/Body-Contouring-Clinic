@@ -11,7 +11,10 @@ class CustomerHomeAdmin extends React.Component {
     this.state = {
       admin: {},
       profile: [],
-      items: [{ url: `/Customer/Admin/${this.props.id}`, title: 'Home' }],
+      items: [
+        { url: `/Customer/Admin/${this.props.id}`, title: 'Home' },
+        { url: `/Customer/Admin/ManageCustomerBalance/${this.props.id}`, title: 'ManageBalance' },],
+    
       _id: localStorage.getItem('_id'),
     };
   }
