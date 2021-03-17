@@ -44,7 +44,8 @@ import PageNotFound from './PageNotFound';
 import TermsAndConditions from './Register/TermsAndConditions';
 import SignupSuccess from './Register/SignupSuccess';
 import CheckConfirmEmail from './Register/CheckConfirmEmail';
-import Forgot_Id_Pw from './Register/Forgot_Id_Pw';
+import Forgot_Id from './Register/Forgot_Id';
+import FindID from './Register/FindID';
 import openHours from './resources/openHours.png';
 import servicePic from './resources/SerivcePic.png';
 import ViewSchedulesList from './StaffSchedule/ViewSchedulesList';
@@ -75,12 +76,8 @@ class RouterConfig extends React.Component {
           {/* Appointment URL */}
           <Route exact path="/Appointment" render={() => <AppointmentHome />} />
           <Route exact path="/Appointment/Appointments" render={() => <Appointments />} />
-          <Route
-            exact
-            path="/Appointment/Create"
-            render={() => <CreateAppointment />}
-          />
-            <Route exact path="/Appointment/Offer/Create/:id" render={(props) => <CreateAppointmentWithOffer id={props.match.params.id}/>} />
+          <Route exact path="/Appointment/Create" render={() => <CreateAppointment />} />
+          <Route exact path="/Appointment/Offer/Create/:id" render={(props) => <CreateAppointmentWithOffer id={props.match.params.id}/>} />
           <Route
             exact
             path="/Appointment/Appointment/:id"
@@ -169,7 +166,8 @@ class RouterConfig extends React.Component {
           <Route exact path="/Request/Admin" render={() => <RequestHomeAdmin />} />
           <Route
             path="/Request/Admin/Details/:id"
-            render={(props) => <ViewRequestAdmin id={props.match.params.id}></ViewRequestAdmin>}/>
+            render={(props) => <ViewRequestAdmin id={props.match.params.id}></ViewRequestAdmin>}
+          />
           <Route
             path="/Request/Admin/Answer/:id"
             render={(props) => <AnswerRequest id={props.match.params.id}></AnswerRequest>}
@@ -233,7 +231,8 @@ class RouterConfig extends React.Component {
           <Route exact path="/Register/TermsAndConditions" render={() => <TermsAndConditions />} />
           <Route exact path="/Register/SignupSuccess" render={() => <SignupSuccess />} />
           <Route exact path="/Register/CheckConfirmEmail" render={() => <CheckConfirmEmail />} />
-          <Route exact path="/Register/Forgot_Id_Pw" render={() => <Forgot_Id_Pw />} />
+          <Route exact path="/Register/ForgotID" render={() => <Forgot_Id />} />
+          <Route exact path="/Register/FindID" render={() => <FindID />} />
 
           {/* Page Not Found */}
           <Route render={() => <PageNotFound />} />

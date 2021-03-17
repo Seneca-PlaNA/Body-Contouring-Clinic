@@ -725,6 +725,28 @@ app.post('/login', (req, res) => {
   });
 });
 
+app.post('/forgot', (req, res) => {
+  Account.findOne({ email: req.body.email }, (err, user) => {
+    if (err || user == null) {
+      return res.json({
+        findID: false,
+        message: 'Not available email',
+      });
+    }
+    user
+      .generateToken()
+      .then((user) => {
+        res
+          .cookie('x_auth', user.token)
+          .status(200)
+          .json({ loginSuccess: true, _id: user._id, token: user.token });
+      })
+      .catch((err) => {
+        res.status(400).send(err);
+      });
+  });
+});
+
 // app.get('/auth', auth, (req, res) => {
 //   res.status(200).json({
 //     _id: req._id,

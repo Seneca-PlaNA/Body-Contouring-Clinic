@@ -22,6 +22,10 @@ const accountSchema = new Schema(
       type: String,
       required: true,
     },
+    phone: {
+      type: String,
+      require: true,
+    },
     email: {
       type: String,
       required: true,
@@ -38,7 +42,7 @@ const accountSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'balanceHistories',
       required: true,
-    }
+    },
   },
   { timestamps: true }
 );

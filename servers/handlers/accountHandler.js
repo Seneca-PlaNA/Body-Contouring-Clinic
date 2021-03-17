@@ -1,8 +1,17 @@
 const Account = require('../../models/account');
+const BalanceHistory = require('../../models/balanceHistory');
+const mongoose = require('mongoose');
 
 //Create
 exports.addNewAccount = function (data) {
   return new Promise((resolve, reject) => {
+    let balance = new BalanceHistory({
+      _id: new mongoose.Types.ObjectId(),
+    });
+    balance.save();
+    var balanceH = `${balance._id}`;
+    data.balanceHistory = balanceH;
+
     let newAccount = new Account(data);
     newAccount.save((err) => {
       if (err) {
@@ -18,6 +27,17 @@ exports.addNewAccount = function (data) {
 exports.viewAllAccount = function () {
   return new Promise((resolve, reject) => {
     Account.find()
+      .populate('accountLevelId')
+      .populate({
+        path: 'balanceHistory',
+        populate: [
+          {
+            path: 'balances',
+            populate: [{ path: 'services', populate: { path: 'serviceCategory' } }],
+          },
+        ],
+      })
+      .exec()
       .then((data) => {
         resolve(data);
       })
@@ -31,6 +51,16 @@ exports.viewAllAccount = function () {
 exports.viewOneAccountById = function (id) {
   return new Promise((resolve, reject) => {
     Account.findOne({ _id: id })
+      .populate('accountLevelId')
+      .populate({
+        path: 'balanceHistory',
+        populate: [
+          {
+            path: 'balances',
+            populate: [{ path: 'services', populate: { path: 'serviceCategory' } }],
+          },
+        ],
+      })
       .exec()
       .then((data) => {
         resolve(data);

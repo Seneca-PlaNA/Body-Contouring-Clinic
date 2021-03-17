@@ -13,16 +13,43 @@ class SignUp extends Component {
         password: String,
         firstName: String,
         lastName: String,
+        phone: String,
         email: String,
         address: String,
-        accountLevelId: '602ae6dd81e029f0fa01aed0',
+        accountLevelId: '60371ad3fda1af6510e75e3a',
+        balanceHistory: String,
       },
+      // balance: {},
       completed: false,
     };
   }
 
   handleSubmit(event) {
     event.preventDefault();
+    // axios.post('http://localhost:3001/create-balance-history', this.state.balance).then((res) => {
+    //   console.log(res.data._id);
+    //   console.log(res.data);
+    //   this.setState({
+    //     account: {
+    //       balanceHistory: res.data._id,
+    //     },
+    //   });
+    // });
+
+    // fetch('http://localhost:3001/create-balance-history', {
+    //   method: 'POST',
+    //   body: JSON.stringify(this.state.balance),
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    //   .then((response) => response.json())
+    //   .then((response) => {
+    //     console.log(response);
+    //     console.log(response.json);
+    //   })
+    //   .catch((err) => console.log(err));
 
     axios
       .post('http://localhost:3001/create-account', this.state.account)
@@ -66,6 +93,15 @@ class SignUp extends Component {
     }));
   }
 
+  onNumberChange(event) {
+    this.setState(() => ({
+      account: {
+        ...this.state.account,
+        phone: event.target.value,
+      },
+    }));
+  }
+
   onEmailChange(event) {
     this.setState(() => ({
       account: {
@@ -84,6 +120,15 @@ class SignUp extends Component {
     }));
   }
 
+  onCreateBalanceHistory(event) {
+    this.setState(() => ({
+      account: {
+        ...this.state.account,
+        balanceHistory: event.target.value,
+      },
+    }));
+  }
+
   render() {
     if (this.state.completed) {
       return (
@@ -97,7 +142,7 @@ class SignUp extends Component {
     }
     return (
       <div className="row">
-        <div className="col-md-8" style={{ 'margin-left': '290px' }}>
+        <div className="col-md-8" style={{ 'margin-left': '340px' }}>
           <h2 className="PageTitle" style={{ 'margin-left': '390px' }}>
             Sign-up Form
           </h2>
@@ -166,6 +211,19 @@ class SignUp extends Component {
                     placeholder="Enter Last name"
                     onChange={this.onLastNameChange.bind(this)}
                   />
+                </Col>
+              </Form.Group>
+              <Form.Group as={Row} controlId="phone">
+                <Form.Label column sm={2}>
+                  Phone Number:
+                </Form.Label>
+                <Col sm={4}>
+                  <Form.Control
+                    type="text"
+                    name="phone"
+                    placeholder="000-000-0000"
+                    onChange={this.onNumberChange.bind(this)}
+                  ></Form.Control>
                 </Col>
               </Form.Group>
               <Form.Group as={Row} controlId="email">
