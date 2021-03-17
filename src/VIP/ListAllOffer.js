@@ -43,7 +43,7 @@ class ListAllOffer extends React.Component {
                 <Card.Text>{moment(result.startDate).format('ll')} ~ {moment(result.endDate).format('ll')}</Card.Text>
                 <Card.Text>{result.description}</Card.Text>
                 <Card.Text>$ {result.price}</Card.Text>
-                <Button variant="outline-info" href={`/Appointment/Create?offerId=${result._id}`}>
+                <Button variant="outline-info" href={`/Appointment/Offer/Create/${result._id}`}>
                   Book
                 </Button>
               </Card.Body>

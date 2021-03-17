@@ -18,6 +18,7 @@ exports.addNewOffer = function (data) {
 exports.viewAllOffers = function () {
   return new Promise((resolve, reject) => {
     Offer.find()
+      .populate('services')
       .then((offers) => {
         resolve(offers);
       })
@@ -31,6 +32,7 @@ exports.viewAllOffers = function () {
 exports.viewOneOfferById = function (id) {
   return new Promise((resolve, reject) => {
     Offer.findOne({ _id: id })
+      .populate('services')
       .exec()
       .then((offer) => {
         resolve(offer);
