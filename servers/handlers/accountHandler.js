@@ -1,8 +1,10 @@
 const Account = require('../../models/account');
 const BalanceHistory = require('../../models/balanceHistory');
+const Customer = require('../../models/customer');
 const mongoose = require('mongoose');
 
 //Create
+
 exports.addNewAccount = function (data) {
   return new Promise((resolve, reject) => {
     let balance = new BalanceHistory({
@@ -11,14 +13,22 @@ exports.addNewAccount = function (data) {
     balance.save();
     var balanceH = `${balance._id}`;
     data.balanceHistory = balanceH;
-
     let newAccount = new Account(data);
-    newAccount.save((err) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(`New Account (id: ${newAccount._id}) is created`);
-      }
+    newAccount.save().then((data) => {
+      let newCustomer = new Customer({
+        account: data._id,
+        lastLoginTime: new Date(),
+        balanceHistory: data.balanceHistory,
+      });
+
+      newCustomer
+        .save()
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
     });
   });
 };

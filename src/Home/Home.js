@@ -104,7 +104,7 @@ class Home extends React.Component {
                 <a className="nav-link">BodyContouringClinic@gmail.com</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link">(416) 966 - 0006</a>
+                <a className="nav-link">Admin</a>
               </li>
             </ul>
             <ul className="navbar-nav ml-auto">
@@ -124,7 +124,7 @@ class Home extends React.Component {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/Appointment/Admin/Appointments">
+                <a className="nav-link" href="/Appointment/Admin/">
                   Appointment
                 </a>
               </li>
