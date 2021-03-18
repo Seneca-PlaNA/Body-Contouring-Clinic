@@ -209,8 +209,8 @@ class RouterConfig extends React.Component {
           />
           <Route
             exact
-            path="/Customer/Admin/profile/:id"
-            render={(props) => <CustomerProfileAdmin id={props.match.params.id} />}
+            path="/Customer/Admin/Profile/:id"
+            render={(props) => <CustomerProfileAdmin id={props.match.params.id}/>}
           />
           <Route
             exact

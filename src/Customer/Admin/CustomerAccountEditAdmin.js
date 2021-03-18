@@ -5,7 +5,7 @@ import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 
 class CustomerAccountEditAdmin extends React.Component {
   state = {
-    items: [{ url: `/Customer/Admin/${this.props.id}`, title: 'Home' }],
+    items: [{ url: `/Customer/Admin`, title: 'Home' },],
   };
   constructor(prop) {
     super(prop);

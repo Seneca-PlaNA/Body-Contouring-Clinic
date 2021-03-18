@@ -2,7 +2,7 @@ import React from 'react';
 import SideBar from '../../SideBar/SideBar';
 import '../../App.css';
 import searchIcon from '../../resources/searchIcon.png';
-import { Form, Button, Table } from 'react-bootstrap';
+import { Form, Button, Table, Pagination } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 class CustomerHomeAdmin extends React.Component {
@@ -11,10 +11,52 @@ class CustomerHomeAdmin extends React.Component {
     this.state = {
       admin: {},
       profile: [],
-      items: [{ url: `/Customer/Admin/${this.props.id}`, title: 'Home' }],
+      items: [{ url: `/Customer/Admin`, title: 'Home' },],
       _id: localStorage.getItem('_id'),
+      filterData:[],
+      seachCustomer: '',
+      currentPage: 1,
+      perPage: 8,
     };
   }
+
+  prevPage() {
+    if (this.state.currentPage > 1) {
+      this.setState({
+        currentPage: parseInt(this.state.currentPage) - 1,
+      });
+    }
+  }
+  nextPage() {
+    if (
+      this.state.currentPage < Math.ceil(this.state.filterData.length / this.state.perPage)
+    ) {
+      this.setState({
+        currentPage: parseInt(this.state.currentPage) + 1,
+      });
+    }
+  }
+  handlePage(e) {
+    this.setState({
+      currentPage: Number(e.target.id),
+    });
+  }
+
+  handleSearchCustomerChange(e) {
+    this.setState({
+      seachCustomer: e.target.value,
+    });
+  }
+
+  handleSearchCustomer(){
+      const newCustomers = this.state.profile.filter((req) => {
+        let name = req.firstName + req.lastName;
+        return name.toLowerCase().includes(this.state.seachCustomer.toLowerCase());
+      });
+      console.log(newCustomers);
+      this.setState({ filterData: newCustomers });
+  }
+
   getCustomerProfile(id) {
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/account/${id}`)
@@ -39,6 +81,7 @@ class CustomerHomeAdmin extends React.Component {
     this.getAllCustomer().then((data) => {
       this.setState({
         profile: data,
+        filterData: data,
       });
     });
 
@@ -50,13 +93,25 @@ class CustomerHomeAdmin extends React.Component {
   }
 
   render() {
+    const indexOfLast = this.state.currentPage * this.state.perPage;
+    const indexOfFirst = indexOfLast - this.state.perPage;
+    const currentItems = this.state.filterData.slice(indexOfFirst, indexOfLast);
+
+    const pageNums = [];
+    for (let i = 1; i <= Math.ceil(this.state.filterData.length / this.state.perPage); i++) {
+      pageNums.push(
+        <Pagination.Item key={i} id={i} onClick={this.handlePage.bind(this)}>
+          {i}
+        </Pagination.Item>
+      );
+    }
     return (
       <div className="row">
         <div className="col-md-1"></div>
         <SideBar items={this.state.items} />
         <div className="col-md-8" style={{ 'margin-left': '80px' }}>
           <h2 className="PageTitle">
-            Hi, {this.state.admin.firstName} {this.state.admin.lastName}{' '}
+            Hi, Staff - {this.state.admin.firstName} {this.state.admin.lastName}{' '}
           </h2>
           <hr />
           <div className="contents">
@@ -65,11 +120,14 @@ class CustomerHomeAdmin extends React.Component {
                 type="text"
                 placeholder="Search customer"
                 style={{ 'margin-left': '800px' }}
+                value={this.state.seachCustomer}
+                onChange={this.handleSearchCustomerChange.bind(this)}
               ></Form.Control>
               <Button
                 type="submit"
                 variant="outline-*"
                 style={{ background: 'none', 'margin-left': '5px' }}
+                onClick={this.handleSearchCustomer.bind(this)}
               >
                 <img src={searchIcon} alt="Search" />
               </Button>
@@ -86,7 +144,7 @@ class CustomerHomeAdmin extends React.Component {
                 <th>Detail</th>
               </tr>
             </thead>
-            {this.state.profile.map((result) => (
+            {currentItems.map((result) => (
               <tbody key={result._id}>
                 <tr>
                   <td>
@@ -95,12 +153,18 @@ class CustomerHomeAdmin extends React.Component {
                   <td>$199</td>
                   <td>Normal</td>
                   <td>
-                    <Link to={`/customer/admin/profile/${result._id}`}>Detail</Link>
+                    <Link to={`/Customer/Admin/Profile/${result._id}`}>Detail</Link>
                   </td>
                 </tr>
               </tbody>
             ))}
           </Table>
+          <br/>
+          <Pagination style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Pagination.Prev onClick={this.prevPage.bind(this)} />
+                    <Pagination>{pageNums}</Pagination>
+                    <Pagination.Next onClick={this.nextPage.bind(this)} />
+          </Pagination>
         </div>
       </div>
     );

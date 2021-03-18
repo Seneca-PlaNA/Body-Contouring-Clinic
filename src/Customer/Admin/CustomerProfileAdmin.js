@@ -9,7 +9,7 @@ class CustomerProfileAdmin extends React.Component {
     super(prop);
     this.state = {
       profile: {},
-      items: [{ url: `/Customer/Admin/${this.props.id}`, title: 'Home' }],
+      items: [{ url: `/Customer/Admin`, title: 'Home' },],
     };
   }
 
@@ -37,7 +37,7 @@ class CustomerProfileAdmin extends React.Component {
         <div className="col-md-1"></div>
         <SideBar items={this.state.items} />
         <div className="col-md-6" style={{ 'margin-left': '80px' }}>
-          <h2 className="PageTitle">User.userName Information</h2>
+          <h2 className="PageTitle">{this.state.profile.firstName} {this.state.profile.lastName} Information</h2>
           <hr />
           <br />
           <Container class="col-md-6">
