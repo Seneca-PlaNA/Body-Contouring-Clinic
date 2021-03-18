@@ -2,12 +2,12 @@ import React from 'react';
 import SideBar from '../SideBar/SideBar';
 import '../App.css';
 import { Table } from 'react-bootstrap';
+import moment from 'moment';
 
 class CustomerHome extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      profile: {},
       items: [
         { url: '/Customer/', title: 'Home' },
         { url: `/Customer/${localStorage.getItem('_id')}`, title: 'Profile' },
@@ -15,24 +15,59 @@ class CustomerHome extends React.Component {
         { url: `/Customer/Balance/${localStorage.getItem('_id')}`, title: 'Balance' },
       ],
       _id: localStorage.getItem('_id'),
+      customer: {},
+      account: {},
+      appointments:[],
+      requests:[],
+      balanceHistory:{},
+      balances:[],
     };
   }
 
-  getCustomerProfile(id) {
-    return new Promise((resolve) => {
-      fetch(`${process.env.REACT_APP_API_URL}/account/${id}`)
-        .then((response) => response.json())
-        .then((data) => {
-          resolve(data);
+  getBalances(id) {
+    fetch(`${process.env.REACT_APP_API_URL}/balance-history/${id}`)
+      .then((response) => response.json())
+      .then((results) => {
+        console.log(results);
+        this.setState({
+          balanceHistory: results,
+          balances: results.balances,
         });
+      });
+  }
+
+  getRequests(id) {
+    fetch(`${process.env.REACT_APP_API_URL}/request?customer=${id}`)
+      .then((response) => response.json())
+      .then((results) => {
+        console.log(results);
+        this.setState({
+          requests: results,
+        });
+      });
+  }
+
+  getAppointments(custId){
+    fetch(`${process.env.REACT_APP_API_URL}/appointment?customer=${custId}`)
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({
+        appointments: data
+      });
     });
   }
 
   componentDidMount() {
-    this.getCustomerProfile(this.state._id).then((data) => {
+    fetch(`${process.env.REACT_APP_API_URL}/customer?account=${this.state._id}`)
+    .then(response => response.json())
+    .then((data) => {
       this.setState({
-        profile: data,
+        customer: data,
+        account: data.account,
       });
+      this.getAppointments(this.state.customer._id);
+      this.getRequests(this.state.customer._id);
+      this.getBalances(this.state.account.balanceHistory);
     });
   }
 
@@ -43,7 +78,7 @@ class CustomerHome extends React.Component {
         <SideBar items={this.state.items} />
         <div className="col-md-6" style={{ 'margin-left': '80px' }}>
           <h2 className="PageTitle">
-            Hi, {this.state.profile.firstName} {this.state.profile.lastName}{' '}
+            Hi, {this.state.account.firstName} {this.state.account.lastName}{' '}
           </h2>
           <hr />
           <br />
@@ -58,18 +93,15 @@ class CustomerHome extends React.Component {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Body Clinic</td>
-                <td>Mintae Kim</td>
-                <td>2021/1/1</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Face Clinic</td>
-                <td>Mintae Kim</td>
-                <td>2021/1/1</td>
-              </tr>
+              {this.state.appointments.map((appointment, index)=>(
+                // eslint-disable-next-line react/jsx-key
+                <tr>
+                  <td>{index + 1}</td>
+                  <td>{appointment.service.name}</td>
+                  <td>{appointment.schedule.staff.account.firstName} {appointment.schedule.staff.account.lastName}</td>
+                  <td>{appointment.schedule == null ? '' : appointment.schedule.date.date}</td>
+                </tr>
+              ))}
             </tbody>
           </Table>
           <a href="/Appointment/">Go to appointment</a>
@@ -86,18 +118,15 @@ class CustomerHome extends React.Component {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Change the appointment</td>
-                <td>Progress</td>
-                <td>2021-1-1</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Change my plan</td>
-                <td>Solved</td>
-                <td>2021-1-1</td>
-              </tr>
+              {this.state.requests.map((request, index)=>(
+                // eslint-disable-next-line react/jsx-key
+                <tr>
+                  <td>{index + 1}</td>
+                  <td>{request.title}</td>
+                  <td>{request.status}</td>
+                  <td>{moment(request.date).format('ll')}</td>
+                </tr>
+              ))}
             </tbody>
           </Table>
           <a href="/Request/">Go to request</a>
@@ -109,23 +138,20 @@ class CustomerHome extends React.Component {
               <tr>
                 <th>#</th>
                 <th>Price</th>
-                <th>Name</th>
+                <th>Info</th>
                 <th>Date</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>$200</td>
-                <td>Harry Potter</td>
-                <td>2021-1-1</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>$110</td>
-                <td>Harry Potter</td>
-                <td>2021-1-1</td>
-              </tr>
+              {this.state.balances.map((balance, index)=>(
+                // eslint-disable-next-line react/jsx-key
+                <tr>
+                  <td>{index + 1}</td>
+                  <td>${balance.balanceAccount}</td>
+                  <td>Add the deposit</td>
+                  <td>{moment(balance.date).format('ll')}</td>
+                </tr>
+              ))}
             </tbody>
           </Table>
           <a href="/Customer/Balance">Go to balance</a>
