@@ -13,10 +13,10 @@ class CustomerProfileEdit extends React.Component {
       profile: {},
       completed: false,
       items: [
-        { url: '/Customer/', title: 'Home' },
-        { url: `/Customer/${this.props.id}`, title: 'Profile' },
-        { url: `/Customer/Edit/${this.props.id}`, title: 'Edit Profile' },
-        { url: `/Customer/Balance/${this.props.id}`, title: 'Balance' },
+        { url: '/Customer', title: 'Home' },
+        { url: `/Customer/Profile`, title: 'Profile' },
+        { url: `/Customer/Edit/${localStorage.getItem('_id')}`, title: 'Edit Profile' },
+        { url: `/Customer/Balance/${localStorage.getItem('_id')}`, title: 'Balance' },
       ],
       _id: localStorage.getItem('_id'),
     };

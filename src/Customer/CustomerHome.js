@@ -9,8 +9,8 @@ class CustomerHome extends React.Component {
     super(props);
     this.state = {
       items: [
-        { url: '/Customer/', title: 'Home' },
-        { url: `/Customer/${localStorage.getItem('_id')}`, title: 'Profile' },
+        { url: '/Customer', title: 'Home' },
+        { url: `/Customer/Profile`, title: 'Profile' },
         { url: `/Customer/Edit/${localStorage.getItem('_id')}`, title: 'Edit Profile' },
         { url: `/Customer/Balance/${localStorage.getItem('_id')}`, title: 'Balance' },
       ],

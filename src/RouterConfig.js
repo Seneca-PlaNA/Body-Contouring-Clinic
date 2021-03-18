@@ -182,8 +182,8 @@ class RouterConfig extends React.Component {
           <Route exact path="/Customer" render={() => <CustomerHome />} />
           <Route
             exact
-            path="/Customer/:id"
-            render={() => <CustomerProfile id={localStorage.getItem('_id')} />}
+            path="/Customer/Profile"
+            render={() => <CustomerProfile />}
           />
           <Route
             exact
@@ -204,8 +204,8 @@ class RouterConfig extends React.Component {
           {/* Customer Admin URL*/}
           <Route
             exact
-            path="/Customer/Admin/:id"
-            render={() => <CustomerHomeAdmin id={localStorage.getItem('_id')} />}
+            path="/Customer/Admin"
+            render={() => <CustomerHomeAdmin />}
           />
           <Route
             exact
