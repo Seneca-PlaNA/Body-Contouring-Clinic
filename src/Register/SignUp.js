@@ -16,7 +16,7 @@ class SignUp extends Component {
         phone: String,
         email: String,
         address: String,
-        accountLevelId: '60371ad3fda1af6510e75e3a',
+        accountLevelId: '603719d1ec07da8afc6ff378',
         balanceHistory: String,
       },
       // balance: {},
