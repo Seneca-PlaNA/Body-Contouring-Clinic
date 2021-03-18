@@ -124,7 +124,6 @@ class CustomerHomeAdmin extends React.Component {
                 onChange={this.handleSearchCustomerChange.bind(this)}
               ></Form.Control>
               <Button
-                type="submit"
                 variant="outline-*"
                 style={{ background: 'none', 'margin-left': '5px' }}
                 onClick={this.handleSearchCustomer.bind(this)}
@@ -144,20 +143,22 @@ class CustomerHomeAdmin extends React.Component {
                 <th>Detail</th>
               </tr>
             </thead>
-            {currentItems.map((result) => (
-              <tbody key={result._id}>
-                <tr>
+
+              <tbody>
+              {currentItems.map((result, index) => (
+                <tr key={index}>
                   <td>
                     {result.firstName} {result.lastName}
                   </td>
                   <td>$199</td>
-                  <td>Normal</td>
+                  <td>{result.accountLevelId == null ? "": result.accountLevelId.name}</td>
                   <td>
                     <Link to={`/Customer/Admin/Profile/${result._id}`}>Detail</Link>
                   </td>
                 </tr>
+                ))}
               </tbody>
-            ))}
+
           </Table>
           <br/>
           <Pagination style={{ display: 'flex', justifyContent: 'center' }}>
