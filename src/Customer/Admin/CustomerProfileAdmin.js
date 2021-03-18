@@ -140,7 +140,7 @@ class CustomerProfileAdmin extends React.Component {
                   Customer level:
                 </Form.Label>
                 <Col sm={3}>
-                  <Form.Control as="select" controlId="accountLevelId" value={this.state.accountLevel._id} onChange={this.onAccountLevelChange.bind(this)}>
+                  <Form.Control as="select" controlId="accountLevelId" value={this.state.accountLevel == null ? '':this.state.accountLevel._id} onChange={this.onAccountLevelChange.bind(this)}>
                     {this.state.accountLevels.map((level)=>(
                       <option key={level._id} value={level._id}>{level.name}</option>
                     ))}
