@@ -99,16 +99,12 @@ class CustomerBalance extends React.Component {
                         <th>Date</th>
                         <th>info</th>
                         <th>Update</th>
-                        <th></th>
                       </tr>
                       {this.state.balanceHistory.balances == null? "" : this.state.balanceHistory.balances.map((result) => (
                       <tr key={result._id}>
                         <td>{moment(result.date).format('ll')}</td>
                         <td>{result.info}</td>
                         <td>$ {result.balanceAccount}</td>
-                        <td>
-                          <a href={`/Customer/BalanceDetail/${result._id}`}>details</a>
-                        </td>
                       </tr>
                      ))}
                     </table>

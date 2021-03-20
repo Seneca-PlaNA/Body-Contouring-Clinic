@@ -174,7 +174,7 @@ class CustomerBalanceDetailAdmin extends React.Component {
                   </Col>
                   <Col sm={2}>
                       <Button type="submit" variant="outline-info"onClick={this.handleSubstractBalance.bind(this)}>
-                        Substract  
+                        Subtract  
                       </Button>
                   </Col>
                   <Col></Col>
@@ -194,16 +194,12 @@ class CustomerBalanceDetailAdmin extends React.Component {
                       <th>Date</th>
                       <th>info</th>
                       <th>Update</th>
-                      <th></th>
                     </tr>
                     {this.state.balanceHistory.balances == null? "" : this.state.balanceHistory.balances.map((result) => (
                     <tr key={result._id}>
                       <td>{moment(result.date).format('ll')}</td>
                       <td>{result.info}</td>
                       <td>$ {result.balanceAccount}</td>
-                      <td>
-                        <a href={`/Customer/BalanceDetail/${result._id}`}>details</a>
-                      </td>
                     </tr>
                    ))}
                   </table>
