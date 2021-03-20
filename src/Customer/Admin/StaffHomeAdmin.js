@@ -3,9 +3,9 @@ import SideBar from '../../SideBar/SideBar';
 import '../../App.css';
 import searchIcon from '../../resources/searchIcon.png';
 import { Form, Button, Table, Pagination } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+// import { Redirect } from 'react-router';
 
-class CustomerHomeAdmin extends React.Component {
+class StaffHomeAdmin extends React.Component {
   constructor(prop) {
     super(prop);
     this.state = {
@@ -16,10 +16,11 @@ class CustomerHomeAdmin extends React.Component {
               ],
       _id: localStorage.getItem('_id'),
       filterData:[],
-      seachCustomer: '',
+      seachStaff: '',
       currentPage: 1,
       perPage: 8,
     };
+    this.requestInactiveStaff = this.requestInactiveStaff.bind(this);
   }
 
   prevPage() {
@@ -44,22 +45,31 @@ class CustomerHomeAdmin extends React.Component {
     });
   }
 
-  handleSearchCustomerChange(e) {
+  handleSearchStaffChange(e) {
     this.setState({
-      seachCustomer: e.target.value,
+      seachStaff: e.target.value,
     });
   }
 
-  handleSearchCustomer(){
-      const newCustomers = this.state.profile.filter((req) => {
+  handleSearchStaff(){
+      const newStaffs = this.state.profile.filter((req) => {
         let name = req.firstName + req.lastName;
-        return name.toLowerCase().includes(this.state.seachCustomer.toLowerCase());
+        return name.toLowerCase().includes(this.state.seachStaff.toLowerCase());
       });
-      console.log(newCustomers);
-      this.setState({ filterData: newCustomers });
+      console.log(newStaffs);
+      this.setState({ filterData: newStaffs });
   }
 
-  getCustomerProfile(id) {
+  requestInactiveStaff(id){
+    fetch(`${process.env.REACT_APP_API_URL}/inactive-staff/${id}`)
+      .then((response) => response.json())
+      .then((results) => {
+        console.log(results);
+          window.location.reload();
+      });
+  }
+
+  getStaffProfile(id) {
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/account/${id}`)
         .then((response) => response.json())
@@ -69,7 +79,7 @@ class CustomerHomeAdmin extends React.Component {
     });
   }
 
-  getAllCustomer() {
+  getAllStaff() {
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/accounts`)
         .then((response) => response.json())
@@ -79,23 +89,22 @@ class CustomerHomeAdmin extends React.Component {
     });
   }
 
-  verifyCustomerLevel(data){
-    const verifiedCustomer = data.filter((req)=>{
-      return !(req.accountLevelId != null &&  req.accountLevelId._id == "603719d1ec07da8afc6ff378")
+  verifyStaffLevel(data){
+    const verifiedStaff = data.filter((req)=>{
+      return req.accountLevelId != null && req.accountLevelId._id == "603719d1ec07da8afc6ff378"
 
     })
     this.setState({
-        profile: verifiedCustomer,
-        filterData: verifiedCustomer,
+        profile: verifiedStaff,
+        filterData: verifiedStaff,
     });
   }
-
   componentDidMount() {
-    this.getAllCustomer().then((data) => {
-      this.verifyCustomerLevel(data);
+    this.getAllStaff().then((data) => {
+      this.verifyStaffLevel(data);
     });
 
-    this.getCustomerProfile(this.state._id).then((data) => {
+    this.getStaffProfile(this.state._id).then((data) => {
       this.setState({
         admin: data,
       });
@@ -103,6 +112,13 @@ class CustomerHomeAdmin extends React.Component {
   }
 
   render() {
+    // if(this.state.completed)
+    // {
+    //   return <Redirect push to={{
+    //     pathname: `/Staff/Admin`
+    //   }}/>
+    // }
+
     const indexOfLast = this.state.currentPage * this.state.perPage;
     const indexOfFirst = indexOfLast - this.state.perPage;
     const currentItems = this.state.filterData.slice(indexOfFirst, indexOfLast);
@@ -125,32 +141,34 @@ class CustomerHomeAdmin extends React.Component {
           </h2>
           <hr />
           <div className="contents">
-            <Form inline>
-              <h4 className="PageTitle">Customer List</h4>
+          </div>
+          <Form inline>
+            <h4 className="PageTitle">Staff List</h4>
+              <Button href="/Staff/Admin/Active" action variant="outline-info" style={{ 'margin-left': '30px' }}>
+               Active Staff
+              </Button>
               <Form.Control
                 type="text"
-                placeholder="Search customer"
-                style={{ 'margin-left': '800px' }}
-                value={this.state.seachCustomer}
-                onChange={this.handleSearchCustomerChange.bind(this)}
+                placeholder="Search staff"
+                value={this.state.seachStaff}
+                style={{'margin-left': '750px' }}
+                onChange={this.handleSearchStaffChange.bind(this)}
               ></Form.Control>
               <Button
                 variant="outline-*"
                 style={{ background: 'none', 'margin-left': '5px' }}
-                onClick={this.handleSearchCustomer.bind(this)}
+                onClick={this.handleSearchStaff.bind(this)}
               >
                 <img src={searchIcon} alt="Search" />
               </Button>
             </Form>
-            <br />
-          </div>
+            <br/>
           <Table striped bordered hover>
             <thead>
               <tr>
-                <th>Customer Name</th>
-                <th>Customer Balance</th>
-                <th>Customer Level</th>
-                <th>Detail</th>
+                <th>Staff ID</th>
+                <th>Staff Name</th>
+                <th>Action</th>
               </tr>
             </thead>
 
@@ -160,15 +178,15 @@ class CustomerHomeAdmin extends React.Component {
                   <td>
                     {result.firstName} {result.lastName}
                   </td>
-                  <td>$199</td>
-                  <td>{result.accountLevelId == null ? "": result.accountLevelId.name}</td>
                   <td>
-                    <Link to={`/Customer/Admin/Profile/${result._id}`}>Detail</Link>
+                    {result.userID}
+                  </td>
+                  <td>
+                    <Button variant="outline-info" onClick={()=>{this.requestInactiveStaff(result._id)}}>InActive</Button>
                   </td>
                 </tr>
                 ))}
               </tbody>
-
           </Table>
           <br/>
           <Pagination style={{ display: 'flex', justifyContent: 'center' }}>
@@ -182,4 +200,4 @@ class CustomerHomeAdmin extends React.Component {
   }
 }
 
-export default CustomerHomeAdmin;
+export default StaffHomeAdmin;

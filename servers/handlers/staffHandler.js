@@ -1,4 +1,5 @@
 const Staff = require('../../models/staff');
+const Account = require('../../models/account');
 
 // create new
 exports.addNewStaff = function (data) {
@@ -97,3 +98,47 @@ exports.viewStaffByInput = function (query) {
       });
   });
 };
+  
+exports.activeStaffById = function (id) {
+  return new Promise((resolve, reject) => {
+
+    Account.updateOne({ _id: id }, { accountLevelId: '603719d1ec07da8afc6ff378' })
+    .exec()
+    .then(()=>{
+        let newStaff = new Staff({
+          account: id,
+          isActive: "true",
+          sin: 954784555,
+          workSchedules: [],
+        });
+    
+        newStaff.save((err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(`new staff (id: ${newStaff._id}) is created.`);
+          }
+        });
+      });
+    })
+};
+
+exports.inactiveStaffById = function (id) {
+  return new Promise((resolve, reject) => {
+
+    Account.updateOne({ _id: id }, { accountLevelId: '60371ad3fda1af6510e75e3a' })
+    .exec()
+    .then(()=>{
+        Staff.deleteOne({ account: id })
+        .exec()
+        .then(() => {
+          resolve(`Staff (id: ${id}) is deleted`);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+      });
+    })
+};
+
+
