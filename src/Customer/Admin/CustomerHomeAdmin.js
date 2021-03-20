@@ -13,7 +13,11 @@ class CustomerHomeAdmin extends React.Component {
       profile: [],
       items: [{ url: `/Customer/Admin/${this.props.id}`, title: 'Home' }],
       _id: localStorage.getItem('_id'),
+      accountLevelId: {},
+      balanceHistory: {},
     };
+    console.log(this.state.profile)
+    console.log(this.props.id)
   }
   getCustomerProfile(id) {
     return new Promise((resolve) => {
@@ -39,15 +43,19 @@ class CustomerHomeAdmin extends React.Component {
     this.getAllCustomer().then((data) => {
       this.setState({
         profile: data,
-      });
-    });
+/*          accountLevelId: {
+           ...this.state.profile,
+          accountLevelId: data.accountLevelId,
+        },  */
+      }); console.log(this.state.profile);  
 
     this.getCustomerProfile(this.state._id).then((data) => {
       this.setState({
         admin: data,
       });
     });
-  }
+  });
+}
 
   render() {
     return (
@@ -81,7 +89,7 @@ class CustomerHomeAdmin extends React.Component {
             <thead>
               <tr>
                 <th>Customer Name</th>
-                <th>Customer Balance</th>
+{/*                 <th>Customer Balance</th> */}
                 <th>Customer Level</th>
                 <th>Detail</th>
               </tr>
@@ -92,8 +100,8 @@ class CustomerHomeAdmin extends React.Component {
                   <td>
                     {result.firstName} {result.lastName}
                   </td>
-                  <td>$199</td>
-                  <td>Normal</td>
+{/*                   <td>{result.balanceHistory.balances.balanceAccount}</td> */}
+{/*                   <td>{result.accountLevelId._id}</td> */}
                   <td>
                     <Link to={`/customer/admin/profile/${result._id}`}>Detail</Link>
                   </td>
@@ -104,6 +112,7 @@ class CustomerHomeAdmin extends React.Component {
         </div>
       </div>
     );
+    
   }
 }
 

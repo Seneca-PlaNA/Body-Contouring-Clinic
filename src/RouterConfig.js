@@ -17,7 +17,7 @@ import CustomerBalance from './Customer/CustomerBalance';
 import BalanceDetail from './Customer/BalanceDetail';
 import CustomerHomeAdmin from './Customer/Admin/CustomerHomeAdmin';
 import CustomerProfileAdmin from './Customer/Admin/CustomerProfileAdmin';
-import CustomerAccountAdmin from './Customer/Admin/CustomerAccountAdmin';
+import ManageCustomerBalance from './Customer/Admin/ManageCustomerBalance';
 import CustomerAccountEditAdmin from './Customer/Admin/CustomerAccountEditAdmin';
 import ViewRequest from './Request/ViewRequest';
 import RequestHomeAdmin from './Request/Admin/RequestHomebyAdmin';
@@ -54,6 +54,7 @@ import ViewStaffScheduleCalendar from './StaffSchedule/ViewStaffScheduleCalendar
 import EditStaffSchedule from './StaffSchedule/EditStaffSchedule';
 import AppointmentDeleted from './Appointment/AppointmentDeleted';
 import AppointmentDeletedAdmin from './Appointment/Admin/AppointmentDeletedAdmin';
+import CreateNewBalance from './Customer/Admin/CreateNewBalance';
 
 class RouterConfig extends React.Component {
   render() {
@@ -214,13 +215,18 @@ class RouterConfig extends React.Component {
           />
           <Route
             exact
-            path="/Customer/Admin/Account/:id"
-            render={(props) => <CustomerAccountAdmin id={props.match.params.id} />}
+            path="/Customer/Admin/ManageCustomerBalance/:id"
+            render={(props) => <ManageCustomerBalance id={props.match.params.id} />}
           />
           <Route
             exact
             path="/Customer/Admin/Account/Edit"
             render={() => <CustomerAccountEditAdmin />}
+          />
+          <Route
+            exact
+            path="/Customer/Admin/CreateNewBalance/:id"
+            render={(props) => < CreateNewBalance id={props.match.params.id} />}
           />
 
           {/* Register URL */}

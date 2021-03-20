@@ -23,6 +23,7 @@ exports.viewAllBalanceHistory = function () {
       populate: [{ path: 'services',
                    populate: 'serviceCategory' }]
     })
+      .exec()
       .then((data) => {
         resolve(data);
       })

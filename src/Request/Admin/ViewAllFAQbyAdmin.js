@@ -120,7 +120,6 @@ class ViewAllFAQbyAdmin extends React.Component {
           <br />
           <Container>
               <Tabs id={this.state.faqs._id} activeKey={this.state.key} onSelect={(key) => this.setState({ key })}>   
-              
               { this.state.faqs.map( (result) => (
                 <Tab eventKey={result.faqCategory._id} title={result.faqCategory.name} style={{ color: '#393F44', 'margin-top': '10px' }}>
                   <Accordion>
@@ -153,10 +152,11 @@ class ViewAllFAQbyAdmin extends React.Component {
 
 
           </Container>
-
+       
           <Container>
             <Row>
               <Col xs={8}></Col>
+              
               <Col xs={7}>
                 <Button variant="outline-info" style={{ marginRight: '480px' }} href="/Request/FAQ/Admin/Create">
                   Create

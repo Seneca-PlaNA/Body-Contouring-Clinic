@@ -1,8 +1,20 @@
 const Balance = require('../../models/balance');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 //Create
 exports.addNewBalance = function (data) {
   return new Promise((resolve, reject) => {
+    let _balance = new Balance({
+      _id: new mongoose.Types.ObjectId(),
+      balanceAccount: new Number,
+      services: new Schema.Types.ObjectId(),
+      date: new Date,
+      isActive: new Boolean,
+    });
+    console.log(_balance);
+    _balance.save();
+    console.log(_balance);
     let newBalance = new Balance(data);
     newBalance.save((err) => {
       if (err) {
@@ -23,6 +35,7 @@ exports.viewAllBalance = function () {
         populate: [{ path: 'serviceCategory'}]
       })
    /* .populate('accountLevel') */
+      .exec()
       .then((balances) => {
         resolve(balances);
       })
