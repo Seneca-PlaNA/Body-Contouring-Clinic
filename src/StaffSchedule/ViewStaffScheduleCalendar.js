@@ -123,14 +123,6 @@ class ViewStaffScheduleCalendar extends React.Component {
                 button={this.state.button}
               />
               <Row>
-                <Col sm={5}>
-                  <StaffScheduleCalendar
-                    view={this.state.dayCalendarView}
-                    schedule={this.state.schedules}
-                    today={this.state.today}
-                  />
-                </Col>
-                <Col sm={2}></Col>
                 <Col>
                   <StaffScheduleCalendar
                     view={this.state.weekCalendarView}
@@ -139,6 +131,16 @@ class ViewStaffScheduleCalendar extends React.Component {
                   />
                 </Col>
               </Row>
+              {/* <br/>
+              <Row>
+                <Col>
+                  <StaffScheduleCalendar
+                    view={this.state.dayCalendarView}
+                    schedule={this.state.schedules}
+                    today={this.state.today}
+                  />
+                </Col>
+              </Row> */}
             </Container>
             <br />
             <br />
