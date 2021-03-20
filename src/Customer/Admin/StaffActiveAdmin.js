@@ -1,26 +1,28 @@
+/* eslint react/prop-types: 0 */
 import React from 'react';
-import SideBar from '../../SideBar/SideBar';
 import '../../App.css';
+import SideBar from '../../SideBar/SideBar';
 import searchIcon from '../../resources/searchIcon.png';
 import { Form, Button, Table, Pagination } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router';
 
-class CustomerHomeAdmin extends React.Component {
+class StaffActiveAdmin extends React.Component {
   constructor(prop) {
     super(prop);
     this.state = {
       admin: {},
       profile: [],
-      items: [{ url: `/Customer/Admin`, title: 'Home' },
+      items: [{ url: `/Customer/Admin`, title: 'Customer Management' },
               { url: `/Staff/Admin`, title: 'Staff Management' },
-              { url: `/Customer/Admin/Balance`, title: 'Balance Management' },
-      ],
+              ],
       _id: localStorage.getItem('_id'),
       filterData:[],
       seachCustomer: '',
       currentPage: 1,
       perPage: 8,
+      completed: false,
     };
+    this.requestActiveStaff = this.requestActiveStaff.bind(this);
   }
 
   prevPage() {
@@ -49,6 +51,17 @@ class CustomerHomeAdmin extends React.Component {
     this.setState({
       seachCustomer: e.target.value,
     });
+  }
+
+  requestActiveStaff(id){
+      fetch(`${process.env.REACT_APP_API_URL}/active-staff/${id}`)
+        .then((response) => response.json())
+        .then((results) => {
+          console.log(results);
+          this.setState({
+            completed: true,
+          })
+        });
   }
 
   handleSearchCustomer(){
@@ -85,6 +98,7 @@ class CustomerHomeAdmin extends React.Component {
       return !(req.accountLevelId != null &&  req.accountLevelId._id == "603719d1ec07da8afc6ff378")
 
     })
+
     this.setState({
         profile: verifiedCustomer,
         filterData: verifiedCustomer,
@@ -104,6 +118,13 @@ class CustomerHomeAdmin extends React.Component {
   }
 
   render() {
+    if(this.state.completed)
+    {
+      return <Redirect push to={{
+        pathname: `/Staff/Admin`
+      }}/>
+    }
+
     const indexOfLast = this.state.currentPage * this.state.perPage;
     const indexOfFirst = indexOfLast - this.state.perPage;
     const currentItems = this.state.filterData.slice(indexOfFirst, indexOfLast);
@@ -127,10 +148,10 @@ class CustomerHomeAdmin extends React.Component {
           <hr />
           <div className="contents">
             <Form inline>
-              <h4 className="PageTitle">Customer List</h4>
+              <h4 className="PageTitle">Account List</h4>
               <Form.Control
                 type="text"
-                placeholder="Search customer"
+                placeholder="Search account"
                 style={{ 'margin-left': '800px' }}
                 value={this.state.seachCustomer}
                 onChange={this.handleSearchCustomerChange.bind(this)}
@@ -148,23 +169,25 @@ class CustomerHomeAdmin extends React.Component {
           <Table striped bordered hover>
             <thead>
               <tr>
-                <th>Customer Name</th>
-                <th>Customer Balance</th>
-                <th>Customer Level</th>
-                <th>Detail</th>
+                <th>Account ID</th>
+                <th>Account Name</th>
+                <th>Account Email</th>
+                <th>Account Status</th>
+                <th>Action</th>
               </tr>
             </thead>
 
               <tbody>
               {currentItems.map((result, index) => (
                 <tr key={index}>
+                  <td>{result.userID}</td>
                   <td>
                     {result.firstName} {result.lastName}
                   </td>
-                  <td>{result.balanceHistory == null? "": result.balanceHistory.currentBalance}</td>
-                  <td>{result.accountLevelId == null ? "": result.accountLevelId.name}</td>
+                  <td>{result.email}</td>
+                  <td>{result.accountLevelId == null ? "" :  result.accountLevelId.name}</td>
                   <td>
-                    <Link to={`/Customer/Admin/Profile/${result._id}`}>Detail</Link>
+                    <Button variant="outline-info" onClick={()=>{this.requestActiveStaff(result._id)}}>Active</Button>
                   </td>
                 </tr>
                 ))}
@@ -183,4 +206,4 @@ class CustomerHomeAdmin extends React.Component {
   }
 }
 
-export default CustomerHomeAdmin;
+export default StaffActiveAdmin;

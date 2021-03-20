@@ -359,6 +359,20 @@ app.get('/staff', (req, res) => {
     .catch((err) => res.json(err));
 });
 
+app.get('/active-staff/:id', (req, res) => {
+  staffHandler
+    .activeStaffById(req.params.id)
+    .then((staff) => res.json(staff))
+    .catch((err) => res.json(err));
+});
+
+app.get('/inactive-staff/:id', (req, res) => {
+  staffHandler
+    .inactiveStaffById(req.params.id)
+    .then((staff) => res.json(staff))
+    .catch((err) => res.json(err));
+});
+
 // customer
 app.post('/create-customer', (req, res) => {
   customerHandler.addNewCustomer(req.body).then((msg) => res.json(msg));

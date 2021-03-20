@@ -19,6 +19,8 @@ import CustomerHomeAdmin from './Customer/Admin/CustomerHomeAdmin';
 import CustomerProfileAdmin from './Customer/Admin/CustomerProfileAdmin';
 import CustomerBalanceAdmin from './Customer/Admin/CustomerBalanceAdmin';
 import CustomerBalanceDetailAdmin from './Customer/Admin/CustomerBalanceDetailAdmin';
+import StaffHomeAdmin from './Customer/Admin/StaffHomeAdmin';
+import StaffActiveAdmin from './Customer/Admin/StaffActiveAdmin';
 import ViewRequest from './Request/ViewRequest';
 import RequestHomeAdmin from './Request/Admin/RequestHomebyAdmin';
 import ViewRequestAdmin from './Request/Admin/ViewRequestDetails';
@@ -224,6 +226,10 @@ class RouterConfig extends React.Component {
             path="/Customer/Admin/Balance/:id"
             render={(props) => <CustomerBalanceDetailAdmin id={props.match.params.id}/>}
           />
+
+          {/* Staff Admin URL */}
+          <Route exact path="/Staff/Admin" render={() => <StaffHomeAdmin />} />
+          <Route exact path="/Staff/Admin/Active" render={() => <StaffActiveAdmin />} />
 
           {/* Register URL */}
           <Route exact path="/Register/Login" render={() => <Login />} />

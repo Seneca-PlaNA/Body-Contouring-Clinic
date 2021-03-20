@@ -186,7 +186,7 @@ class CreateAppointmentAdmin extends React.Component {
                           <option value="">-- select customer --</option>
                           {this.state.customers.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
-                            <option value={result._id}>{result.account.firstName} {result.account.lastName}</option>
+                            <option value={result._id}>{result.account == null ? "" : result.account.firstName} {result.account == null ? "" : result.account.lastName}</option>
                           ))}
                         </Form.Control>
                       </Col>
