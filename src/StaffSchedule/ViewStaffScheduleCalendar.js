@@ -115,6 +115,7 @@ class ViewStaffScheduleCalendar extends React.Component {
           <div className="col-md-9">
             <Container style={{ marginLeft: '0px', marginRight: '0px', float: 'center' }}>
               <h2>Hi, {this.state.account.firstName + ' ' + this.state.account.lastName}, here is your schedule</h2>
+              <hr/><br/>
               <SavedPopUp
                 show={this.state.saveModal}
                 handelClose={this.hideSave}
@@ -131,16 +132,6 @@ class ViewStaffScheduleCalendar extends React.Component {
                   />
                 </Col>
               </Row>
-              {/* <br/>
-              <Row>
-                <Col>
-                  <StaffScheduleCalendar
-                    view={this.state.dayCalendarView}
-                    schedule={this.state.schedules}
-                    today={this.state.today}
-                  />
-                </Col>
-              </Row> */}
             </Container>
             <br />
             <br />
