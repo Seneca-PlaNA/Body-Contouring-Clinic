@@ -5,7 +5,7 @@ import searchIcon from '../../resources/searchIcon.png';
 import { Form, Button, Table, Pagination } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-class CustomerHomeAdmin extends React.Component {
+class CustomerBalanceAdmin extends React.Component {
   constructor(prop) {
     super(prop);
     this.state = {
@@ -134,14 +134,14 @@ class CustomerHomeAdmin extends React.Component {
               </Button>
             </Form>
           </div>
-          <h4 className="PageTitle">Customer List</h4>
+          <h4 className="PageTitle">Customer Balance List</h4>
           <br />
           <Table striped bordered hover>
             <thead>
               <tr>
+                <th>Customer ID</th>
                 <th>Customer Name</th>
                 <th>Customer Balance</th>
-                <th>Customer Level</th>
                 <th>Detail</th>
               </tr>
             </thead>
@@ -150,12 +150,14 @@ class CustomerHomeAdmin extends React.Component {
               {currentItems.map((result, index) => (
                 <tr key={index}>
                   <td>
+                    {result.userID}
+                  </td>
+                  <td>
                     {result.firstName} {result.lastName}
                   </td>
                   <td>{result.balanceHistory == null? "": result.balanceHistory.currentBalance}</td>
-                  <td>{result.accountLevelId == null ? "": result.accountLevelId.name}</td>
                   <td>
-                    <Link to={`/Customer/Admin/Profile/${result._id}`}>Detail</Link>
+                    <Link to={`/Customer/Admin/Balance/${result.balanceHistory._id}`}>Detail</Link>
                   </td>
                 </tr>
                 ))}
@@ -174,4 +176,4 @@ class CustomerHomeAdmin extends React.Component {
   }
 }
 
-export default CustomerHomeAdmin;
+export default CustomerBalanceAdmin;

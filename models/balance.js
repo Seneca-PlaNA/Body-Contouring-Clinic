@@ -7,29 +7,15 @@ const balanceSchema = new Schema(
       type: Number,
       required: true,
     },
-/* 
-    accountLevel: {
-      type: Schema.Types.ObjectId,
-      ref: 'accountLevels',
-      required: true,
-    }, */
 
-    services: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'services',
+    info:{
+        type: String,
         required: true,
-      },
-    ],
+    },
     
     date: {
       type: Date,
       required: true,   
-    },
-
-    isActive: {
-      type: Boolean,
-      required: true,
     },
   },
   { timestamps: true }

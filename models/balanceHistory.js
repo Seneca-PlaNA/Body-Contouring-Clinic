@@ -10,6 +10,9 @@ const balanceHistorySchema = new Schema(
         required: true,
       },
     ],
+    currentBalance: {
+      type: Number,
+    }
   },
   { timestamps: true }
 );

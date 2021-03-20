@@ -11,7 +11,9 @@ class CustomerProfileAdmin extends React.Component {
     this.state = {
       account: [],
       accountLevel: [],
-      items: [{ url: `/Customer/Admin`, title: 'Home' },],
+      items: [{ url: `/Customer/Admin`, title: 'Home' },
+              { url: `/Customer/Admin/Balance`, title: 'Balance Management' },
+      ],
       accountLevels: [],
     };
   }

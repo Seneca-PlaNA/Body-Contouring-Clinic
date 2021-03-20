@@ -173,6 +173,20 @@ app.delete('/balance-history/:id', (req, res) => {
     .catch((err) => res.json(err));
 });
 
+app.put('/add-balance/:id', (req, res) => {
+  balanceHistoryHandler
+    .addBalanceInHistoryById(req.body, req.params.id)
+    .then((msg) => res.json(msg))
+    .catch((err) => res.json(err));
+});
+
+app.put('/substract-balance/:id', (req, res) => {
+  balanceHistoryHandler
+    .substractBalanceInHistoryById(req.body, req.params.id)
+    .then((msg) => res.json(msg))
+    .catch((err) => res.json(err));
+});
+
 // service-category
 app.post('/create-service-category', (req, res) => {
   serviceCategoryHandler.addNewServiceCategory(req.body).then((msg) => res.json(msg));
