@@ -55,11 +55,8 @@ class CustomerBalanceDetailAdmin extends React.Component {
         'Content-Type': 'application/json'
       },})
     .then((response) => response.json())
-    .then((results) => {
-      console.log(results);
-      this.setState({
-        completed: true,
-      })
+    .then(() => {
+      window.location.reload();
     });
   }
 
@@ -72,11 +69,8 @@ class CustomerBalanceDetailAdmin extends React.Component {
         'Content-Type': 'application/json'
       },})
     .then((response) => response.json())
-    .then((results) => {
-      console.log(results);
-      this.setState({
-        completed: true,
-      })
+    .then(() => {
+      window.location.reload();
     });
   }
 
