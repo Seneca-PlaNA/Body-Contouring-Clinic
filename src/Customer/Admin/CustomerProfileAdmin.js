@@ -10,6 +10,8 @@ class CustomerProfileAdmin extends React.Component {
     this.state = {
       profile: {},
       items: [{ url: `/Customer/Admin/${this.props.id}`, title: 'Home' }],
+      balanceHistory: [],
+      balances:[],
     };
   }
 
@@ -27,8 +29,19 @@ class CustomerProfileAdmin extends React.Component {
     this.getCustomerProfile(this.props.id).then((data) => {
       this.setState({
         profile: data,
+        balanceHistory: {
+          ...this.state.profile,
+          balanceHistory: data.balanceHistory._id,
+        },
+        balances: {
+          ...this.state.profile.balanceHistory,
+          balances: data.balances,
+        }
       });
-    });
+      console.log(data)
+      console.log(this.state.profile.balanceHistory)
+      console.log(this.state.profile.balanceHistory._id)
+    });/* console.log(this.state.profile.balanceHistory) */
   }
 
   render() {
@@ -37,12 +50,12 @@ class CustomerProfileAdmin extends React.Component {
         <div className="col-md-1"></div>
         <SideBar items={this.state.items} />
         <div className="col-md-6" style={{ 'margin-left': '80px' }}>
-          <h2 className="PageTitle">User.userName Information</h2>
+          <h2 className="PageTitle">{this.state.profile.firstName + ' ' + this.state.profile.lastName} Information</h2>
           <hr />
           <br />
-          <Container class="col-md-6">
+          <Container class="col-md-6"  >
             <Form style={{ fontSize: '20px', marginLeft: '80px', textAlign: 'left' }}>
-              <Form.Group as={Row}>
+              <Form.Group as={Row} >
                 <Form.Label column md={3}>
                   Name:
                 </Form.Label>
@@ -78,7 +91,7 @@ class CustomerProfileAdmin extends React.Component {
                 </Form.Label>
                 <Col sm={1}>
                   <Form.Label column md={0}>
-                    User.Balance
+{/*                     {this.state.profile.balanceHistory.balances[0].balanceAccount} */}
                   </Form.Label>
                 </Col>
               </Form.Group>
@@ -106,12 +119,15 @@ class CustomerProfileAdmin extends React.Component {
                   View Request
                 </Button>
                 &nbsp;
-                <Button variant="outline-info" href="/Customer/Admin/Account">
+                <Button variant="outline-info"/*  href={`/Customer/Admin/ManageCustomerBalance/${this.state.profile.balanceHistory._id}`} */>
                   View Account
                 </Button>
                 &nbsp;
                 <Button variant="outline-info" href="/Customer/Admin">
                   Edit
+                </Button>
+                <Button variant="outline-info" href={`/Customer/Admin/CreateNewBalance/${this.state.profile.balanceHistory}`}>
+                  Create Balance
                 </Button>
               </Col>
             </Row>
