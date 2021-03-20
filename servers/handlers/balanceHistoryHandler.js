@@ -84,54 +84,52 @@ exports.deleteBalanceHistoryById = function (id) {
 exports.addBalanceInHistoryById = function (data, id) {
   return new Promise((resolve, reject) => {
     var calculate = 0;
-    const addBalance = new Balance({
-      balanceAccount: data.updateBalance,
-      info: data.info,
-      date: new Date(),
-    });
-    addBalance.save();
+    console.log("Back Start");
+    console.log(data);
+    // var newBalance = data.balance;
+    let addBalance = new Balance(data);
 
-    BalanceHistory.findOne({_id: id})
-    .exec()
-    .then((data)=>{
-        calculate = data.currentBalance + addBalance.balanceAccount;
-    })
- 
-    BalanceHistory.updateOne({ _id: id }, { $push: {balances: addBalance._id}, currentBalance: calculate })
+    addBalance.save().then(()=>{
+
+      BalanceHistory.findOne({_id: id})
       .exec()
-      .then(() => {
-        resolve(`Balance is updated in (id: ${id}) history`);
+      .then((data)=>{
+          calculate = data.currentBalance + addBalance.balanceAccount;
+          BalanceHistory.updateOne({ _id: id }, { $push: {balances: addBalance._id}, currentBalance: calculate })
+          .exec()
+          .then(() => {
+            resolve(`Balance is updated in (id: ${id}) history`);
+          })
+          .catch((err) => {
+            reject(err);
+          });
       })
-      .catch((err) => {
-        reject(err);
       });
-  });
+    });
 };
 
 //Update
 exports.substractBalanceInHistoryById = function (data, id) {
   return new Promise((resolve, reject) => {
     var calculate = 0;
-    const addBalance = new Balance({
-      balanceAccount: data.updateBalance,
-      info: data.info,
-      date: new Date(),
-    });
-    addBalance.save();
+    // var newBalance = data.balance;
+    let addBalance = new Balance(data);
 
-    BalanceHistory.findOne({_id: id})
-    .exec()
-    .then((data)=>{
-        calculate = data.currentBalance - addBalance.balanceAccount;
-    })
- 
-    BalanceHistory.updateOne({ _id: id }, { $push: {balances: addBalance._id}, currentBalance: calculate })
+    addBalance.save().then(()=>{
+
+      BalanceHistory.findOne({_id: id})
       .exec()
-      .then(() => {
-        resolve(`Balance is updated in (id: ${id}) history`);
+      .then((data)=>{
+          calculate = data.currentBalance - addBalance.balanceAccount;
+          BalanceHistory.updateOne({ _id: id }, { $push: {balances: addBalance._id}, currentBalance: calculate })
+          .exec()
+          .then(() => {
+            resolve(`Balance is updated in (id: ${id}) history`);
+          })
+          .catch((err) => {
+            reject(err);
+          });
       })
-      .catch((err) => {
-        reject(err);
       });
-  });
+    });
 };

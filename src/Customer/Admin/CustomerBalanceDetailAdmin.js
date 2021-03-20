@@ -3,27 +3,81 @@ import { Container, Row, Col, Form, Table, Button } from 'react-bootstrap';
 import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 class CustomerBalanceDetailAdmin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       items: [{ url: `/Customer/Admin`, title: 'Home' },
+              { url: `/Staff/Admin`, title: 'Staff Management' },
               { url: `/Customer/Admin/Balance`, title: 'Balance Management' },
       ],
       _id: localStorage.getItem('_id'),
       balances: [],
       balanceHistory: [],
       profile: {},
-      updateBalance: 0,
+      balance :{
+        balanceAccount: 0,
+        info: "",
+        date: new Date(),
+      }
     };
-  
+    this.handleAddBalance = this.handleAddBalance.bind(this);
   }
 
   onUpdateBalance(event){
     this.setState({
-      updateBalance: event.target.value,
+      balance : {
+        ...this.state.balance,
+        balanceAccount: Number(event.target.value),
+      }
     })
+  }
+
+  onUpdateInfo(event){
+    this.setState({
+      balance : {
+        ...this.state.balance,
+        info: event.target.value,
+      }
+    })
+  }
+
+  handleAddBalance(){
+    console.log(this.state.balance);
+    console.log(this.props.id);
+    fetch(`${process.env.REACT_APP_API_URL}/add-balance/${this.props.id}`,{
+      method: "POST",
+      body: JSON.stringify(this.state.balance),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },})
+    .then((response) => response.json())
+    .then((results) => {
+      console.log(results);
+      this.setState({
+        completed: true,
+      })
+    });
+  }
+
+  handleSubstractBalance(){
+    fetch(`${process.env.REACT_APP_API_URL}/substract-balance/${this.props.id}`,{
+      method: "POST",
+      body: JSON.stringify(this.state.balance),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },})
+    .then((response) => response.json())
+    .then((results) => {
+      console.log(results);
+      this.setState({
+        completed: true,
+      })
+    });
   }
 
   getCustomerProfile() {
@@ -79,35 +133,54 @@ class CustomerBalanceDetailAdmin extends React.Component {
           <h2 className="PageTitle">Hi, {this.state.profile.firstName + ' ' + this.state.profile.lastName}</h2>
           <hr />
           <br />
-          <h4>Balance Information</h4>
-          <br/>
+
           <Container class="col-md-8">
-            <Form style={{ fontSize: '20px', "margin-right": '200px', textAlign: 'left' }}>
-              <Form.Group as={Row}>
-                <Col sm={6}>
+            <Form style={{ fontSize: '20px', textAlign: 'left' }}>
+            <h4>Balance Information</h4><br/>
+              <Row>
+                <Col sm={4}>          
                   <Form.Label>
                     Current Balance: $ {this.state.balanceHistory == null? 0 :this.state.balanceHistory.currentBalance}
                   </Form.Label>
                 </Col>
-                <Col sm={2}>
-                  <Form.Label>
-                    Update 
-                  </Form.Label>
-                </Col>
-                <Col sm={2}>
-                  <Form.Control type="text" value={this.state.updateBalance} onChange={this.onUpdateBalance.bind(this)}/> 
-                </Col>
-                <Col sm={1}>
-                  <Button variant="outline-info">
-                    Add
-                  </Button>
-                </Col>
-                <Col sm={1}>
-                  <Button variant="outline-info">
-                    Substract  
-                  </Button>
-                </Col>
-              </Form.Group>
+                <Col>
+              <Row>
+                  <Col sm={2}>
+                      <Form.Label>
+                        Update 
+                      </Form.Label>
+                  </Col>
+                  <Col sm={6}>
+                    <Form.Control type="text" value={this.state.updateBalance} onChange={this.onUpdateBalance.bind(this)}/> 
+                  </Col>
+              </Row>
+              <Row>
+                  <Col sm={2}>
+                      <Form.Label>
+                        Info 
+                      </Form.Label>
+                  </Col>
+                  <Col sm={6}>
+                    <Form.Control type="text" value={this.state.info} onChange={this.onUpdateInfo.bind(this)}/> 
+                  </Col>
+                </Row>
+                <br/>
+                <Row>
+                  <Col sm={4}></Col>
+                  <Col sm={2}>
+                      <Button type="submit" variant="outline-info" onClick={this.handleAddBalance.bind(this)}>
+                        Add
+                      </Button>
+                  </Col>
+                  <Col sm={2}>
+                      <Button type="submit" variant="outline-info"onClick={this.handleSubstractBalance.bind(this)}>
+                        Substract  
+                      </Button>
+                  </Col>
+                  <Col></Col>
+                </Row>
+              </Col>
+              </Row>
             </Form>
           </Container>
           <br />
@@ -119,16 +192,15 @@ class CustomerBalanceDetailAdmin extends React.Component {
                   <table>
                     <tr>
                       <th>Date</th>
-                      <th>Therapy Name</th>
-                      <th>Description</th>
-                      <th>Price</th>
+                      <th>info</th>
+                      <th>Update</th>
+                      <th></th>
                     </tr>
                     {this.state.balanceHistory.balances == null? "" : this.state.balanceHistory.balances.map((result) => (
                     <tr key={result._id}>
-                      <td>{result.date}</td>
-                      <td>{result.services[0].serviceCategory.name}</td>
-                      <td>{result.services[0].name}</td>
-                      <td>${result.services[0].price}</td>
+                      <td>{moment(result.date).format('ll')}</td>
+                      <td>{result.info}</td>
+                      <td>$ {result.balanceAccount}</td>
                       <td>
                         <a href={`/Customer/BalanceDetail/${result._id}`}>details</a>
                       </td>

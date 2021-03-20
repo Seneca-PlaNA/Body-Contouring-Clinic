@@ -173,14 +173,17 @@ app.delete('/balance-history/:id', (req, res) => {
     .catch((err) => res.json(err));
 });
 
-app.put('/add-balance/:id', (req, res) => {
+app.post('/add-balance/:id', (req, res) => {
+  console.log("Server");
+  console.log(req.body);
+  console.log(req.params.id);
   balanceHistoryHandler
     .addBalanceInHistoryById(req.body, req.params.id)
     .then((msg) => res.json(msg))
     .catch((err) => res.json(err));
 });
 
-app.put('/substract-balance/:id', (req, res) => {
+app.post('/substract-balance/:id', (req, res) => {
   balanceHistoryHandler
     .substractBalanceInHistoryById(req.body, req.params.id)
     .then((msg) => res.json(msg))

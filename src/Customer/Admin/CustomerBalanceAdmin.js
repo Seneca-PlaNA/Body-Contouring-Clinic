@@ -12,6 +12,7 @@ class CustomerBalanceAdmin extends React.Component {
       admin: {},
       profile: [],
       items: [{ url: `/Customer/Admin`, title: 'Home' },
+              { url: `/Staff/Admin`, title: 'Staff Management' },
               { url: `/Customer/Admin/Balance`, title: 'Balance Management' },
       ],
       _id: localStorage.getItem('_id'),

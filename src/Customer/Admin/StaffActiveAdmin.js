@@ -12,9 +12,10 @@ class StaffActiveAdmin extends React.Component {
     this.state = {
       admin: {},
       profile: [],
-      items: [{ url: `/Customer/Admin`, title: 'Customer Management' },
+      items: [{ url: `/Customer/Admin`, title: 'Home' },
               { url: `/Staff/Admin`, title: 'Staff Management' },
-              ],
+              { url: `/Customer/Admin/Balance`, title: 'Balance Management' },
+      ],
       _id: localStorage.getItem('_id'),
       filterData:[],
       seachCustomer: '',
