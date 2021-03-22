@@ -14,7 +14,6 @@ import CustomerHome from './Customer/CustomerHome';
 import CustomerProfile from './Customer/CustomerProfile';
 import CustomerEdit from './Customer/CustomerProfileEdit';
 import CustomerBalance from './Customer/CustomerBalance';
-import BalanceDetail from './Customer/BalanceDetail';
 import CustomerHomeAdmin from './Customer/Admin/CustomerHomeAdmin';
 import CustomerProfileAdmin from './Customer/Admin/CustomerProfileAdmin';
 import CustomerBalanceAdmin from './Customer/Admin/CustomerBalanceAdmin';
@@ -198,11 +197,6 @@ class RouterConfig extends React.Component {
             exact
             path="/Customer/Balance/:id"
             render={(props) => <CustomerBalance id={props.match.params.id} />}
-          />
-          <Route
-            exact
-            path="/Customer/BalanceDetail/:id"
-            render={(props)  => <BalanceDetail id={props.match.params.id} />}
           />
 
           {/* Customer Admin URL*/}

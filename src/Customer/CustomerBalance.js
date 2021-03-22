@@ -11,7 +11,6 @@ class CustomerBalance extends React.Component {
      items: [
       { url: '/Customer', title: 'Home' },
       { url: `/Customer/Profile`, title: 'Profile' },
-      { url: `/Customer/Edit/${localStorage.getItem('_id')}`, title: 'Edit Profile' },
       { url: `/Customer/Balance/${localStorage.getItem('_id')}`, title: 'Balance' },
     ], 
       _id: localStorage.getItem('_id'),
@@ -128,7 +127,8 @@ class CustomerBalance extends React.Component {
             <Container class="col-md-8">
               <Table>
                 <Row>
-                  <Col md={12}>      
+                  <Col md={12}>   
+                  <table>   
                       <tr>
                         <th>Date</th>
                         <th>info</th>
@@ -141,6 +141,7 @@ class CustomerBalance extends React.Component {
                         <td>$ {result.balanceAccount}</td>
                       </tr>
                      ))}
+                    </table>
                   </Col>
                 </Row>
               </Table>
