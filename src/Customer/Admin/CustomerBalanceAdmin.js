@@ -163,7 +163,6 @@ class CustomerBalanceAdmin extends React.Component {
                 </tr>
                 ))}
               </tbody>
-
           </Table>
           <br/>
           <Pagination style={{ display: 'flex', justifyContent: 'center' }}>

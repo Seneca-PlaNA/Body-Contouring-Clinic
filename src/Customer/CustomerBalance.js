@@ -1,7 +1,7 @@
 import React from 'react';
 import SideBar from '../SideBar/SideBar';
 import '../App.css';
-import { Form, Row, Col, Container, Table } from 'react-bootstrap';
+import { Form, Row, Col, Container, Table, Pagination } from 'react-bootstrap';
 import moment from 'moment';
 
 class CustomerBalance extends React.Component {
@@ -19,9 +19,36 @@ class CustomerBalance extends React.Component {
       balanceHistory: [],
       profile: {},
       balanceHistoryId: [],
+      currentPage: 1,
+      perPage: 8,
     };
     this.getCustomerProfile = this.getCustomerProfile.bind(this);
   }
+
+  prevPage() {
+    if (this.state.currentPage > 1) {
+      this.setState({
+        currentPage: parseInt(this.state.currentPage) - 1,
+      });
+    }
+  }
+
+  nextPage() {
+    if (
+      this.state.currentPage < Math.ceil(this.state.filterData.length / this.state.perPage)
+    ) {
+      this.setState({
+        currentPage: parseInt(this.state.currentPage) + 1,
+      });
+    }
+  }
+  
+  handlePage(e) {
+    this.setState({
+      currentPage: Number(e.target.id),
+    });
+  }
+
   getCustomerProfile() {
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/account/${this.state._id}`)
@@ -57,19 +84,27 @@ class CustomerBalance extends React.Component {
       .then((data)=>{
         this.setState({
           balanceHistory: data,
-          // balances: data.balances,
+          balances: data.balances,
         });
       });
     });
   }
   
-    render() {
-      const pagination = {
-        color: '#B58970',
-        textAlign: 'center',
-        marginLeft: '50px',
-      };
-      return (
+  render() {
+    const indexOfLast = this.state.currentPage * this.state.perPage;
+    const indexOfFirst = indexOfLast - this.state.perPage;
+    const currentItems = this.state.balances.slice(indexOfFirst, indexOfLast);
+
+    const pageNums = [];
+    for (let i = 1; i <= Math.ceil(this.state.balances.length / this.state.perPage); i++) {
+      pageNums.push(
+        <Pagination.Item key={i} id={i} onClick={this.handlePage.bind(this)}>
+          {i}
+        </Pagination.Item>
+      );
+    }
+
+    return (
         <div className="row">
           <div className="col-md-1"></div>
           <SideBar items={this.state.items} />
@@ -94,45 +129,34 @@ class CustomerBalance extends React.Component {
               <Table>
                 <Row>
                   <Col md={12}>      
-                    <table>
                       <tr>
                         <th>Date</th>
                         <th>info</th>
                         <th>Update</th>
                       </tr>
-                      {this.state.balanceHistory.balances == null? "" : this.state.balanceHistory.balances.map((result) => (
+                      {currentItems == null? "" : currentItems.map((result) => (
                       <tr key={result._id}>
                         <td>{moment(result.date).format('ll')}</td>
                         <td>{result.info}</td>
                         <td>$ {result.balanceAccount}</td>
                       </tr>
                      ))}
-                    </table>
-  
-                    <br />
                   </Col>
                 </Row>
-                <span style={pagination}>
-                  <a href="#"> &laquo; </a>
-                  <a href="#"> 1 </a>
-                  <a className="active" href="#">
-                    {' '}
-                    2{' '}
-                  </a>
-                  <a href="#"> 3 </a>
-                  <a href="#"> 4 </a>
-                  <a href="#"> 5 </a>
-                  <a href="#"> 6 </a>
-                  <a href="#"> &raquo; </a>
-                </span>
               </Table>
+              <br/>
+            <Pagination style={{ display: 'flex', justifyContent: 'center' }}>
+                      <Pagination.Prev onClick={this.prevPage.bind(this)} />
+                      <Pagination>{pageNums}</Pagination>
+                      <Pagination.Next onClick={this.nextPage.bind(this)} />
+            </Pagination>
             </Container>
             <br />
             <br />
           </div>
         </div>
-      );
-    }
+    );
+  }
 }
 
 export default CustomerBalance;

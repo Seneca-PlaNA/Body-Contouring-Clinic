@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Form, Table, Button } from 'react-bootstrap';
+import { Container, Row, Col, Form, Table, Button, Pagination } from 'react-bootstrap';
 import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
 import PropTypes from 'prop-types';
@@ -21,9 +21,35 @@ class CustomerBalanceDetailAdmin extends React.Component {
         balanceAccount: 0,
         info: "",
         date: new Date(),
-      }
+      },
+      currentPage: 1,
+      perPage: 8,
     };
     this.handleAddBalance = this.handleAddBalance.bind(this);
+  }
+
+  prevPage() {
+    if (this.state.currentPage > 1) {
+      this.setState({
+        currentPage: parseInt(this.state.currentPage) - 1,
+      });
+    }
+  }
+
+  nextPage() {
+    if (
+      this.state.currentPage < Math.ceil(this.state.filterData.length / this.state.perPage)
+    ) {
+      this.setState({
+        currentPage: parseInt(this.state.currentPage) + 1,
+      });
+    }
+  }
+  
+  handlePage(e) {
+    this.setState({
+      currentPage: Number(e.target.id),
+    });
   }
 
   onUpdateBalance(event){
@@ -108,17 +134,24 @@ class CustomerBalanceDetailAdmin extends React.Component {
       .then((data)=>{
         this.setState({
           balanceHistory: data,
-          // balances: data.balances,
+          balances: data.balances,
         });
       });
   }
   
   render() {
-    const pagination = {
-      color: '#B58970',
-      textAlign: 'center',
-      marginLeft: '50px',
-    };
+    const indexOfLast = this.state.currentPage * this.state.perPage;
+    const indexOfFirst = indexOfLast - this.state.perPage;
+    const currentItems = this.state.balances.slice(indexOfFirst, indexOfLast);
+
+    const pageNums = [];
+    for (let i = 1; i <= Math.ceil(this.state.balances.length / this.state.perPage); i++) {
+      pageNums.push(
+        <Pagination.Item key={i} id={i} onClick={this.handlePage.bind(this)}>
+          {i}
+        </Pagination.Item>
+      );
+    }
     return (
       <div className="row">
         <div className="col-md-1"></div>
@@ -189,7 +222,7 @@ class CustomerBalanceDetailAdmin extends React.Component {
                       <th>info</th>
                       <th>Update</th>
                     </tr>
-                    {this.state.balanceHistory.balances == null? "" : this.state.balanceHistory.balances.map((result) => (
+                    {currentItems == null? "" : currentItems.map((result) => (
                     <tr key={result._id}>
                       <td>{moment(result.date).format('ll')}</td>
                       <td>{result.info}</td>
@@ -201,20 +234,13 @@ class CustomerBalanceDetailAdmin extends React.Component {
                   <br />
                 </Col>
               </Row>
-              <span style={pagination}>
-                <a href="#"> &laquo; </a>
-                <a href="#"> 1 </a>
-                <a className="active" href="#">
-                  {' '}
-                  2{' '}
-                </a>
-                <a href="#"> 3 </a>
-                <a href="#"> 4 </a>
-                <a href="#"> 5 </a>
-                <a href="#"> 6 </a>
-                <a href="#"> &raquo; </a>
-              </span>
             </Table>
+            <br/>
+          <Pagination style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Pagination.Prev onClick={this.prevPage.bind(this)} />
+                    <Pagination>{pageNums}</Pagination>
+                    <Pagination.Next onClick={this.nextPage.bind(this)} />
+          </Pagination>
           </Container>
           <br />
           <br />
