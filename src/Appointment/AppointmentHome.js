@@ -55,7 +55,7 @@ class AppointmentHome extends React.Component {
               </Button>
             </Col>
             <Col>
-              <Link to={`/Appointment/Navigation`}>
+              <Link to={`/Appointment/Create`}>
                 <Button variant="outline-secondary">
                   Create Appointment
                 </Button>

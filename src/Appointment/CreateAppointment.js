@@ -7,11 +7,6 @@ class CreateAppointment extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [
-        { url: '/Appointment', title: 'Appointment Home' },
-        { url: '/Appointment/Appointments', title: 'View All Appointments' },
-        { url: `/Appointment/Navigation`, title: 'Create Appointment' },
-      ],
       saveModal: false,
       savedBackLink: '/Appointment/Appointment',
       button: 'Back To Appointment',

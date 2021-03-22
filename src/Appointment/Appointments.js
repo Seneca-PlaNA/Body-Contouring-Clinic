@@ -11,7 +11,7 @@ class Appointments extends React.Component {
       items: [
         { url: '/Appointment', title: 'Appointment Home' },
         { url: '/Appointment/Appointments', title: 'View All Appointments' },
-        { url: `/Appointment/Navigation`, title: 'Create Appointment' },
+        { url: `/Appointment/Create`, title: 'Create Appointment' },
       ],
       _id: localStorage.getItem('_id'),
       appointments: [],

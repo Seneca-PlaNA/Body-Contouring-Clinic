@@ -2,21 +2,12 @@
 import React from 'react';
 import '../../App.css';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
-import SideBar from '../../SideBar/SideBar';
 import { Redirect } from 'react-router';
 
 class CreateAppointmentAdmin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [
-        { url: '/Appointment', title: 'Appointment Home' },
-        {
-          url: '/Appointment/Admin',
-          title: 'View All Appointments',
-        },
-        { url: '/Appointment/Admin/Create', title: 'Create Appointment' },
-      ],
       saveModal: false,
       savedBackLink: '/Appointment/Admin',
       button: 'Back To Appointment',
@@ -163,15 +154,6 @@ class CreateAppointmentAdmin extends React.Component {
       }}/>
     }
     return (
-      <>
-        <br />
-        <br />
-        <div className="row">
-          <div className="col-md-1"></div>
-          <SideBar items={this.state.items} />
-          <div className="col-md-6">
-            <h2>New Appointment</h2>
-            <br/>
             <Container>
               <Row>
                 <Col></Col>
@@ -274,9 +256,6 @@ class CreateAppointmentAdmin extends React.Component {
                 <Col></Col>
               </Row>
             </Container>
-          </div>
-        </div>
-      </>
     );
   }
 }

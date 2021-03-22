@@ -10,7 +10,7 @@ class AppointmentDeleted extends React.Component {
       items: [
         { url: '/Appointment', title: 'Appointment Home' },
         { url: '/Appointment/Admin', title: 'View All Appointments' },
-        { url: '/Appointment/Navigation', title: 'Create Appointment' },
+        { url: '/Appointment/Create', title: 'Create Appointment' },
       ],
     };
   }

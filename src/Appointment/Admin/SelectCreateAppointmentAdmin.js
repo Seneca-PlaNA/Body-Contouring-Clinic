@@ -1,19 +1,19 @@
 import React from 'react';
 import { Button, Accordion, Card } from 'react-bootstrap';
-import '../App.css';
-import SideBar from '../SideBar/SideBar';
+import '../../App.css';
+import SideBar from '../../SideBar/SideBar';
 // import { Link } from 'react-router-dom';
-import CreateAppointment from './CreateAppointment';
-import CreateAppointmentByStaff from './CreateAppointmentbyStaff';
+import CreateAppointment from './CreateAppointmentAdmin';
+import CreateAppointmentByStaff from './CreateAppointmentAdminbyStaff';
 
-class SelectCreateAppointment extends React.Component {
+class SelectCreateAppointmentAdmin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       items: [
         { url: '/Appointment', title: 'Appointment Home' },
-        { url: '/Appointment/Appointments', title: 'View All Appointments' },
-        { url: `/Appointment/Create`, title: 'Create Appointment' },
+        { url: '/Appointment/Admin', title: 'View All Appointments' },
+        { url: '/Appointment/Admin/Create', title: 'Create Appointment' },
       ],
       _id: localStorage.getItem('_id'),
       customer: [],
@@ -77,4 +77,4 @@ class SelectCreateAppointment extends React.Component {
   }
 }
 
-export default SelectCreateAppointment;
+export default SelectCreateAppointmentAdmin;

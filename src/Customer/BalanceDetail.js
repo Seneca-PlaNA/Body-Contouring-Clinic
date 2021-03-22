@@ -10,7 +10,6 @@ class BalanceDetail extends React.Component {
       items: [
         { url: '/Customer', title: 'Home' },
         { url: `/Customer/Profile`, title: 'Profile' },
-        { url: `/Customer/Edit/${localStorage.getItem('_id')}`, title: 'Edit Profile' },
         { url: `/Customer/Balance/${localStorage.getItem('_id')}`, title: 'Balance' },
       ],
 //      _id: localStorage.getItem('_id'),
