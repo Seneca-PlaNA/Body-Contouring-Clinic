@@ -38,7 +38,7 @@ class CustomerBalanceDetailAdmin extends React.Component {
 
   nextPage() {
     if (
-      this.state.currentPage < Math.ceil(this.state.filterData.length / this.state.perPage)
+      this.state.currentPage < Math.ceil(this.state.balances.length / this.state.perPage)
     ) {
       this.setState({
         currentPage: parseInt(this.state.currentPage) + 1,
