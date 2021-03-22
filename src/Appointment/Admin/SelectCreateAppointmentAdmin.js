@@ -24,7 +24,7 @@ class SelectCreateAppointmentAdmin extends React.Component {
   componentDidMount() {
     document.title = 'All Appointments | Body Contouring Clinic';
 
-    fetch(`${process.env.REACT_APP_API_URL}/customer?account=${this.state._id}`)
+    fetch(`${process.env.REACT_APP_API_URL}/staff?account=${this.state._id}`)
     .then(response => response.json())
     .then((data) => {
       this.setState({
