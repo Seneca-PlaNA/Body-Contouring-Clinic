@@ -119,6 +119,7 @@ class CustomerBalanceAdmin extends React.Component {
           <hr />
           <div className="contents">
             <Form inline>
+             <h4 className="PageTitle">Customer Balance List</h4>
               <Form.Control
                 type="text"
                 placeholder="Search customer"
@@ -135,7 +136,6 @@ class CustomerBalanceAdmin extends React.Component {
               </Button>
             </Form>
           </div>
-          <h4 className="PageTitle">Customer Balance List</h4>
           <br />
           <Table striped bordered hover>
             <thead>

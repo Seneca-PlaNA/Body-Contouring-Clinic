@@ -177,10 +177,10 @@ class StaffHomeAdmin extends React.Component {
               {currentItems.map((result, index) => (
                 <tr key={index}>
                   <td>
-                    {result.firstName} {result.lastName}
+                    {result.userID}
                   </td>
                   <td>
-                    {result.userID}
+                    {result.firstName} {result.lastName}
                   </td>
                   <td>
                     <Button variant="outline-info" onClick={()=>{this.requestInactiveStaff(result._id)}}>InActive</Button>
