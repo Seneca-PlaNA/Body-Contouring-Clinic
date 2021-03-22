@@ -34,6 +34,7 @@ import Login from './Register/Login';
 import SignUp from './Register/SignUp';
 import CreateAppointment from './Appointment/CreateAppointment';
 import CreateAppointmentWithOffer from './Appointment/CreateAppointmentWithOffer';
+import SelectCreateAppointment from './Appointment/SelectCreateAppointment';
 import Appointments from './Appointment/Appointments';
 import Appointment from './Appointment/Appointment';
 import EditAppointment from './Appointment/EditAppointment';
@@ -78,6 +79,7 @@ class RouterConfig extends React.Component {
           {/* Appointment URL */}
           <Route exact path="/Appointment" render={() => <AppointmentHome />} />
           <Route exact path="/Appointment/Appointments" render={() => <Appointments />} />
+          <Route exact path="/Appointment/Navigation" render={() => <SelectCreateAppointment />} />
           <Route exact path="/Appointment/Create" render={() => <CreateAppointment />} />
           <Route exact path="/Appointment/Offer/Create/:id" render={(props) => <CreateAppointmentWithOffer id={props.match.params.id}/>} />
           <Route

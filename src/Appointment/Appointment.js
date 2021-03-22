@@ -15,7 +15,7 @@ class Appointment extends React.Component {
       items: [
         { url: '/Appointment', title: 'Appointment Home' },
         { url: '/Appointment/Appointments', title: 'View All Appointments' },
-        { url: '/Appointment/Create', title: 'Create Appointment' },
+        { url: '/Appointment/Navigation', title: 'Create Appointment' },
       ],
       show: false,
       children: 'appointment',

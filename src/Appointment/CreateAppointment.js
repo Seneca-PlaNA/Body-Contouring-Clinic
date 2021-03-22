@@ -1,8 +1,6 @@
 import React from 'react';
 import '../App.css';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
-import SideBar from '../SideBar/SideBar';
-import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
 
 class CreateAppointment extends React.Component {
@@ -12,7 +10,7 @@ class CreateAppointment extends React.Component {
       items: [
         { url: '/Appointment', title: 'Appointment Home' },
         { url: '/Appointment/Appointments', title: 'View All Appointments' },
-        { url: `/Appointment/Create`, title: 'Create Appointment' },
+        { url: `/Appointment/Navigation`, title: 'Create Appointment' },
       ],
       saveModal: false,
       savedBackLink: '/Appointment/Appointment',
@@ -156,15 +154,6 @@ class CreateAppointment extends React.Component {
       }}/>
     }
     return (
-      <>
-        <br />
-        <br />
-        <div className="row">
-          <div className="col-md-1"></div>
-          <SideBar items={this.state.items} />
-          <div className="col-md-6">
-            <h2>New Appointment</h2>
-            <br/>
             <Container>
               <Row>
                 <Col></Col>
@@ -252,15 +241,8 @@ class CreateAppointment extends React.Component {
                 <Col></Col>
               </Row>
             </Container>
-          </div>
-        </div>
-      </>
     );
   }
-}
-
-CreateAppointment.propTypes = {
-  id : PropTypes.string.isRequired
 }
 
 export default CreateAppointment;

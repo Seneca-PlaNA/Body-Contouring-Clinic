@@ -1,37 +1,35 @@
 import React from 'react';
 import '../App.css';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
-import SideBar from '../SideBar/SideBar';
-import styles from '../app.module.css';
-import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
 
-class EditAppointment extends React.Component {
+class CreateAppointment extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       items: [
         { url: '/Appointment', title: 'Appointment Home' },
         { url: '/Appointment/Appointments', title: 'View All Appointments' },
-        { url: '/Appointment/Navigation', title: 'Create Appointment' },
+        { url: `/Appointment/Navigation`, title: 'Create Appointment' },
       ],
       saveModal: false,
-      title: 'Appointment saved!',
       savedBackLink: '/Appointment/Appointment',
       button: 'Back To Appointment',
-      appointment: [],
-      customer: [],
-      schedule: [],
-      time: [],
-      date: [],
-      service: [],
-      staff: [],
+      title: 'Appointment Saved!',
+
       completed: false,
-      allServices: [],
-      allTechnicians: [],
+      _id: localStorage.getItem('_id'),
+      appointment: {
+        customer: String,
+        contactNumber: String,
+        specialRequest: String,
+        service: String,
+        schedule: String,
+      },
+      services: [],
+      customer: {},
       filterData: [],
-      technician:[],
-      printDate: String,
+      technicians:[],
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
@@ -47,8 +45,8 @@ class EditAppointment extends React.Component {
 
   handlSubmit(event) {
     event.preventDefault();
-    fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`,{
-      method: "PUT",
+    fetch(`${process.env.REACT_APP_API_URL}/create-appointment`,{
+      method: "POST",
       body: JSON.stringify(this.state.appointment),
       headers: {
         'Accept': 'application/json',
@@ -57,6 +55,16 @@ class EditAppointment extends React.Component {
     .then((response) => (response.json()))
     .then(()=> this.setState({completed: true}))
     .catch((err) => (console.log(err)));
+  }
+
+  onServiceChange(event){
+    this.setState(() => ({
+      appointment:{
+        ...this.state.appointment,
+        customer: this.state.customer._id,
+        service: event.target.value,
+      }
+    }));
   }
 
   onContactNumChange(event){
@@ -77,20 +85,7 @@ class EditAppointment extends React.Component {
     }));
   }
 
-  onServiceChange(event) {
-    this.setState(() => ({
-      appointment:{
-        ...this.state.appointment,
-        service: event.target.value,
-      }
-    }));
-  }
-
   onDateChange(event){
-    this.setState({
-      printDate: event.target.value,
-    });
-
     var pureDate = (event.target.value).split("-");
     var searchDate = pureDate[1] + "/" + pureDate[2] +"/" + pureDate[0];
     console.log(searchDate);
@@ -99,7 +94,7 @@ class EditAppointment extends React.Component {
     .then((data)=>{
       console.log(data);
       this.setState({
-        filterData: data,
+        filterData: data
       })
     });
   }
@@ -108,10 +103,10 @@ class EditAppointment extends React.Component {
     var technicianData = [];
     this.state.filterData.forEach(function(data){
 
-      if(data.time._id == event.target.value)
-      {
-        technicianData = technicianData.concat(data);
-      }
+        if(data.time._id == event.target.value)
+        {
+          technicianData = technicianData.concat(data);
+        }
     })
     this.setState({
       technician: technicianData,
@@ -128,59 +123,50 @@ class EditAppointment extends React.Component {
     });
   }
 
+  getService(){
+    fetch(`${process.env.REACT_APP_API_URL}/services`)
+    .then(response => response.json())  
+    .then((data)=>{
+      this.setState({
+        services: data
+      })
+    });
+  }
+
+  getTechnicians(){
+    fetch(`${process.env.REACT_APP_API_URL}/staffs`)
+    .then(response => response.json())  
+    .then((data)=>{
+      this.setState({
+        technicians: data
+      })
+      console.log(this.state.technicians);
+    });
+  }
+
   componentDidMount() {
-    document.title = 'Edit Appointment | Body Contouring Clinic';
-    fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`)
+    document.title = 'Create New Appointment | Body Contouring Clinic';
+
+    fetch(`${process.env.REACT_APP_API_URL}/customer?account=${this.state._id}`)
     .then(response => response.json())
     .then((data) => {
-      var pDate = (data.schedule.date.date).split("/");
-      var result = pDate[2] + "-" + pDate[0] + "-" + pDate[1];
-      
       this.setState({
-        appointment: data,
-        customer: data.customer.account,
-        schedule: data.schedule,
-        time: data.schedule.time,
-        date: data.schedule.date,
-        staff: data.schedule.staff,
-        service: data.service,
-        printDate: result,
+        customer: data,
       });
+      this.getService();
+      this.getTechnicians();
+    });
 
-      fetch(`${process.env.REACT_APP_API_URL}/services`)
-      .then(response => response.json())  
-      .then((data)=>{
-        this.setState({
-          allServices: data
-        })
-      });
-
-      fetch(`${process.env.REACT_APP_API_URL}/staffs`)
-      .then(response => response.json())  
-      .then((data)=>{
-        this.setState({
-          allTechnicians: data
-        })
-      });
-  });
   }
 
   render() {
     if(this.state.completed)
     {
       return <Redirect push to={{
-        pathname: `/Appointment/Appointment/${this.props.id}`
+        pathname: `/Appointment/Appointments`
       }}/>
     }
     return (
-      <>
-        <br />
-        <br />
-        <div className="row">
-          <div className="col-md-1"></div>
-          <SideBar items={this.state.items} />
-          <div className="col-md-6">
-            <h2 className={styles.appointmentTitle}>Edit Appointment</h2>
             <Container>
               <Row>
                 <Col></Col>
@@ -191,10 +177,25 @@ class EditAppointment extends React.Component {
                         Service(s):
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control inline as="select" className="col-md-7" value={this.state.service._id} onChange={this.onServiceChange.bind(this)}>
-                        {this.state.allServices.map((result)=>(
+                        <Form.Control inline as="select" onChange={this.onServiceChange.bind(this)}>
+                        <option>-- select service --</option>
+                        {this.state.services.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
                             <option key={result._id} value={result._id}>{result.name}</option>
+                          ))}
+                        </Form.Control>
+                      </Col>
+                    </Form.Group>
+                    <Form.Group as={Row}>
+                      <Form.Label column sm="4">
+                        Technician:
+                      </Form.Label>
+                      <Col sm="8">
+                      <Form.Control as="select">
+                          <option value="">-- select technician --</option>
+                          {this.state.technicians.map((result)=>(
+                            // eslint-disable-next-line react/jsx-key
+                            <option value={result._id}>{result.account.firstName} {result.account.lastName}</option>
                           ))}
                         </Form.Control>
                       </Col>
@@ -204,35 +205,27 @@ class EditAppointment extends React.Component {
                         Date
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control type="date" value={this.state.printDate} onChange={this.onDateChange.bind(this)}/>
-                      </Col>
-                    </Form.Group>
-                    <Form.Group as={Row}>
-                      <Form.Label column sm="4">
-                        Time
-                      </Form.Label>
-                      <Col sm="6">
-                        <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)}>
-                          <option value="">-- select time --</option>
+                        <Form.Control inline as="select" onChange={this.onDateChange.bind(this)}>
+                          <option value="">-- select Date --</option>
                           {this.state.filterData.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
-                            <option value={result.time._id}>{result.time.time}</option>
+                              <option value={result.date._id}>{result.date.date}</option>
                           ))}
                           </Form.Control>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
                       <Form.Label column sm="4">
-                        Technician:
+                        Time
                       </Form.Label>
                       <Col sm="8">
-                      <Form.Control as="select" onChange={this.onScheduleChange.bind(this)}>
-                          <option value="">-- select technician --</option>
-                          {this.state.technician.map((result)=>(
+                        <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)}>
+                          <option value="">-- select time --</option>
+                          {this.state.filterData.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
-                            <option value={result._id}>{result.staff.account.firstName} {result.staff.account.lastName}</option>
+                              <option value={result.time._id}>{result.time.time}</option>
                           ))}
-                        </Form.Control>
+                          </Form.Control>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
@@ -243,7 +236,7 @@ class EditAppointment extends React.Component {
                         <Form.Control placeholder="647-596-9521" value={this.state.appointment.contactNumber} onChange={this.onContactNumChange.bind(this)}/>
                       </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="exampleForm.ControlTextarea1">
+                    <Form.Group as={Row}>
                       <Form.Label column sm="4">
                         Special Request:
                       </Form.Label>
@@ -267,15 +260,8 @@ class EditAppointment extends React.Component {
                 <Col></Col>
               </Row>
             </Container>
-          </div>
-        </div>
-      </>
     );
   }
 }
 
-EditAppointment.propTypes = {
-  id : PropTypes.string.isRequired
-}
-
-export default EditAppointment;
+export default CreateAppointment;
