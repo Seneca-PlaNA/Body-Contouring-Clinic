@@ -68,6 +68,13 @@ app.delete('/account/:id', (req, res) => {
     .catch((err) => res.json(err));
 });
 
+app.get('/account', (req, res) => {
+  accountHandler
+    .viewOneAccountByInput(req.query)
+    .then((accounts) => res.json(accounts))
+    .catch((err) => res.json(err));
+});
+
 //Account Level
 app.post('/create-account-level', (req, res) => {
   accountLevelHandler.addNewAccountLevel(req.body).then((msg) => res.json(msg));

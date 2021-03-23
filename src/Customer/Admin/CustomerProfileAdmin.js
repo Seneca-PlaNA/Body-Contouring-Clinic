@@ -4,6 +4,7 @@ import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
 import { Container, Form, Row, Col, Button } from 'react-bootstrap';
 import { Redirect } from 'react-router';
+import { Link } from 'react-router-dom';
 
 class CustomerProfileAdmin extends React.Component {
   constructor(prop) {
@@ -16,6 +17,7 @@ class CustomerProfileAdmin extends React.Component {
               { url: `/Customer/Admin/Balance`, title: 'Balance Management' },
       ],
       accountLevels: [],
+      balanceHistory: [],
     };
   }
 
@@ -46,6 +48,16 @@ class CustomerProfileAdmin extends React.Component {
     .catch((err) => (console.log(err)));
   }
 
+  getBalanceHistory(id) {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/balance-history/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        });
+    });
+  }
+
   getCustomerProfile(id) {
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/account/${id}`)
@@ -71,6 +83,12 @@ class CustomerProfileAdmin extends React.Component {
         account: data,
         accountLevel: data.accountLevelId,
       });
+      this.getBalanceHistory(data.balanceHistory._id)
+      .then((data)=>{
+        this.setState({
+          balanceHistory: data,
+        });
+      });
     });
 
     this.getAccountLevels()
@@ -79,6 +97,7 @@ class CustomerProfileAdmin extends React.Component {
         accountLevels: data,
       });
     });
+    
   }
 
   render() {
@@ -93,7 +112,13 @@ class CustomerProfileAdmin extends React.Component {
         <div className="col-md-1"></div>
         <SideBar items={this.state.items} />
         <div className="col-md-6" style={{ 'margin-left': '80px' }}>
-          <h2 className="PageTitle">Customer : {this.state.account.firstName} {this.state.account.lastName}</h2>
+          <h2 className="PageTitle">Customer : {this.state.account.firstName} {this.state.account.lastName}
+            <Button style={{'margin-left': '40px'}} variant="outline-info">
+              <Link to={`/Customer/Edit/${this.state.account._id}`}>
+                Edit
+              </Link>
+            </Button>
+          </h2>
           <hr />
           <br />
           <Container class="col-md-6">
@@ -102,8 +127,8 @@ class CustomerProfileAdmin extends React.Component {
                 <Form.Label column md={3}>
                   Name:
                 </Form.Label>
-                <Col sm={5}>
-                  <Form.Label column md={0}>
+                <Col sm={8}>
+                  <Form.Label>
                     {this.state.account.firstName} {this.state.account.lastName}
                   </Form.Label>
                 </Col>
@@ -112,8 +137,8 @@ class CustomerProfileAdmin extends React.Component {
                 <Form.Label column sm={3}>
                   Email:
                 </Form.Label>
-                <Col sm={1}>
-                  <Form.Label column md={0}>
+                <Col sm={8}>
+                  <Form.Label>
                     {this.state.account.email}
                   </Form.Label>
                 </Col>
@@ -122,8 +147,8 @@ class CustomerProfileAdmin extends React.Component {
                 <Form.Label column sm={3}>
                   Address:
                 </Form.Label>
-                <Col sm={1}>
-                  <Form.Label column md={0}>
+                <Col sm={8}>
+                  <Form.Label >
                     {this.state.account.address}
                   </Form.Label>
                 </Col>
@@ -132,9 +157,9 @@ class CustomerProfileAdmin extends React.Component {
                 <Form.Label column sm={3}>
                   Current Balance:
                 </Form.Label>
-                <Col sm={1}>
-                  <Form.Label column md={0}>
-                    User.Balance
+                <Col sm={8}>
+                  <Form.Label>
+                   $ {this.state.balanceHistory.currentBalance}
                   </Form.Label>
                 </Col>
               </Form.Group>
@@ -142,7 +167,7 @@ class CustomerProfileAdmin extends React.Component {
                 <Form.Label column sm={3}>
                   Customer level:
                 </Form.Label>
-                <Col sm={3}>
+                <Col sm={4}>
                   <Form.Control as="select" controlId="accountLevelId" value={this.state.accountLevel == null ? '':this.state.accountLevel._id} onChange={this.onAccountLevelChange.bind(this)}>
                     {this.state.accountLevels.map((level)=>(
                       level.name !="Staff"?<option key={level._id} value={level._id}>{level.name}</option>:""
@@ -160,13 +185,12 @@ class CustomerProfileAdmin extends React.Component {
                   View Request
                 </Button>
                 &nbsp;
-                <Button variant="outline-info" href="/Customer/Admin/Account">
-                  View Account
+                <Button variant="outline-info" >
+                  <Link to={`/Customer/Admin/Balance/${this.state.balanceHistory._id}`} >
+                    View Balance
+                  </Link>
                 </Button>
                 &nbsp;
-                <Button action type="submit" variant="outline-info">
-                  Edit
-                </Button>
               </Col>
             </Row>
             </Form>

@@ -100,9 +100,9 @@ class CustomerBalanceDetailAdmin extends React.Component {
     });
   }
 
-  getCustomerProfile() {
+  getCustomerProfile(id) {
     return new Promise((resolve) => {
-      fetch(`${process.env.REACT_APP_API_URL}/account/${this.state._id}`)
+      fetch(`${process.env.REACT_APP_API_URL}/account?balanceHistory=${id}`)
         .then((response) => response.json())
         .then((data) => {
           resolve(data);
@@ -123,7 +123,7 @@ class CustomerBalanceDetailAdmin extends React.Component {
   }
 
   componentDidMount() {
-    this.getCustomerProfile()
+    this.getCustomerProfile(this.props.id)
     .then((data)=>{
       this.setState({
         profile: data,
@@ -157,7 +157,7 @@ class CustomerBalanceDetailAdmin extends React.Component {
         <div className="col-md-1"></div>
         <SideBar items={this.state.items} />
         <div className="col-md-8" style={{ 'margin-left': '80px' }}>
-          <h2 className="PageTitle">Hi, {this.state.profile.firstName + ' ' + this.state.profile.lastName}</h2>
+          <h2 className="PageTitle">Customer :  {this.state.profile.firstName + ' ' + this.state.profile.lastName}</h2>
           <hr />
           <br />
 

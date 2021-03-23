@@ -108,3 +108,27 @@ exports.deleteAccountById = function (id) {
       });
   });
 };
+
+//Read
+exports.viewOneAccountByInput = function (query) {
+  return new Promise((resolve, reject) => {
+    Account.findOne(query)
+      .populate('accountLevelId')
+      // .populate({
+      //   path: 'balanceHistory',
+      //   populate: [
+      //     {
+      //       path: 'balances',
+      //       populate: [{ path: 'services', populate: { path: 'serviceCategory' } }],
+      //     },
+      //   ],
+      // })
+      .exec()
+      .then((data) => {
+        resolve(data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};

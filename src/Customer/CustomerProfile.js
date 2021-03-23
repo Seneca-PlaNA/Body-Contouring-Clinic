@@ -53,7 +53,7 @@ class CustomerProfile extends React.Component {
           <hr />
           <br />
           <Container class="col-md-12">
-            <Form style={{ fontSize: '20px', marginLeft: '80px', textAlign: 'left' }}>
+            <Form style={{ fontSize: '20px',textAlign: 'left' }}>
               <Form.Group as={Row}>
                 <Form.Label column md={3}>
                   Name:
@@ -69,7 +69,7 @@ class CustomerProfile extends React.Component {
                   Email:
                 </Form.Label>
                 <Col sm={8}>
-                  <Form.Label column md={0}>
+                  <Form.Label>
                     {this.state.profile.email}
                   </Form.Label>
                 </Col>
@@ -79,7 +79,7 @@ class CustomerProfile extends React.Component {
                   User Id:
                 </Form.Label>
                 <Col sm={8}>
-                  <Form.Label column md={0}>
+                  <Form.Label>
                     {this.state.profile.userID}
                   </Form.Label>
                 </Col>
@@ -89,7 +89,7 @@ class CustomerProfile extends React.Component {
                   Address:
                 </Form.Label>
                 <Col sm={8}>
-                  <Form.Label column md={0}>
+                  <Form.Label>
                     {this.state.profile.address}
                   </Form.Label>
                 </Col>
