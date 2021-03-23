@@ -148,8 +148,8 @@ class CustomerHomeAdmin extends React.Component {
           <Table striped bordered hover>
             <thead>
               <tr>
+                <th>Customer ID</th>
                 <th>Customer Name</th>
-                <th>Customer Balance</th>
                 <th>Customer Level</th>
                 <th>Detail</th>
               </tr>
@@ -158,10 +158,10 @@ class CustomerHomeAdmin extends React.Component {
               <tbody>
               {currentItems.map((result, index) => (
                 <tr key={index}>
+                  <td>{result.userID}</td>
                   <td>
                     {result.firstName} {result.lastName}
                   </td>
-                  <td>{result.balanceHistory == null? "": result.balanceHistory.currentBalance}</td>
                   <td>{result.accountLevelId == null ? "": result.accountLevelId.name}</td>
                   <td>
                     <Link to={`/Customer/Admin/Profile/${result._id}`}>Detail</Link>
