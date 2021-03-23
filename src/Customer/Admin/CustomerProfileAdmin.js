@@ -4,7 +4,6 @@ import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
 import { Container, Form, Row, Col, Button } from 'react-bootstrap';
 import { Redirect } from 'react-router';
-import { Link } from 'react-router-dom';
 
 class CustomerProfileAdmin extends React.Component {
   constructor(prop) {
@@ -113,11 +112,6 @@ class CustomerProfileAdmin extends React.Component {
         <SideBar items={this.state.items} />
         <div className="col-md-6" style={{ 'margin-left': '80px' }}>
           <h2 className="PageTitle">Customer : {this.state.account.firstName} {this.state.account.lastName}
-            <Button style={{'margin-left': '40px'}} variant="outline-info">
-              <Link to={`/Customer/Edit/${this.state.account._id}`}>
-                Edit
-              </Link>
-            </Button>
           </h2>
           <hr />
           <br />
@@ -175,14 +169,16 @@ class CustomerProfileAdmin extends React.Component {
                   </Form.Control>
                 </Col>
               </Form.Group>
-              <Row>
+              {/* <Row>
               <Col>
                 <Button variant="outline-info" href="/Appointment/Appointments">
                   View Appointment
                 </Button>
                 &nbsp;
                 <Button variant="outline-info" href="/Request/">
-                  View Request
+                  <Link to={`/Request/${this.state.balanceHistory._id}`} >
+                    View Request
+                  </Link>
                 </Button>
                 &nbsp;
                 <Button variant="outline-info" >
@@ -192,7 +188,10 @@ class CustomerProfileAdmin extends React.Component {
                 </Button>
                 &nbsp;
               </Col>
-            </Row>
+            </Row> */}
+              <Button type="submit" variant="outline-info">
+                  Edit
+              </Button>
             </Form>
           </Container>
           <br />
