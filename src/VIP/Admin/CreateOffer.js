@@ -1,8 +1,9 @@
 import React from 'react';
 import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
-import { Form, Row, Col, Container, Button } from 'react-bootstrap';
+import { Form, Row, Col, Container, Button, Modal } from 'react-bootstrap';
 import { Redirect } from 'react-router';
+import { post } from 'axios';
 
 class CreateOffer extends React.Component {
   constructor(props) {
@@ -23,13 +24,27 @@ class CreateOffer extends React.Component {
         imageURL: String,
       },
       completed: false,
+      file: null,
+      imageSuccess : false,
     };
+    this.imageShow = this.imageShow.bind(this);
+    this.imageHide = this.imageHide.bind(this);
   }
 
+  imageShow = () => {
+    this.setState({
+      imageSuccess : true
+    })
+  }
+
+  imageHide = () => {
+    this.setState({
+      imageSuccess : false
+    })
+  }
   handlSubmit(event) {
     event.preventDefault();
-
-    fetch(`${process.env.REACT_APP_API_URL}/add-offer`,{
+    fetch(`${process.env.REACT_APP_API_URL}/create-offer`,{
       method: "POST",
       body: JSON.stringify(this.state.offer),
       headers: {
@@ -40,6 +55,39 @@ class CreateOffer extends React.Component {
       .then((response) => response.json())
       .then(() => this.setState({ completed: true }))
       .catch((err) => console.log(err));
+  }
+
+  onFormSubmit(event){
+    this.setState({
+      file: event.target.files[0],
+    });
+  }
+
+  fileUpload(){
+    const url = process.env.REACT_APP_IMAGE_URL + "/upload";
+    const formData = new FormData();
+    formData.append('file', this.state.file)
+    const config = {
+        headers: {
+            'content-type': 'multipart/form-data'
+        }
+    }
+    post(url, formData,config)
+    .then((data)=>{
+      var tempData = JSON.stringify(data.data.fileName).replace('"','').replace('"','');
+      console.log("ResultData: " + tempData );
+      this.setState(()=>({
+        offer: {
+          ...this.state.offer,
+          imageURL: tempData,
+        }
+      }));
+    })
+    .then(()=>{
+      this.setState({
+        imageSuccess: true
+      })
+    });
   }
 
   onNameChange(event) {
@@ -164,7 +212,18 @@ class CreateOffer extends React.Component {
                 <Form.Label column sm={2}>
                   Attach File:
                 </Form.Label>
-                <Form.File />
+                <Form.File type="file" onChange={this.onFormSubmit.bind(this)}/>
+                <Button variant="outline-secondary" onClick={this.fileUpload.bind(this)}>
+                      Upload
+                </Button>
+                <Modal show={this.state.imageSuccess} onHide={this.imageHide}>
+                    <Modal.Header closeButton>
+                      <Modal.Title>Image Upload Result</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <p>Image Upload Success</p>
+                    </Modal.Body>
+                </Modal>
               </Form.Group>
               <br />
               <br />

@@ -1,6 +1,6 @@
 import React from 'react';
 import SideBar from '../../SideBar/SideBar';
-import { Button, Container, Row, Col, Form } from 'react-bootstrap';
+import { Button, Container, Row, Col, Form, Image } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
 import moment from 'moment'
@@ -113,8 +113,8 @@ class ViewRequestAdmin extends React.Component {
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
                   <Form.Label style={reqTitle}>
                     Attached File {this.state.serviceCategory.name}
-                  </Form.Label>
-                  <Form.Control type="text" plaintext readOnly value={this.state.request.attachedFile} />
+                  </Form.Label><br/>
+                  <Image src={process.env.REACT_APP_IMAGE_URL + "/file/" + this.state.request.attachedFile} alt=" No Attachment"/> 
                 </Form.Group>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
                   <Form.Label style={reqTitle}>

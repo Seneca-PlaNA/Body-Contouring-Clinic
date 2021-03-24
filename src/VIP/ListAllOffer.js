@@ -37,7 +37,7 @@ class ListAllOffer extends React.Component {
         <CardColumns>
           { this.state.offers.map( (result) => (
             <Card>
-              <Card.Img variant="top" src={result.imageURL} />
+              <Card.Img variant="top" src={process.env.REACT_APP_IMAGE_URL + "/file/" + result.imageURL} />
               <Card.Body>
                 <Card.Title>{result.name}</Card.Title>
                 <Card.Text>{moment(result.startDate).format('ll')} ~ {moment(result.endDate).format('ll')}</Card.Text>

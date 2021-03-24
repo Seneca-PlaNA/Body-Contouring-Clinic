@@ -1,7 +1,7 @@
 import React from 'react';
 import '../App.css';
 import SideBar from '../SideBar/SideBar';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Image } from 'react-bootstrap';
 import PopUp from '../PopUp';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
@@ -100,7 +100,7 @@ class ViewRequest extends React.Component {
       'font-weight': 'bold',
       color: 'black',
     };
-
+    
     return (
       <div className="row">
         <div className="col-md-1"></div>
@@ -148,8 +148,8 @@ class ViewRequest extends React.Component {
                   <Form.Control type="text" readOnly value={this.state.request.status} />
                 </Form.Group>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
-                  <Form.Label style={reqTitle}>Attachment</Form.Label>
-                  <Form.Control type="text" readOnly value={this.state.request.attachedFile} />
+                  <Form.Label style={reqTitle}>Attachment</Form.Label> <br/>
+                  <Image src={process.env.REACT_APP_IMAGE_URL + "/file/" + this.state.request.attachedFile} alt=" No Attachment"/> 
                 </Form.Group>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
                   <Form.Label style={reqTitle}>Answer</Form.Label>
