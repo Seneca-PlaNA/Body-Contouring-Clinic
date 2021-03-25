@@ -52,7 +52,7 @@ class SignUp extends Component {
     //   .catch((err) => console.log(err));
 
     axios
-      .post('http://localhost:3001/create-account', this.state.account)
+      .post(`${process.env.REACT_APP_API_URL}/create-account`, this.state.account)
       .then(() => this.setState({ completed: true }))
       .catch((err) => console.log(err));
   }

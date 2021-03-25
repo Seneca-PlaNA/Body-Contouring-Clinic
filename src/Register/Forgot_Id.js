@@ -26,7 +26,7 @@ class Forgot_Id extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post('http://localhost:3001/forgot', this.state.account)
+      .post(`${process.env.REACT_APP_API_URL}/forgot`, this.state.account)
       .then((res) => {
         console.log(res.data._id);
         localStorage.setItem('_id', res.data._id); //temporary login method

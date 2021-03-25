@@ -42,7 +42,7 @@ class Login extends Component {
   handleSubmit(event) {
     event.preventDefault();
     axios
-      .post('http://localhost:3001/login', this.state.account)
+      .post(`${process.env.REACT_APP_API_URL}/login`, this.state.account)
       .then((res) => {
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('_id', res.data._id); //temporary login method
