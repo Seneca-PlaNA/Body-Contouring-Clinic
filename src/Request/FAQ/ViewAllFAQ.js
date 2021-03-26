@@ -16,7 +16,7 @@ class ViewAllFAQ extends React.Component {
 
   getFAQs() {
     return new Promise((resolve) => {
-      fetch('http://localhost:3001/faqs')
+      fetch(`${process.env.REACT_APP_API_URL}/faqs`)
         .then((response) => response.json())
         .then((results) => {
           resolve(results);
@@ -26,7 +26,7 @@ class ViewAllFAQ extends React.Component {
 
   getFAQCategory(id) {
     return new Promise((resolve) => {
-      fetch(`http://localhost:3001/faq-category/${id}`)
+      fetch(`${process.env.REACT_APP_API_URL}/faq-category/${id}`)
         .then((response) => response.json())
         .then((results) => {
           resolve(results);

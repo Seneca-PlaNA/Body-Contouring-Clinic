@@ -98,7 +98,7 @@ class RequestHomebyAdmin extends React.Component {
   getRequests() {
     moment();
     return new Promise((resolve) => {
-      fetch('http://localhost:3001/requests')
+      fetch(`${process.env.REACT_APP_API_URL}/requests`)
         .then((response) => response.json())
         .then((results) => {
           resolve(results);

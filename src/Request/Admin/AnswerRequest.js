@@ -22,7 +22,7 @@ class AnswerRequest extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     console.log(this.state.request);
-    fetch(`http://localhost:3001/request/${this.props.id}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/request/${this.props.id}`, {
       method: 'PUT',
       body: JSON.stringify(this.state.request),
       headers: {
@@ -54,7 +54,7 @@ class AnswerRequest extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`http://localhost:3001/request/${this.props.id}`)
+    fetch(`${process.env.REACT_APP_API_URL}/request/${this.props.id}`)
       .then((result) => result.json())
       .then((result) => {
         this.setState({

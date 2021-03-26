@@ -15,9 +15,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:3001/api')
-      .then((res) => res.json())
-      .then((data) => this.setState({ backServer: data.backServer }));
   }
 
   render() {

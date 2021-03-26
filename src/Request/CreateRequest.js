@@ -52,7 +52,7 @@ class CreateRequest extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    fetch('http://localhost:3001/create-request', {
+    fetch(`${process.env.REACT_APP_API_URL}/create-request`, {
       method: 'POST',
       body: JSON.stringify(this.state.request),
       headers: {
