@@ -3,10 +3,9 @@ import React from 'react';
 import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
 import PopUp from '../../PopUp';
-import { Tabs, Tab, Card, Accordion, Container, Button, ButtonToolbar, Col, Row } from 'react-bootstrap';
+import { Tabs, Tab, Card, Accordion, Container, Button, Col, Row } from 'react-bootstrap';
 import { Redirect } from 'react-router';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 class ViewAllFAQbyAdmin extends React.Component {
   constructor(props) {
@@ -19,12 +18,7 @@ class ViewAllFAQbyAdmin extends React.Component {
       ],
       children: 'FAQ',
       faqs: [],
-      faqCategory: [
-        {name: 'After Care'},
-        {name: 'Appointment'},
-        {name: 'Register'},
-        {name: 'Others'},
-      ],
+      faqCategories: [],
       selectedFAQ: {},
       completed: false,
     };
@@ -90,13 +84,28 @@ class ViewAllFAQbyAdmin extends React.Component {
     });
   }
 
+  getFAQCategory() {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/faq-categories`)
+        .then((response) => response.json())
+        .then((results) => {
+          resolve(results);
+        });
+    });
+  }
+
   componentDidMount() {
     this.getFAQs()
       .then((data) => {
         this.setState({
           faqs: data,
-          faqCategory: data.faqCategory,
         });
+    });
+    this.getFAQCategory()
+    .then((data)=>{
+      this.setState({
+        faqCategories: data,
+      })
     });
   }
 
@@ -120,35 +129,23 @@ class ViewAllFAQbyAdmin extends React.Component {
           <br />
           <Container>
               <Tabs id={this.state.faqs._id} activeKey={this.state.key} onSelect={(key) => this.setState({ key })}>   
-              
-              { this.state.faqs.map( (result) => (
-                <Tab eventKey={result.faqCategory._id} title={result.faqCategory.name} style={{ color: '#393F44', 'margin-top': '10px' }}>
+              { this.state.faqCategories.map( (result) => (
+              <Tab eventKey={result._id} title={result.name} style={{ color: '#393F44', 'margin-top': '10px' }}>
+              {this.state.faqs.map((oneFaq) =>(
+                oneFaq.faqCategory._id != result._id ? '' : 
                   <Accordion>
                     <Card>
                       <Accordion.Toggle as={Card.Header} eventKey="0">
-                        {result.title}
-                      </Accordion.Toggle> 
-                      <Accordion.Collapse eventKey="0">
-                        <Card.Body>
-                          {result.contents}
-                            <ButtonToolbar>
-                              <Link to={`/Request/FAQ/Admin/Edit/${result._id}`}>
-                                <Button variant="outline-secondary" style={{ marginLeft: '780px' }}>Edit</Button>
-                              </Link>
-                              <Button variant="outline-danger" style={{ marginLeft: '15px' }} onClick={()=> {
-                                  this.setState({
-                                  show: true,
-                                  selectedFAQ: result, })}}>
-                                  Delete
-                              </Button>
-                            </ButtonToolbar>
-                          </Card.Body>
-                        </Accordion.Collapse>
-                      </Card>
-                    </Accordion>
-
-                  </Tab>
-                              ))}
+                         {oneFaq.title}
+                         </Accordion.Toggle>
+                         <Accordion.Collapse eventKey="0">
+                           <Card.Body>{oneFaq.contents}</Card.Body>
+                         </Accordion.Collapse>
+                    </Card>
+                  </Accordion>      
+              ))}
+              </Tab> 
+          ))}
               </Tabs>  
 
 
