@@ -3,9 +3,10 @@ import React from 'react';
 import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
 import PopUp from '../../PopUp';
-import { Tabs, Tab, Card, Accordion, Container, Button, Col, Row } from 'react-bootstrap';
+import { Tabs, Tab, Card, Accordion, Container, Button, Col, Row, ButtonToolbar } from 'react-bootstrap';
 import { Redirect } from 'react-router';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 class ViewAllFAQbyAdmin extends React.Component {
   constructor(props) {
@@ -139,7 +140,20 @@ class ViewAllFAQbyAdmin extends React.Component {
                          {oneFaq.title}
                          </Accordion.Toggle>
                          <Accordion.Collapse eventKey="0">
-                           <Card.Body>{oneFaq.contents}</Card.Body>
+                           <Card.Body>
+                             {oneFaq.contents}
+                             <ButtonToolbar>
+                              <Link to={`/Request/FAQ/Admin/Edit/${oneFaq._id}`}>
+                                  <Button variant="outline-secondary" style={{ marginLeft: '780px' }}>Edit</Button>
+                                </Link>
+                                <Button variant="outline-danger" style={{ marginLeft: '15px' }} onClick={()=> {
+                                    this.setState({
+                                    show: true,
+                                    selectedFAQ: oneFaq, })}}>
+                                    Delete
+                                </Button>
+                             </ButtonToolbar>
+                           </Card.Body>
                          </Accordion.Collapse>
                     </Card>
                   </Accordion>      
