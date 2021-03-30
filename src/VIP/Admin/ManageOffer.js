@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Button, Pagination } from 'react-bootstrap';
 import PopUp from '../../PopUp';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -14,14 +14,37 @@ class ManageOffer extends React.Component {
       items: [
         { url: '/VIP/Admin', title: 'Special Offer' },
         { url: '/VIP/Admin/Manage', title: 'Offer Manage' },
+        { url: '/VIP/Admin/Manage/Create', title: 'Create Offer' },
       ],
       children: 'Offer',
       offers: [],
       selectedOffer: {},
+      currentPage: 1,
+      perPage: 8,
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+  }
+
+  prevPage() {
+    if (this.state.currentPage > 1) {
+      this.setState({
+        currentPage: parseInt(this.state.currentPage) - 1,
+      });
+    }
+  }
+  nextPage() {
+    if (this.state.currentPage < Math.ceil(this.state.offers.length / this.state.perPage)) {
+      this.setState({
+        currentPage: parseInt(this.state.currentPage) + 1,
+      });
+    }
+  }
+  handlePage(e) {
+    this.setState({
+      currentPage: Number(e.target.id),
+    });
   }
 
   showModal = () => {
@@ -77,10 +100,18 @@ class ManageOffer extends React.Component {
     });
   }
   render() {
-    const pagination = {
-      color: '#B58970',
-    };
+    const indexOfLast = this.state.currentPage * this.state.perPage;
+    const indexOfFirst = indexOfLast - this.state.perPage;
+    const currentItems = this.state.offers.slice(indexOfFirst, indexOfLast);
 
+    const pageNums = [];
+    for (let i = 1; i <= Math.ceil(this.state.offers.length / this.state.perPage); i++) {
+      pageNums.push(
+        <Pagination.Item key={i} id={i} onClick={this.handlePage.bind(this)}>
+          {i}
+        </Pagination.Item>
+      );
+    }
     return (
       <div className="row">
         <div className="col-md-1"></div>
@@ -92,10 +123,6 @@ class ManageOffer extends React.Component {
             <br />
             <table>
               <tr>
-                <th>
-                  <input type="checkbox" />
-                </th>
-                <th>ID</th>
                 <th>Date</th>
                 <th>Price</th>
                 <th>Title</th>
@@ -103,13 +130,9 @@ class ManageOffer extends React.Component {
                 <td></td>
                 <td></td>
               </tr>
-              { this.state.offers.map((result, index) => (
+              { currentItems.map((result) => (
                   // eslint-disable-next-line react/jsx-key
                   <tr key={result._id}>
-                  <td>
-                    <input type="checkbox" />
-                  </td>
-                  <td>{index}</td>
                   <td>{moment(result.startDate).format('ll')} ~ {moment(result.endDate).format('ll')}</td>
                   <td>${result.price}</td>
                   <td>{result.name}</td>
@@ -143,27 +166,11 @@ class ManageOffer extends React.Component {
               ))}
             </table>
             <br />
-            <span style={pagination}>
-              <a href="#"> &laquo; </a>
-              <a href="#"> 1 </a>
-              <a className="active" href="#">
-                {' '}
-                2{' '}
-              </a>
-              <a href="#"> 3 </a>
-              <a href="#"> 4 </a>
-              <a href="#"> 5 </a>
-              <a href="#"> 6 </a>
-              <a href="#"> &raquo; </a>
-            </span>
-            <Row>
-              <Col xs={10}></Col>
-              <Col xs={1}>
-                <Button variant="outline-info" href="/VIP/Admin/Manage/Create">
-                  Create
-                </Button>
-              </Col>
-            </Row>
+            <Pagination style={{ display: 'flex', justifyContent: 'center' }}>
+                <Pagination.Prev onClick={this.prevPage.bind(this)} />
+                <Pagination>{pageNums}</Pagination>
+                <Pagination.Next onClick={this.nextPage.bind(this)} />
+            </Pagination>
             <br />
             <br />
             <br />
