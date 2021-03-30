@@ -91,7 +91,7 @@ class Appointment extends React.Component {
           year: data.schedule.date.date.split('/')[2],
           month: data.schedule.date.date.split('/')[0],
           day: data.schedule.date.date.split('/')[1],
-          staff: data.schedule.staff.account,
+          staff: data.schedule.staff == null? null : data.schedule.staff.account,
           service: data.service
         });
     });
@@ -124,7 +124,7 @@ class Appointment extends React.Component {
                     </tr>
                     <tr>
                       <td>Technician:</td>
-                      <td>{this.state.staff.firstName} {this.state.staff.lastName}</td>
+                      <td>{this.state.staff == null ? '' : this.state.staff.firstName} {this.state.staff == null ? '' : this.state.staff.lastName}</td>
                     </tr>
                     <tr>
                       <td>Service:</td>
