@@ -93,12 +93,12 @@ class CustomerHome extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.appointments.map((appointment, index)=>(
+              {this.state.appointments != null && this.state.appointments.map((appointment, index)=>(
                 // eslint-disable-next-line react/jsx-key
                 <tr>
                   <td>{index + 1}</td>
                   <td>{appointment.service.name}</td>
-                  <td>{appointment.schedule.staff.account.firstName} {appointment.schedule.staff.account.lastName}</td>
+                  <td>{appointment.schedule.staff == null ? '': appointment.schedule.staff.account.firstName}{appointment.schedule.staff == null ? '': appointment.schedule.staff.account.lastName} </td>
                   <td>{appointment.schedule == null ? '' : moment(appointment.schedule.date.date).format('ll')}</td>
                 </tr>
               ))}
