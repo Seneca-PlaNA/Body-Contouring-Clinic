@@ -59,7 +59,7 @@ class CustomerProfile extends React.Component {
                   Name:
                 </Form.Label>
                 <Col sm={8}>
-                  <Form.Label column md={0}>
+                  <Form.Label>
                     {this.state.profile.firstName} {this.state.profile.lastName}
                   </Form.Label>
                 </Col>

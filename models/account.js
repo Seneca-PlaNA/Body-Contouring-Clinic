@@ -64,6 +64,28 @@ accountSchema.pre('save', function (next) {
   }
 });
 
+accountSchema.pre('updateOne', function (next) {
+  let user = this;
+  console.log("HERE");
+  console.log(user._update.$set);
+  if (user._update.$set.password) {
+    console.log("Success");
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+      console.log("hash part")
+      if (err) return next(err);
+      bcrypt.hash(user._update.$set.password, salt, function (err, hash) {
+        if (err) return next(err);
+        console.log(hash);
+        user._update.$set.password = hash;
+        next();
+      });
+    });
+  } else {
+    console.log("NOPE");
+    next();
+  }
+});
+
 accountSchema.methods.comparePassword = function (plainPassword) {
   return bcrypt
     .compare(plainPassword, this.password)

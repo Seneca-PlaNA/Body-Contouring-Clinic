@@ -16,15 +16,19 @@ class CustomerProfileEdit extends React.Component {
         { url: `/Customer/Profile`, title: 'Profile' },
         { url: `/Customer/Balance/${localStorage.getItem('_id')}`, title: 'Balance' },
       ],
+      tempPwd: '',
+      pwdConfirmed: false,
       _id: localStorage.getItem('_id'),
+      editProfile:{}
     };
   }
 
   handleSubmit(event) {
     event.preventDefault();
+    
     fetch(`${process.env.REACT_APP_API_URL}/account/${this.state._id}`, {
       method: 'PUT',
-      body: JSON.stringify(this.state.profile),
+      body: JSON.stringify(this.state.editProfile),
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -41,6 +45,10 @@ class CustomerProfileEdit extends React.Component {
         ...this.state.profile,
         firstName: event.target.value,
       },
+      editProfile:{
+        ...this.state.editProfile,
+        firstName: event.target.value,
+      }
     }));
   }
 
@@ -50,6 +58,10 @@ class CustomerProfileEdit extends React.Component {
         ...this.state.profile,
         lastName: event.target.value,
       },
+      editProfile:{
+        ...this.state.editProfile,
+        lastName: event.target.value,
+      }
     }));
   }
 
@@ -59,6 +71,10 @@ class CustomerProfileEdit extends React.Component {
         ...this.state.profile,
         email: event.target.value,
       },
+      editProfile:{
+        ...this.state.editProfile,
+        email: event.target.value,
+      }
     }));
   }
 
@@ -68,9 +84,44 @@ class CustomerProfileEdit extends React.Component {
         ...this.state.profile,
         address: event.target.value,
       },
+      editProfile:{
+        ...this.state.editProfile,
+        address: event.target.value,
+      }
     }));
   }
 
+  onPasswordChange(event) {
+    this.setState(() => ({
+      tempPwd: event.target.value,
+    }));
+    console.log(this.state.tempPwd);
+  }
+
+  onConfirmPasswordChange(event) {
+    this.setState(() => ({
+      pwdConfirmed: false,
+    }));
+
+    if(this.state.tempPwd == event.target.value)
+    {
+      this.setState(() => ({
+        profile: {
+          ...this.state.profile,
+          password: event.target.value,
+        },
+        editProfile:{
+          ...this.state.editProfile,
+          password: event.target.value,
+        }
+      }));
+    }
+    else{
+      this.setState(() => ({
+        pwdConfirmed: true,
+      }));
+    }
+  }
   componentDidMount() {
     fetch(`${process.env.REACT_APP_API_URL}/account/${this.state._id}`)
       .then((response) => response.json())
@@ -96,11 +147,7 @@ class CustomerProfileEdit extends React.Component {
                   First Name:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control
-                    type="text"
-                    value={this.state.profile.firstName}
-                    onChange={this.onFirstNameChange.bind(this)}
-                  ></Form.Control>
+                  <Form.Control type="text" value={this.state.profile.firstName} onChange={this.onFirstNameChange.bind(this)}/>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -120,7 +167,7 @@ class CustomerProfileEdit extends React.Component {
                   Password:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="password"></Form.Control>
+                  <Form.Control type="password" onChange={this.onPasswordChange.bind(this)}/>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -128,7 +175,10 @@ class CustomerProfileEdit extends React.Component {
                   Confirm Password:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="password"></Form.Control>
+                  <Form.Control type="password" onChange={this.onConfirmPasswordChange.bind(this)} isInvalid={this.state.pwdConfirmed}/>
+                  <Form.Control.Feedback type='invalid' > 
+                    PASSWORD NOT MATCHED
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -158,7 +208,7 @@ class CustomerProfileEdit extends React.Component {
               <Form.Group as={Row}>
                 <Col xs={1}></Col>
                 <Col>
-                  <Link to={`/Customer/${this.props.id}`}>
+                  <Link to={`/Customer/Profile`}>
                     <Button variant="outline-info">Cancel</Button>
                   </Link>
                   &nbsp;
