@@ -9,6 +9,7 @@ exports.addNewAccount = function (data) {
   return new Promise((resolve, reject) => {
     let balance = new BalanceHistory({
       _id: new mongoose.Types.ObjectId(),
+      currentBalance: 0,
     });
     balance.save();
     var balanceH = `${balance._id}`;

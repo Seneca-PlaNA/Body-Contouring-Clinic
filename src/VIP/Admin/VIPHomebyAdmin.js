@@ -11,6 +11,7 @@ class VIPHomebyAdmin extends React.Component {
       items: [
         { url: '/VIP/Admin', title: 'Special Offer' },
         { url: '/VIP/Admin/Manage', title: 'Offer Manage' },
+        { url: '/VIP/Admin/Manage/Create', title: 'Create Offer' },
       ],
     };
   }

@@ -23,8 +23,8 @@ class ViewAllFAQbyAdmin extends React.Component {
       selectedFAQ: {},
       completed: false,
     };
-     this.showFAQ = this.showFAQ.bind(this); 
-     this.hideFAQ = this.hideFAQ.bind(this); 
+     this.showFAQ = this.showFAQ.bind(this);
+     this.hideFAQ = this.hideFAQ.bind(this);
      this.handleDelete = this.handleDelete.bind(this);
   }
 
@@ -46,13 +46,13 @@ class ViewAllFAQbyAdmin extends React.Component {
         this.setState({
           faq: data,
         });
-      });     
+      });
     })
     .then(() => {
       this.refreshPage();
     });
 
-    this.setState({ 
+    this.setState({
       show: false,
       selectedFAQ: null,
       completed: true,
@@ -129,11 +129,11 @@ class ViewAllFAQbyAdmin extends React.Component {
           <h2 className="PageTitle">FAQ</h2>
           <br />
           <Container>
-              <Tabs id={this.state.faqs._id} activeKey={this.state.key} onSelect={(key) => this.setState({ key })}>   
+              <Tabs id={this.state.faqs._id} activeKey={this.state.key} onSelect={(key) => this.setState({ key })}>
               { this.state.faqCategories.map( (result) => (
               <Tab eventKey={result._id} title={result.name} style={{ color: '#393F44', 'margin-top': '10px' }}>
               {this.state.faqs.map((oneFaq) =>(
-                oneFaq.faqCategory._id != result._id ? '' : 
+                oneFaq.faqCategory._id != result._id ? '' :
                   <Accordion>
                     <Card>
                       <Accordion.Toggle as={Card.Header} eventKey="0">
@@ -156,20 +156,21 @@ class ViewAllFAQbyAdmin extends React.Component {
                            </Card.Body>
                          </Accordion.Collapse>
                     </Card>
-                  </Accordion>      
+                  </Accordion>
               ))}
-              </Tab> 
+              </Tab>
           ))}
-              </Tabs>  
+              </Tabs>
 
 
           </Container>
 
           <Container>
+            <br />
             <Row>
-              <Col xs={8}></Col>
-              <Col xs={7}>
-                <Button variant="outline-info" style={{ marginRight: '480px' }} href="/Request/FAQ/Admin/Create">
+              <Col xs={10}></Col>
+              <Col xs={2}>
+                <Button variant="outline-info"  href="/Request/FAQ/Admin/Create">
                   Create
                 </Button>
               </Col>

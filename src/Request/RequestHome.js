@@ -44,9 +44,7 @@ class RequestHome extends React.Component {
     }
   }
   nextPage() {
-    if (
-      this.state.currentPage < Math.ceil(this.state.filterRequests.length / this.state.perPage)
-    ) {
+    if (this.state.currentPage < Math.ceil(this.state.filterRequests.length / this.state.perPage)) {
       this.setState({
         currentPage: parseInt(this.state.currentPage) + 1,
       });
@@ -96,14 +94,17 @@ class RequestHome extends React.Component {
     this.setState({ filter: event.target.value });
   };
   getRequests(id) {
-    fetch(`${process.env.REACT_APP_API_URL}/request?customer=${id}`)
-      .then((response) => response.json())
-      .then((results) => {
-        this.setState({
-          requests: results,
-          filterRequests: results,
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/request?customer=${id}`)
+        .then((response) => response.json())
+        .then((results) => {
+          resolve(results);
+          this.setState({
+            requests: results,
+            filterRequests: results,
+          });
         });
-      });
+    });
   }
 
   updateRequest() {
@@ -141,6 +142,20 @@ class RequestHome extends React.Component {
         this.setState({ filterRequests: newRequests });
       }
     }
+  }
+  resetAll() {
+    this.getRequests(this.state.account._id).then((data) => {
+      this.setState({
+        requests: data,
+        filterRequests: data,
+        searchType: '',
+        searchDate: '',
+        filter: '',
+        startDate: '',
+        endDate: '',
+        dayValue: 9999,
+      });
+    });
   }
   componentDidMount() {
     fetch(`${process.env.REACT_APP_API_URL}/customer?account=${this.state._id}`)
@@ -226,6 +241,9 @@ class RequestHome extends React.Component {
                 style={{ background: 'none', 'margin-left': '5px' }}
               >
                 <img src={searchIcon} alt="Search" />
+              </Button>
+              <Button variant="link" onClick={this.resetAll.bind(this)}>
+                Reset
               </Button>
               <Form.Control
                 as="select"

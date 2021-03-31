@@ -43,9 +43,7 @@ class RequestHomebyAdmin extends React.Component {
     }
   }
   nextPage() {
-    if (
-      this.state.currentPage < Math.ceil(this.state.filterRequests.length / this.state.perPage)
-    ) {
+    if (this.state.currentPage < Math.ceil(this.state.filterRequests.length / this.state.perPage)) {
       this.setState({
         currentPage: parseInt(this.state.currentPage) + 1,
       });
@@ -68,6 +66,7 @@ class RequestHomebyAdmin extends React.Component {
     });
   }
   handleSearchTypeChange(e) {
+    console.log(e.target.value);
     this.setState({
       searchType: e.target.value,
     });
@@ -96,7 +95,6 @@ class RequestHomebyAdmin extends React.Component {
     this.setState({ filter: event.target.value });
   };
   getRequests() {
-    moment();
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/requests`)
         .then((response) => response.json())
@@ -105,7 +103,22 @@ class RequestHomebyAdmin extends React.Component {
         });
     });
   }
+  resetAll() {
+    this.getRequests().then((data) => {
+      this.setState({
+        requests: data,
+        filterRequests: data,
+        searchType: '',
+        searchDate: '',
+        filter: '',
+        startDate: '',
+        endDate: '',
+        dayValue: 9999,
+      });
+    });
+  }
   updateRequest() {
+    console.log(this.state.searchType);
     if (this.state.startDate && this.state.endDate) {
       const newRequest = this.state.requests.filter((req) => {
         return moment(req.date).isBetween(this.state.startDate, this.state.endDate);
@@ -121,12 +134,14 @@ class RequestHomebyAdmin extends React.Component {
       });
       this.setState({ filterRequests: newRequests });
     } else if (this.state.searchType) {
+      console.log('searchtype');
       if (this.state.searchType == 'title') {
         const newRequests = this.state.requests.filter((req) => {
           return req.title.toLowerCase().includes(this.state.filter.toLowerCase());
         });
         this.setState({ filterRequests: newRequests });
       } else if (this.state.searchType == 'customerID') {
+        console.log('nam');
         const newRequests = this.state.requests.filter((req) => {
           return req.customer.account.userID
             .toLowerCase()
@@ -152,6 +167,7 @@ class RequestHomebyAdmin extends React.Component {
     });
   }
   render() {
+    console.log(this.state.filterRequests);
     const indexOfLast = this.state.currentPage * this.state.perPage;
     const indexOfFirst = indexOfLast - this.state.perPage;
     const currentItems = this.state.filterRequests.slice(indexOfFirst, indexOfLast);
@@ -203,7 +219,7 @@ class RequestHomebyAdmin extends React.Component {
                 style={{ 'margin-left': '30px' }}
                 onChange={this.handleSearchTypeChange.bind(this)}
               >
-                <option>N/A</option>
+                <option value="">N/A</option>
                 <option value="customerID">Customer ID</option>
                 <option value="customerName">Customer Name</option>
                 <option value="title">Title</option>
@@ -221,6 +237,9 @@ class RequestHomebyAdmin extends React.Component {
                 onClick={this.updateRequest.bind(this)}
               >
                 <img src={searchIcon} alt="Search" />
+              </Button>
+              <Button variant="link" onClick={this.resetAll.bind(this)}>
+                Reset
               </Button>
               <Form.Control
                 as="select"
