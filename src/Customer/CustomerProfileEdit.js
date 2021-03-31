@@ -156,7 +156,7 @@ class CustomerProfileEdit extends React.Component {
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
-                <Col xs={1}></Col>
+                <Col xs={2}></Col>
                 <Col>
                   <Link to={`/Customer/${this.props.id}`}>
                     <Button variant="outline-info">Cancel</Button>
