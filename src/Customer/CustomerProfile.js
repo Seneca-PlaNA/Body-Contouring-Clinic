@@ -43,23 +43,22 @@ class CustomerProfile extends React.Component {
         <div className="col-md-1"></div>
         <SideBar items={this.state.items} />
         <div className="col-md-6" style={{ 'margin-left': '80px' }}>
-          <h2 className="PageTitle">Profile
-            <Button style={{'margin-left': '40px'}} variant="outline-info">
-              <Link to={`/Customer/Edit/${this.state._id}`}>
-                Edit
-              </Link>
+          <h2 className="PageTitle">
+            Profile
+            <Button style={{ 'margin-left': '40px' }} variant="outline-info">
+              <Link to={`/Customer/Edit/${this.state._id}`}>Edit</Link>
             </Button>
           </h2>
           <hr />
           <br />
           <Container class="col-md-12">
-            <Form style={{ fontSize: '20px',textAlign: 'left' }}>
+            <Form style={{ fontSize: '20px', textAlign: 'left' }}>
               <Form.Group as={Row}>
                 <Form.Label column md={3}>
                   Name:
                 </Form.Label>
                 <Col sm={8}>
-                  <Form.Label column md={0}>
+                  <Form.Label>
                     {this.state.profile.firstName} {this.state.profile.lastName}
                   </Form.Label>
                 </Col>
@@ -69,9 +68,7 @@ class CustomerProfile extends React.Component {
                   Email:
                 </Form.Label>
                 <Col sm={8}>
-                  <Form.Label>
-                    {this.state.profile.email}
-                  </Form.Label>
+                  <Form.Label>{this.state.profile.email}</Form.Label>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -79,9 +76,7 @@ class CustomerProfile extends React.Component {
                   User Id:
                 </Form.Label>
                 <Col sm={8}>
-                  <Form.Label>
-                    {this.state.profile.userID}
-                  </Form.Label>
+                  <Form.Label>{this.state.profile.userID}</Form.Label>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -89,9 +84,7 @@ class CustomerProfile extends React.Component {
                   Address:
                 </Form.Label>
                 <Col sm={8}>
-                  <Form.Label>
-                    {this.state.profile.address}
-                  </Form.Label>
+                  <Form.Label>{this.state.profile.address}</Form.Label>
                 </Col>
               </Form.Group>
             </Form>
