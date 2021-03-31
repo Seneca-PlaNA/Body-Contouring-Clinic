@@ -26,6 +26,8 @@ class CreateOffer extends React.Component {
       completed: false,
       file: null,
       imageSuccess : false,
+      tempStartDate: null,
+      tempEndDate: null,
     };
     this.imageShow = this.imageShow.bind(this);
     this.imageHide = this.imageHide.bind(this);
