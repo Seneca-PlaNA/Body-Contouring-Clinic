@@ -4,6 +4,7 @@ import SideBar from '../../SideBar/SideBar';
 import { Form, Row, Col, Container, Button, Modal } from 'react-bootstrap';
 import { Redirect } from 'react-router';
 import { post } from 'axios';
+import moment from 'moment';
 
 class CreateOffer extends React.Component {
   constructor(props) {
@@ -29,6 +30,7 @@ class CreateOffer extends React.Component {
       imageSuccess : false,
       tempStartDate: null,
       tempEndDate: null,
+      dateStatus: false,
     };
     this.imageShow = this.imageShow.bind(this);
     this.imageHide = this.imageHide.bind(this);
@@ -122,20 +124,34 @@ class CreateOffer extends React.Component {
 
   onStartDateChange(event) {
     this.setState(() => ({
-      offer: {
-        ...this.state.offer,
-        startDate: event.target.value,
-      },
+      // offer: {
+      //   ...this.state.offer,
+      //   startDate: event.target.value,
+      // },
+      tempStartDate : event.target.value,
     }));
   }
 
   onEndDateChange(event) {
-    this.setState(() => ({
-      offer: {
-        ...this.state.offer,
-        endDate: event.target.value,
-      },
-    }));
+    this.setState({
+      dateStatus : false,
+    });
+    if(moment(this.state.tempStartDate).isBefore(event.target.value))
+    {
+      this.setState(() => ({
+        offer: {
+          ...this.state.offer,
+          startDate: this.state.tempStartDate,
+          endDate: event.target.value,
+        },
+      }));
+    }
+    else
+    {
+      this.setState(()=>({
+        dateStatus : true,
+      }));
+    }
   }
 
   render() {
@@ -203,12 +219,10 @@ class CreateOffer extends React.Component {
                   />
                 </Col>
                 <Col sm={3}>
-                  <Form.Control
-                    controlId="endDate"
-                    type="date"
-                    placeholder="end date"
-                    onChange={this.onEndDateChange.bind(this)}
-                  />
+                  <Form.Control controlId="endDate" type="date" placeholder="end date" onChange={this.onEndDateChange.bind(this)} isInvalid={this.state.dateStatus}/>
+                  <Form.Control.Feedback type='invalid'>
+                    start-date should be before end-date
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>

@@ -2,6 +2,7 @@ import React from 'react';
 import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
 import ListAllOffer from '../ListAllOffer';
+import { Redirect } from 'react-router';
 
 class VIPHomebyAdmin extends React.Component {
   constructor() {
@@ -13,10 +14,37 @@ class VIPHomebyAdmin extends React.Component {
         { url: '/VIP/Admin/Manage', title: 'Offer Manage' },
         { url: '/VIP/Admin/Manage/Create', title: 'Create Offer' },
       ],
+      authName: {},
+      _id: localStorage.getItem('_id'),
     };
   }
 
+  getCustomerProfile(id) {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/account/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        });
+    });
+  }
+
+  componentDidMount() {
+    this.getCustomerProfile(this.state._id).then((data) => {
+      this.setState({
+        authName: data.accountLevelId,
+      });
+      console.log(this.state.authName);
+    });
+  }
   render() {
+    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+
     return (
       <div className="row">
         <div className="col-md-1"></div>

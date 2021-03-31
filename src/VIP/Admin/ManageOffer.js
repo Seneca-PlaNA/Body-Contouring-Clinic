@@ -5,6 +5,7 @@ import { Button, Pagination } from 'react-bootstrap';
 import PopUp from '../../PopUp';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import { Redirect } from 'react-router';
 
 class ManageOffer extends React.Component {
   constructor() {
@@ -18,6 +19,8 @@ class ManageOffer extends React.Component {
       ],
       children: 'Offer',
       offers: [],
+      authName: {},
+      _id: localStorage.getItem('_id'),
       selectedOffer: {},
       currentPage: 1,
       perPage: 8,
@@ -91,6 +94,16 @@ class ManageOffer extends React.Component {
     });
   }
 
+  getCustomerProfile(id) {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/account/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        });
+    });
+  }
+
   componentDidMount() {
     this.getOffers()
       .then((data) => {
@@ -98,8 +111,23 @@ class ManageOffer extends React.Component {
           offers: data,
         });
     });
+
+    this.getCustomerProfile(this.state._id).then((data) => {
+      this.setState({
+        authName: data.accountLevelId,
+      });
+      console.log(this.state.authName);
+    });
+
   }
   render() {
+    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+
     const indexOfLast = this.state.currentPage * this.state.perPage;
     const indexOfFirst = indexOfLast - this.state.perPage;
     const currentItems = this.state.offers.slice(indexOfFirst, indexOfLast);
