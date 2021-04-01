@@ -5,6 +5,7 @@ import { Form, Row, Col, Container, Button, Modal } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
 import { post } from 'axios';
+import moment from 'moment';
 
 class EditOffer extends React.Component {
   constructor(props) {
@@ -23,6 +24,9 @@ class EditOffer extends React.Component {
       completed : false,
       file: null,
       imageSuccess : false,
+      tempStartDate: null,
+      tempEndDate: null,
+      dateStatus: false,
     };
     this.imageShow = this.imageShow.bind(this);
     this.imageHide = this.imageHide.bind(this);
@@ -115,24 +119,58 @@ class EditOffer extends React.Component {
     }));
   }
 
+  // onStartDateChange(event) {
+  //   this.setState(() => ({
+  //     startDate: event.target.value,
+  //     offer:{
+  //       ...this.state.offer,
+  //       startDate: event.target.value,
+  //     }
+  //   }));
+  // }
+
+  // onEndDateChange(event) {
+  //   this.setState(() => ({
+  //     endDate: event.target.value,
+  //     offer:{
+  //       ...this.state.offer,
+  //       endDate: event.target.value,
+  //     }
+  //   }));
+  // }
+
   onStartDateChange(event) {
     this.setState(() => ({
       startDate: event.target.value,
-      offer:{
-        ...this.state.offer,
-        startDate: event.target.value,
-      }
+      // offer: {
+      //   ...this.state.offer,
+      //   startDate: event.target.value,
+      // },
+      tempStartDate : event.target.value,
     }));
   }
 
   onEndDateChange(event) {
-    this.setState(() => ({
-      endDate: event.target.value,
-      offer:{
-        ...this.state.offer,
+    this.setState({
+      dateStatus : false,
+    });
+    if(moment(this.state.tempStartDate).isBefore(event.target.value))
+    {
+      this.setState(() => ({
         endDate: event.target.value,
-      }
-    }));
+        offer: {
+          ...this.state.offer,
+          startDate: this.state.tempStartDate,
+          endDate: event.target.value,
+        },
+      }));
+    }
+    else
+    {
+      this.setState(()=>({
+        dateStatus : true,
+      }));
+    }
   }
 
   componentDidMount() {
@@ -198,7 +236,10 @@ class EditOffer extends React.Component {
                   <Form.Control controlId="startDate" type="date" value={this.state.startDate} onChange={this.onStartDateChange.bind(this)} />
                 </Col>
                 <Col sm={3}>
-                  <Form.Control controlId="endDate" type="date" value={this.state.endDate} onChange={this.onEndDateChange.bind(this)} />
+                  <Form.Control controlId="endDate" type="date" value={this.state.endDate} onChange={this.onEndDateChange.bind(this)} isInvalid={this.state.dateStatus}/>
+                  <Form.Control.Feedback type='invalid'>
+                    start-date should be before end-date
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
