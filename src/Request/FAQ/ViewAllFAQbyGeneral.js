@@ -2,6 +2,7 @@ import React from 'react';
 import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
 import ViewAllFAQ from './ViewAllFAQ';
+import { Redirect } from 'react-router';
 
 class ViewAllFAQbyGeneral extends React.Component {
   constructor() {
@@ -13,10 +14,38 @@ class ViewAllFAQbyGeneral extends React.Component {
         { url: '/Request/Create', title: 'Create Request' },
         { url: '/Request/FAQ', title: 'FAQ' },
       ],
+      _id: localStorage.getItem('_id'),
+      authName: {},
     };
   }
 
+  getCustomerProfile(id) {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/account/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        });
+    });
+  }
+
+  componentDidMount() {
+    this.getCustomerProfile(this.state._id)
+    .then((data)=>{
+      this.setState({
+        authName: data.accountLevelId,
+      });
+    });
+  }
+
   render() {
+    if(this.state.authName == null)
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+
     return (
       <div className="row">
         <div className="col-md-1"></div>
