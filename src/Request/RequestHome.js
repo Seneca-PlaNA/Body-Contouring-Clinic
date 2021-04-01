@@ -83,12 +83,12 @@ class RequestHome extends React.Component {
       status: e.target.value,
     });
   }
-  onStartDateChange = () => {
-    this.setState({ startDate: document.getElementById('startDate').value });
+  onStartDateChange = (e) => {
+    this.setState({ startDate: e.target.value });
   };
 
-  onEndDateChange = () => {
-    this.setState({ endDate: document.getElementById('endDate').value });
+  onEndDateChange = (e) => {
+    this.setState({ endDate: e.target.value });
   };
   handleChange = (event) => {
     this.setState({ filter: event.target.value });
@@ -208,6 +208,7 @@ class RequestHome extends React.Component {
               <Form.Control
                 id="startDate"
                 onChange={this.onStartDateChange.bind(this)}
+                value={this.state.startDate}
                 type="date"
                 style={{ 'margin-left': '30px', 'margin-right': '15px' }}
               />
@@ -215,6 +216,7 @@ class RequestHome extends React.Component {
               <Form.Control
                 id="endDate"
                 onChange={this.onEndDateChange.bind(this)}
+                value={this.state.endDate}
                 type="date"
                 style={{ 'margin-left': '15px' }}
               />

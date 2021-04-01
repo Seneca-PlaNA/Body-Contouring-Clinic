@@ -20,6 +20,7 @@ class RequestHomebyAdmin extends React.Component {
       dayValue: 0,
       status: '',
       startDate: '',
+      endDate: '',
       filter: '',
       requests: [],
       filterRequests: [],
@@ -83,12 +84,12 @@ class RequestHomebyAdmin extends React.Component {
     this.setState({ show: false });
   };
 
-  onStartDateChange = () => {
-    this.setState({ startDate: document.getElementById('startDate').value });
+  onStartDateChange = (e) => {
+    this.setState({ startDate: e.target.value });
   };
 
-  onEndDateChange = () => {
-    this.setState({ endDate: document.getElementById('endDate').value });
+  onEndDateChange = (e) => {
+    this.setState({ endDate: e.target.value });
   };
 
   handleChange = (event) => {
@@ -204,6 +205,7 @@ class RequestHomebyAdmin extends React.Component {
               <Form.Control
                 id="startDate"
                 onChange={this.onStartDateChange.bind(this)}
+                value={this.state.startDate}
                 type="date"
                 style={{ 'margin-left': '30px', 'margin-right': '15px' }}
               />
@@ -211,6 +213,7 @@ class RequestHomebyAdmin extends React.Component {
               <Form.Control
                 id="endDate"
                 onChange={this.onEndDateChange.bind(this)}
+                value={this.state.endDate}
                 type="date"
                 style={{ 'margin-left': '15px' }}
               />
