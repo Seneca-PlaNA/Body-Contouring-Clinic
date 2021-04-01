@@ -183,26 +183,6 @@ class CustomerProfileAdmin extends React.Component {
                   </Form.Control>
                 </Col>
               </Form.Group>
-              {/* <Row>
-              <Col>
-                <Button variant="outline-info" href="/Appointment/Appointments">
-                  View Appointment
-                </Button>
-                &nbsp;
-                <Button variant="outline-info" href="/Request/">
-                  <Link to={`/Request/${this.state.balanceHistory._id}`} >
-                    View Request
-                  </Link>
-                </Button>
-                &nbsp;
-                <Button variant="outline-info" >
-                  <Link to={`/Customer/Admin/Balance/${this.state.balanceHistory._id}`} >
-                    View Balance
-                  </Link>
-                </Button>
-                &nbsp;
-              </Col>
-            </Row> */}
               <Button type="submit" variant="outline-info">
                   Edit
               </Button>

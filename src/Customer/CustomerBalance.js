@@ -82,7 +82,7 @@ class CustomerBalance extends React.Component {
         authName: data.accountLevelId,
       })
 
-      this.getBalance(this.state.balanceHistoryId._id)
+      this.getBalance(this.state.balanceHistoryId == null? null:this.state.balanceHistoryId._id)
       .then((data)=>{
         this.setState({
           balanceHistory: data,
