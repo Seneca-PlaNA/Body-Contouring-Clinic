@@ -22,6 +22,10 @@ class CustomerProfileEdit extends React.Component {
       _id: localStorage.getItem('_id'),
       editProfile:{},
       authName:{},
+      fNameStatus: false,
+      lNameStatus: false,
+      emailStatus: false,
+      adStatus: false,
     };
   }
 
@@ -42,55 +46,116 @@ class CustomerProfileEdit extends React.Component {
   }
 
   onFirstNameChange(event) {
-    this.setState(() => ({
-      profile: {
-        ...this.state.profile,
-        firstName: event.target.value,
-      },
-      editProfile:{
-        ...this.state.editProfile,
-        firstName: event.target.value,
-      }
-    }));
+    this.setState(()=>({
+      fNameStatus: false,
+    }))
+
+    if(event.target.value != ''){
+      this.setState(() => ({
+        profile: {
+          ...this.state.profile,
+          firstName: event.target.value,
+        },
+        editProfile:{
+          ...this.state.editProfile,
+          firstName: event.target.value,
+        }
+      }));
+    }
+    else{
+      this.setState(()=>({
+        profile: {
+          ...this.state.profile,
+          firstName: event.target.value,
+        },
+        fNameStatus: true,
+      }))
+    }
   }
 
   onLastNameChange(event) {
-    this.setState(() => ({
-      profile: {
-        ...this.state.profile,
-        lastName: event.target.value,
-      },
-      editProfile:{
-        ...this.state.editProfile,
-        lastName: event.target.value,
-      }
-    }));
+    this.setState(()=>({
+      lNameStatus: false,
+    }))
+
+    if(event.target.value != ''){
+      this.setState(() => ({
+        profile: {
+          ...this.state.profile,
+          lastName: event.target.value,
+        },
+        editProfile:{
+          ...this.state.editProfile,
+          lastName: event.target.value,
+        }
+      }));
+    }
+    else{
+      this.setState(()=>({
+        profile: {
+          ...this.state.profile,
+          lastName: event.target.value,
+        },
+        lNameStatus: true,
+      }))
+    }
+
   }
 
   onEmailChange(event) {
-    this.setState(() => ({
-      profile: {
-        ...this.state.profile,
-        email: event.target.value,
-      },
-      editProfile:{
-        ...this.state.editProfile,
-        email: event.target.value,
-      }
-    }));
+    this.setState(()=>({
+      emailStatus: false,
+    }))
+
+    if(event.target.value != ''){
+      this.setState(() => ({
+        profile: {
+          ...this.state.profile,
+          email: event.target.value,
+        },
+        editProfile:{
+          ...this.state.editProfile,
+          email: event.target.value,
+        }
+      }));
+    }
+    else{
+      this.setState(()=>({
+        profile: {
+          ...this.state.profile,
+          email: event.target.value,
+        },
+        emailStatus: true,
+      }))
+    }
   }
 
   onAddressChange(event) {
-    this.setState(() => ({
-      profile: {
-        ...this.state.profile,
-        address: event.target.value,
-      },
-      editProfile:{
-        ...this.state.editProfile,
-        address: event.target.value,
-      }
-    }));
+    this.setState(()=>({
+      adStatus: false,
+    }))
+
+    if(event.target.value != ''){
+      this.setState(() => ({
+        profile: {
+          ...this.state.profile,
+          address: event.target.value,
+        },
+        editProfile:{
+          ...this.state.editProfile,
+          address: event.target.value,
+        }
+      }));
+    }
+    else{
+      this.setState(()=>({
+        adStatus: true,
+        profile: {
+          ...this.state.profile,
+          address: event.target.value,
+        },
+      }))
+    }
   }
 
   onPasswordChange(event) {
@@ -156,7 +221,10 @@ class CustomerProfileEdit extends React.Component {
                   First Name:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="text" value={this.state.profile.firstName} onChange={this.onFirstNameChange.bind(this)}/>
+                  <Form.Control type="text" value={this.state.profile.firstName} onChange={this.onFirstNameChange.bind(this)} isInvalid={this.state.fNameStatus}/>
+                  <Form.Control.Feedback type='invalid' > 
+                    First Name should not be null
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -164,11 +232,10 @@ class CustomerProfileEdit extends React.Component {
                   Last Name:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control
-                    type="text"
-                    value={this.state.profile.lastName}
-                    onChange={this.onLastNameChange.bind(this)}
-                  ></Form.Control>
+                  <Form.Control type="text" value={this.state.profile.lastName} onChange={this.onLastNameChange.bind(this)} isInvalid={this.state.lNameStatus}/>
+                  <Form.Control.Feedback type='invalid' > 
+                    Last Name should not be null
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -195,11 +262,10 @@ class CustomerProfileEdit extends React.Component {
                   Email Address:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control
-                    type="email"
-                    value={this.state.profile.email}
-                    onChange={this.onEmailChange.bind(this)}
-                  ></Form.Control>
+                  <Form.Control type="email" value={this.state.profile.email} onChange={this.onEmailChange.bind(this)} isInvalid={this.state.emailStatus}/>
+                  <Form.Control.Feedback type='invalid' > 
+                    Email should not be null
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -207,11 +273,10 @@ class CustomerProfileEdit extends React.Component {
                   Address:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control
-                    type="text"
-                    value={this.state.profile.address}
-                    onChange={this.onAddressChange.bind(this)}
-                  ></Form.Control>
+                  <Form.Control type="text" value={this.state.profile.address} onChange={this.onAddressChange.bind(this)} isInvalid={this.state.adStatus}/>
+                  <Form.Control.Feedback type='invalid' > 
+                    Address should not be null
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
