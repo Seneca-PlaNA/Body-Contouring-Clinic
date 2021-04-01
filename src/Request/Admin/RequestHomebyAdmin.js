@@ -24,6 +24,10 @@ class RequestHomebyAdmin extends React.Component {
       requests: [],
       filterRequests: [],
       searchType: [],
+      eDateStatus: false,
+      sDateStatus: false,
+      tempStart: '',
+      tempEnd: '',
 
       currentPage: 1,
       perPage: 8,
@@ -83,13 +87,47 @@ class RequestHomebyAdmin extends React.Component {
     this.setState({ show: false });
   };
 
-  onStartDateChange = () => {
-    this.setState({ startDate: document.getElementById('startDate').value });
+  onStartDateChange = (e) => {
+    this.setState({
+      eDateStatus: false,
+      sDateStatus: false,
+      startDate: e.target.value,
+    })
+
+    if(moment(e.target.value).isBefore(this.state.endDate)){
+      this.setState({ 
+        eDateStatus: false,
+        sDateStatus: false,
+    });
+    }
+    else{
+      this.setState({
+        sDateStatus: true,
+        eDateStatus: true,
+      })
+    }
   };
 
-  onEndDateChange = () => {
-    this.setState({ endDate: document.getElementById('endDate').value });
-  };
+  onEndDateChange = (e) => {
+    this.setState({
+      eDateStatus: false,
+      sDateStatus: false,
+      endDate: e.target.value,
+    })
+
+    if(moment(this.state.startDate).isBefore(e.target.value)){
+      this.setState({ 
+        eDateStatus: false,
+        sDateStatus: false,
+      });
+    }
+    else{
+      this.setState({
+        sDateStatus: true,
+        eDateStatus: true,
+      })
+    }
+  }
 
   handleChange = (event) => {
     this.setState({ filter: event.target.value });
@@ -185,7 +223,8 @@ class RequestHomebyAdmin extends React.Component {
         <div className="col-md-1"></div>
         <SideBar items={this.state.items} />
         <div className="col-md-8" style={{ 'margin-left': '80px' }}>
-          <h2 className="PageTitle">View All Request</h2>
+          <h2 className="PageTitle">View All Request
+          </h2> 
           <br />
           <div className="contents">
             <Form inline>
@@ -206,6 +245,7 @@ class RequestHomebyAdmin extends React.Component {
                 onChange={this.onStartDateChange.bind(this)}
                 type="date"
                 style={{ 'margin-left': '30px', 'margin-right': '15px' }}
+                isInvalid={this.state.sDateStatus}
               />
               ~
               <Form.Control
@@ -213,6 +253,7 @@ class RequestHomebyAdmin extends React.Component {
                 onChange={this.onEndDateChange.bind(this)}
                 type="date"
                 style={{ 'margin-left': '15px' }}
+                isInvalid={this.state.eDateStatus}
               />
               <Form.Control
                 as="select"

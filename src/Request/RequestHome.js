@@ -27,6 +27,8 @@ class RequestHome extends React.Component {
       startDate: '',
       endDate: '',
       status: '',
+      sDateStatus: false,
+      eDateStatus: false,
 
       currentPage: 1,
       perPage: 4,
@@ -83,16 +85,53 @@ class RequestHome extends React.Component {
       status: e.target.value,
     });
   }
-  onStartDateChange = () => {
-    this.setState({ startDate: document.getElementById('startDate').value });
+
+  onStartDateChange = (e) => {
+    this.setState({
+      eDateStatus: false,
+      sDateStatus: false,
+      startDate: e.target.value,
+    })
+
+    if(moment(e.target.value).isBefore(this.state.endDate)){
+      this.setState({ 
+        eDateStatus: false,
+        sDateStatus: false,
+    });
+    }
+    else{
+      this.setState({
+        sDateStatus: true,
+        eDateStatus: true,
+      })
+    }
   };
 
-  onEndDateChange = () => {
-    this.setState({ endDate: document.getElementById('endDate').value });
-  };
+  onEndDateChange = (e) => {
+    this.setState({
+      eDateStatus: false,
+      sDateStatus: false,
+      endDate: e.target.value,
+    })
+
+    if(moment(this.state.startDate).isBefore(e.target.value)){
+      this.setState({ 
+        eDateStatus: false,
+        sDateStatus: false,
+      });
+    }
+    else{
+      this.setState({
+        sDateStatus: true,
+        eDateStatus: true,
+      })
+    }
+  }
+  
   handleChange = (event) => {
     this.setState({ filter: event.target.value });
   };
+
   getRequests(id) {
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/request?customer=${id}`)
@@ -210,6 +249,7 @@ class RequestHome extends React.Component {
                 onChange={this.onStartDateChange.bind(this)}
                 type="date"
                 style={{ 'margin-left': '30px', 'margin-right': '15px' }}
+                isInvalid={this.state.sDateStatus}
               />
               ~
               <Form.Control
@@ -217,6 +257,7 @@ class RequestHome extends React.Component {
                 onChange={this.onEndDateChange.bind(this)}
                 type="date"
                 style={{ 'margin-left': '15px' }}
+                isInvalid={this.state.eDateStatus}
               />
               <Form.Control
                 as="select"
