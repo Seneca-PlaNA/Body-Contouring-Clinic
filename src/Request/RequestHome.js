@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import SideBar from '../SideBar/SideBar';
 import { Button, Form, Pagination } from 'react-bootstrap';
+import { Redirect } from 'react-router';
 
 class RequestHome extends React.Component {
   constructor() {
@@ -30,6 +31,7 @@ class RequestHome extends React.Component {
 
       currentPage: 1,
       perPage: 4,
+      authName:{},
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -164,13 +166,20 @@ class RequestHome extends React.Component {
         this.setState({
           user: data.account,
           account: data,
+          authName: data.account != null? data.account.accountLevelId: null,
         });
         this.getRequests(this.state.account._id);
       });
   }
 
   render() {
-    console.log(this.state.currentPage);
+    if(this.state.authName == null)
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+
     const indexOfLast = this.state.currentPage * this.state.perPage;
     const indexOfFirst = indexOfLast - this.state.perPage;
     const currentItems = this.state.filterRequests.slice(indexOfFirst, indexOfLast);
