@@ -18,6 +18,8 @@ class EditFAQ extends React.Component {
       faqCategory:[],
       completed: false,
       faqCategories: [],
+      _id: localStorage.getItem('_id'),
+      authName: {},
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -97,9 +99,24 @@ class EditFAQ extends React.Component {
     });
   }
 
-
+  getCustomerProfile() {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/account/${this.state._id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        });
+    });
+  }
 
   componentDidMount() {
+    this.getCustomerProfile(this.state._id)
+    .then((data)=>{
+      this.setState({
+        authName: data.accountLevelId,
+      });
+    });
+
     this.getFAQ(this.props.id).then((data) => {
       this.setState({
         faq: data,
@@ -107,6 +124,7 @@ class EditFAQ extends React.Component {
         faqCategory: data.faqCategory,
       })
     });
+
     this.getFAQCategories().then((data) => {
       this.setState({
         faqCategories: data,
@@ -115,6 +133,13 @@ class EditFAQ extends React.Component {
   }
 
   render() {
+    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+    
     if (this.state.completed) {
       return (
         <Redirect
