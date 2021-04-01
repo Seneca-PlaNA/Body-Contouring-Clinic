@@ -5,6 +5,7 @@ import SideBar from '../../SideBar/SideBar';
 import { Button, Form, Pagination } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import { Redirect } from 'react-router';
 
 class RequestHomebyAdmin extends React.Component {
   constructor() {
@@ -27,6 +28,8 @@ class RequestHomebyAdmin extends React.Component {
 
       currentPage: 1,
       perPage: 8,
+      _id: localStorage.getItem('_id'),
+      authName: {},
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -158,7 +161,24 @@ class RequestHomebyAdmin extends React.Component {
     }
   }
 
+  getCustomerProfile() {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/account/${this.state._id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        });
+    });
+  }
+
   componentDidMount() {
+    this.getCustomerProfile(this.state._id)
+    .then((data)=>{
+      this.setState({
+        authName: data.accountLevelId,
+      });
+    });
+
     this.getRequests().then((data) => {
       this.setState({
         requests: data,
@@ -167,6 +187,13 @@ class RequestHomebyAdmin extends React.Component {
     });
   }
   render() {
+    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+
     console.log(this.state.filterRequests);
     const indexOfLast = this.state.currentPage * this.state.perPage;
     const indexOfFirst = indexOfLast - this.state.perPage;
