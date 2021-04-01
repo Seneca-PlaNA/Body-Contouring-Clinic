@@ -66,7 +66,7 @@ class AppointmentsAdmin extends React.Component {
       searchDate: e.target.value,
     });
   }
-  
+
   handleFilterChange = (event) => {
     this.setState({ filter: event.target.value });
   };
@@ -74,21 +74,21 @@ class AppointmentsAdmin extends React.Component {
   updateAppointment() {
     if (this.state.searchDate) {
       const newAppointments = this.state.appointments.filter((req) => {
-        return moment(req.schedule.date.date).isSame(this.state.searchDate); 
+        return moment(req.schedule.date.date).isSame(this.state.searchDate);
       });
       this.setState({ filterAppointments: newAppointments });
     } else if (this.state.dayValue) {
       this.setState({
-        searchDate : ''
+        searchDate: '',
       });
       const newAppointments = this.state.appointments.filter((req) => {
-        if(this.state.dayValue == "9999")
-        {
+        if (this.state.dayValue == '9999') {
           return moment(req.schedule.date.date);
-        }
-        else
-        {
-          return  moment(req.schedule.date.date).isBetween(moment(), moment().add(parseInt(this.state.dayValue), 'days'));
+        } else {
+          return moment(req.schedule.date.date).isBetween(
+            moment(),
+            moment().add(parseInt(this.state.dayValue), 'days')
+          );
         }
       });
       this.setState({ filterAppointments: newAppointments });
@@ -108,17 +108,17 @@ class AppointmentsAdmin extends React.Component {
     }
   }
 
-  resetAll(){
-    this.getAppointments()
-    .then((data) => {
+  resetAll() {
+    this.getAppointments().then((data) => {
       this.setState({
-        appointments: data, 
+        filter: '',
+        appointments: data,
         filterAppointments: data,
-        searchDate: "",
+        searchDate: '',
         dayValue: 9999,
       });
-  });
-  };
+    });
+  }
 
   getAppointments() {
     return new Promise((resolve) => {
@@ -128,17 +128,16 @@ class AppointmentsAdmin extends React.Component {
           resolve(results);
         });
     });
-  };
+  }
 
   componentDidMount() {
     document.title = 'All Appointments | Body Contouring Clinic';
-    this.getAppointments()
-    .then((data) => {
+    this.getAppointments().then((data) => {
       this.setState({
-        appointments: data, 
+        appointments: data,
         filterAppointments: data,
       });
-  });
+    });
   }
 
   render() {
@@ -147,7 +146,11 @@ class AppointmentsAdmin extends React.Component {
     const currentItems = this.state.filterAppointments.slice(indexOfFirst, indexOfLast);
 
     const pageNums = [];
-    for (let i = 1; i <= Math.ceil(this.state.filterAppointments.length / this.state.perPage); i++) {
+    for (
+      let i = 1;
+      i <= Math.ceil(this.state.filterAppointments.length / this.state.perPage);
+      i++
+    ) {
       pageNums.push(
         <Pagination.Item key={i} id={i} onClick={this.handlePage.bind(this)}>
           {i}
@@ -155,81 +158,101 @@ class AppointmentsAdmin extends React.Component {
       );
     }
     return (
-        <div className="row">
-          <div className="col-md-1"></div>
-          <SideBar items={this.state.items} />
-          <div className="col-md-8" style={{ 'margin-left': '80px' }}>
-            <h2 className="PageTitle">Appointments</h2>
-            <div className="contents">
-              <Form inline >
-                <Form.Control as="select" name="days" value={this.state.dayValue} onChange={this.handleDayChange}>
-                  <option value="9999">All</option>
-                  <option value="7">within 7 days</option>
-                  <option value="30">within 30 days</option>
-                  <option value="60">within 60 days</option>
-                </Form.Control>
-                <Form.Control type="date" style={{ 'margin-left': '30px' }} value={this.state.searchDate} onChange={this.handleSearchDateChange.bind(this)}/>
-                <Form.Control as="select" style={{ 'margin-left': '30px' }} value={this.state.searchType} onChange={this.handleSearchTypeChange.bind(this)}>
-                  <option>-- select --</option>
-                  <option value="customer">Customer</option>
-                  <option value="service">Service</option>
-                </Form.Control>
-                <Form.Control
-                      type="text"
-                      placeholder="Search.."
-                      style={{ 'margin-left': '30px' }}
-                      value={this.state.filter}
-                      onChange={this.handleFilterChange.bind(this)}
-                ></Form.Control>
-                <Button
-                      variant="outline-*"
-                      style={{ background: 'none', 'margin-left': '5px' }}
-                      onClick={this.updateAppointment.bind(this)}
-                >
-                  <img src={searchIcon} alt="Search" />
-                </Button>
-                <Button variant="link" onClick={this.resetAll.bind(this)}>Reset</Button>
-              </Form>
-              <table>
-                    <tr>
-                      <th>Customer</th>
-                      <th>Date</th>
-                      <th>Time</th>
-                      <th>Service</th>
-                      <th>Price</th>
-                      <th>Status</th>
-                    </tr>
-                    {currentItems.map((result, index)=>(
-                      // eslint-disable-next-line react/jsx-key
-                      <tr key={index}>
-                      <td>{result.customer.account.firstName} {result.customer.account.lastName}</td>
-                      <td>{result.schedule == null ? '' : moment(result.schedule.date.date).format('ll')}</td>
-                      <td>{result.schedule == null ? '' : result.schedule.time.time}</td>
-                      <td>{result.service.name}</td>
-                      <td>${result.service.price}</td>
-                      <td>{result.confirmation == "false" ? "Wait" : "Confirmed"}</td>
-                      <td>
-                        <Link to={`/Appointment/Admin/Appointment/${result._id}`}>
-                          <Button variant="outline-secondary">
-                            details
-                          </Button>
-                        </Link>
-                      </td>
-                    </tr>
-                    ))}
-               </table>
-                  <br />
-                  <Pagination style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Pagination.Prev onClick={this.prevPage.bind(this)} />
-                    <Pagination>{pageNums}</Pagination>
-                    <Pagination.Next onClick={this.nextPage.bind(this)} />
-                  </Pagination>
-            </div>
-            <br/><br/>
+      <div className="row">
+        <div className="col-md-1"></div>
+        <SideBar items={this.state.items} />
+        <div className="col-md-8" style={{ 'margin-left': '80px' }}>
+          <h2 className="PageTitle">Appointments</h2>
+          <div className="contents">
+            <Form inline>
+              <Form.Control
+                as="select"
+                name="days"
+                value={this.state.dayValue}
+                onChange={this.handleDayChange}
+              >
+                <option value="9999">All</option>
+                <option value="7">within 7 days</option>
+                <option value="30">within 30 days</option>
+                <option value="60">within 60 days</option>
+              </Form.Control>
+              <Form.Control
+                type="date"
+                style={{ 'margin-left': '30px' }}
+                value={this.state.searchDate}
+                onChange={this.handleSearchDateChange.bind(this)}
+              />
+              <Form.Control
+                as="select"
+                style={{ 'margin-left': '30px' }}
+                value={this.state.searchType}
+                onChange={this.handleSearchTypeChange.bind(this)}
+              >
+                <option>-- select --</option>
+                <option value="customer">Customer</option>
+                <option value="service">Service</option>
+              </Form.Control>
+              <Form.Control
+                type="text"
+                placeholder="Search.."
+                style={{ 'margin-left': '30px' }}
+                value={this.state.filter}
+                onChange={this.handleFilterChange.bind(this)}
+              ></Form.Control>
+              <Button
+                variant="outline-*"
+                style={{ background: 'none', 'margin-left': '5px' }}
+                onClick={this.updateAppointment.bind(this)}
+              >
+                <img src={searchIcon} alt="Search" />
+              </Button>
+              <Button variant="link" onClick={this.resetAll.bind(this)}>
+                Reset
+              </Button>
+            </Form>
+            <table>
+              <tr>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Service</th>
+                <th>Price</th>
+                <th>Status</th>
+              </tr>
+              {currentItems.map((result, index) => (
+                // eslint-disable-next-line react/jsx-key
+                <tr key={index}>
+                  <td>
+                    {result.customer.account.firstName} {result.customer.account.lastName}
+                  </td>
+                  <td>
+                    {result.schedule == null ? '' : moment(result.schedule.date.date).format('ll')}
+                  </td>
+                  <td>{result.schedule == null ? '' : result.schedule.time.time}</td>
+                  <td>{result.service.name}</td>
+                  <td>${result.service.price}</td>
+                  <td>{result.confirmation == 'false' ? 'Wait' : 'Confirmed'}</td>
+                  <td>
+                    <Link to={`/Appointment/Admin/Appointment/${result._id}`}>
+                      <Button variant="outline-secondary">details</Button>
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </table>
+            <br />
+            <Pagination style={{ display: 'flex', justifyContent: 'center' }}>
+              <Pagination.Prev onClick={this.prevPage.bind(this)} />
+              <Pagination>{pageNums}</Pagination>
+              <Pagination.Next onClick={this.nextPage.bind(this)} />
+            </Pagination>
           </div>
-        </div>  
-          )
-  }      
+          <br />
+          <br />
+        </div>
+      </div>
+    );
+  }
 }
 
 export default AppointmentsAdmin;
