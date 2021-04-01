@@ -3,6 +3,7 @@ import SideBar from '../SideBar/SideBar';
 import '../App.css';
 import { Form, Row, Col, Container, Table, Pagination } from 'react-bootstrap';
 import moment from 'moment';
+import { Redirect } from 'react-router';
 
 class CustomerBalance extends React.Component {
   constructor(props) {
@@ -20,6 +21,7 @@ class CustomerBalance extends React.Component {
       balanceHistoryId: [],
       currentPage: 1,
       perPage: 8,
+      authName: {},
     };
     this.getCustomerProfile = this.getCustomerProfile.bind(this);
   }
@@ -76,7 +78,8 @@ class CustomerBalance extends React.Component {
     .then((data)=>{
       this.setState({
         profile: data,
-        balanceHistoryId : data.balanceHistory
+        balanceHistoryId : data.balanceHistory,
+        authName: data.accountLevelId,
       })
 
       this.getBalance(this.state.balanceHistoryId._id)
@@ -90,6 +93,13 @@ class CustomerBalance extends React.Component {
   }
   
   render() {
+    if(this.state.authName == null)
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+
     const indexOfLast = this.state.currentPage * this.state.perPage;
     const indexOfFirst = indexOfLast - this.state.perPage;
     const currentItems = this.state.balances.slice(indexOfFirst, indexOfLast);

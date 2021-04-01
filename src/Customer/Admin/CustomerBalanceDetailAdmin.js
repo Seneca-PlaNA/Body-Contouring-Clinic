@@ -4,6 +4,7 @@ import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { Redirect } from 'react-router';
 
 class CustomerBalanceDetailAdmin extends React.Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class CustomerBalanceDetailAdmin extends React.Component {
       },
       currentPage: 1,
       perPage: 8,
+      authName:{},
     };
     this.handleAddBalance = this.handleAddBalance.bind(this);
   }
@@ -122,7 +124,22 @@ class CustomerBalanceDetailAdmin extends React.Component {
   });
   }
 
+  getAuthProfile(id) {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/account/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        });
+    });
+  }
   componentDidMount() {
+    this.getAuthProfile(this.state._id).then((data) => {
+      this.setState({
+        authName: data.accountLevelId,
+      });
+    });
+
     this.getCustomerProfile(this.props.id)
     .then((data)=>{
       this.setState({
@@ -140,6 +157,14 @@ class CustomerBalanceDetailAdmin extends React.Component {
   }
   
   render() {
+
+    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+
     const indexOfLast = this.state.currentPage * this.state.perPage;
     const indexOfFirst = indexOfLast - this.state.perPage;
     const currentItems = this.state.balances.slice(indexOfFirst, indexOfLast);

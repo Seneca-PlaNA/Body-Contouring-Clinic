@@ -3,7 +3,7 @@ import SideBar from '../../SideBar/SideBar';
 import '../../App.css';
 import searchIcon from '../../resources/searchIcon.png';
 import { Form, Button, Table, Pagination } from 'react-bootstrap';
-// import { Redirect } from 'react-router';
+import { Redirect } from 'react-router';
 
 class StaffHomeAdmin extends React.Component {
   constructor(prop) {
@@ -16,6 +16,7 @@ class StaffHomeAdmin extends React.Component {
               { url: `/Customer/Admin/Balance`, title: 'Balance Management' },
       ],
       _id: localStorage.getItem('_id'),
+      authName: {},
       filterData:[],
       seachStaff: '',
       currentPage: 1,
@@ -108,18 +109,19 @@ class StaffHomeAdmin extends React.Component {
     this.getStaffProfile(this.state._id).then((data) => {
       this.setState({
         admin: data,
+        authName: data.accountLevelId,
       });
     });
   }
 
   render() {
-    // if(this.state.completed)
-    // {
-    //   return <Redirect push to={{
-    //     pathname: `/Staff/Admin`
-    //   }}/>
-    // }
 
+    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
     const indexOfLast = this.state.currentPage * this.state.perPage;
     const indexOfFirst = indexOfLast - this.state.perPage;
     const currentItems = this.state.filterData.slice(indexOfFirst, indexOfLast);

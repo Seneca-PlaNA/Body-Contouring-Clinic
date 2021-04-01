@@ -4,6 +4,7 @@ import '../../App.css';
 import searchIcon from '../../resources/searchIcon.png';
 import { Form, Button, Table, Pagination } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router';
 
 class CustomerBalanceAdmin extends React.Component {
   constructor(prop) {
@@ -20,6 +21,7 @@ class CustomerBalanceAdmin extends React.Component {
       seachCustomer: '',
       currentPage: 1,
       perPage: 8,
+      authName: {},
     };
   }
 
@@ -91,11 +93,20 @@ class CustomerBalanceAdmin extends React.Component {
     this.getCustomerProfile(this.state._id).then((data) => {
       this.setState({
         admin: data,
+        authName: data.accountLevelId,
       });
     });
   }
 
   render() {
+
+    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+    
     const indexOfLast = this.state.currentPage * this.state.perPage;
     const indexOfFirst = indexOfLast - this.state.perPage;
     const currentItems = this.state.filterData.slice(indexOfFirst, indexOfLast);

@@ -17,6 +17,8 @@ class CustomerProfileAdmin extends React.Component {
       ],
       accountLevels: [],
       balanceHistory: [],
+      _id: localStorage.getItem('_id'),
+      authName: {},
     };
   }
 
@@ -77,6 +79,11 @@ class CustomerProfileAdmin extends React.Component {
   }
 
   componentDidMount() {
+    this.getCustomerProfile(this.state._id).then((data)=>{
+      this.setState({
+        authName: data.accountLevelId,
+      });
+    });
     this.getCustomerProfile(this.props.id).then((data) => {
       this.setState({
         account: data,
@@ -100,6 +107,13 @@ class CustomerProfileAdmin extends React.Component {
   }
 
   render() {
+    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+
     if(this.state.completed)
     {
       return <Redirect push to={{

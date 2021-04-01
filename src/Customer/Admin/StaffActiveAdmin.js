@@ -22,6 +22,7 @@ class StaffActiveAdmin extends React.Component {
       currentPage: 1,
       perPage: 8,
       completed: false,
+      authName: {},
     };
     this.requestActiveStaff = this.requestActiveStaff.bind(this);
   }
@@ -114,11 +115,19 @@ class StaffActiveAdmin extends React.Component {
     this.getCustomerProfile(this.state._id).then((data) => {
       this.setState({
         admin: data,
+        authName: data.accountLevelId,
       });
     });
   }
 
   render() {
+    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+
     if(this.state.completed)
     {
       return <Redirect push to={{

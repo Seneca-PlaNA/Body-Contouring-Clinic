@@ -4,6 +4,7 @@ import '../App.css';
 import SideBar from '../SideBar/SideBar';
 import { Container, Form, Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router';
 
 class CustomerProfile extends React.Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class CustomerProfile extends React.Component {
         { url: `/Customer/Balance/${localStorage.getItem('_id')}`, title: 'Balance' },
       ],
       _id: localStorage.getItem('_id'),
+      authName: {},
     };
   }
 
@@ -33,11 +35,19 @@ class CustomerProfile extends React.Component {
     this.getCustomerProfile(this.state._id).then((data) => {
       this.setState({
         profile: data,
+        authName: data.accountLevelId,
       });
     });
   }
 
   render() {
+    if(this.state.authName == null)
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+
     return (
       <div className="row">
         <div className="col-md-1"></div>

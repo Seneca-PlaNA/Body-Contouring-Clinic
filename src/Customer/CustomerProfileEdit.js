@@ -4,6 +4,7 @@ import '../App.css';
 import SideBar from '../SideBar/SideBar';
 import { Form, Container, Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router';
 
 class CustomerProfileEdit extends React.Component {
   constructor(props) {
@@ -19,7 +20,8 @@ class CustomerProfileEdit extends React.Component {
       tempPwd: '',
       pwdConfirmed: false,
       _id: localStorage.getItem('_id'),
-      editProfile:{}
+      editProfile:{},
+      authName:{},
     };
   }
 
@@ -128,11 +130,18 @@ class CustomerProfileEdit extends React.Component {
       .then((data) => {
         this.setState({
           profile: data,
+          authName: data.accountLevelId,
         });
       });
   }
 
   render() {
+    if(this.state.authName == null)
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
     return (
       <div className="row">
         <div className="col-md-1"></div>

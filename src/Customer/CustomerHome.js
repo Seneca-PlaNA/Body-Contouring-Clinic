@@ -4,6 +4,7 @@ import '../App.css';
 import { Table } from 'react-bootstrap';
 import moment from 'moment';
 import {Link} from 'react-router-dom';
+import { Redirect } from 'react-router';
 
 class CustomerHome extends React.Component {
   constructor(props) {
@@ -21,6 +22,7 @@ class CustomerHome extends React.Component {
       requests:[],
       balanceHistory:{},
       balances:[],
+      authName:{},
     };
   }
 
@@ -64,14 +66,23 @@ class CustomerHome extends React.Component {
       this.setState({
         customer: data,
         account: data.account,
+        authName: data.account != null? data.account.accountLevelId: null,
       });
       this.getAppointments(this.state.customer._id);
       this.getRequests(this.state.customer._id);
-      this.getBalances(this.state.account.balanceHistory);
+      //this.getBalances(this.state.account.balanceHistory);
+      this.getBalances(this.state.account != null? this.state.account.balanceHistory: null)
     });
   }
 
   render() {
+    if(this.state.authName == null)
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+
     return (
       <div className="row">
         <div className="col-md-1"></div>
