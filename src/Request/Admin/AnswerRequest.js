@@ -16,31 +16,54 @@ class AnswerRequest extends React.Component {
       request: {},
       request_answer: '',
       completed: false,
+      answer: {
+        answer: '',
+        status: '',
+      },
       _id: localStorage.getItem('_id'),
+      answerNull: false,
+      statusNull: false,
       authName: {},
     };
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log(this.state.request);
-    fetch(`${process.env.REACT_APP_API_URL}/request/${this.props.id}`, {
-      method: 'PUT',
-      body: JSON.stringify(this.state.request),
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
+    this.setState({ 
+      answerNull: false,
+      statusNull: false, 
     })
-      .then((response) => response.json())
-      .then(() => this.setState({ completed: true }))
-      .catch((err) => console.log(err));
+
+    if(this.state.request.answer == '' || this.state.answer.status == '' )
+    {
+      this.state.request.answer == '' ? this.setState({ answerNull: true }) : this.setState({ answerNull: false });
+      this.state.answer.status == '' ? this.setState({ statusNull: true }) : this.setState({ statusNull: false });
+    }
+    else
+    {
+      fetch(`${process.env.REACT_APP_API_URL}/request/${this.props.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(this.state.answer),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then(() => this.setState({ completed: true }))
+        .catch((err) => console.log(err));
+    }
+    
   }
 
   onAnswerChange(e) {
     this.setState(() => ({
       request: {
         ...this.state.request,
+        answer: e.target.value,
+      },
+      answer: {
+        ...this.state.answer,
         answer: e.target.value,
       },
     }));
@@ -50,6 +73,10 @@ class AnswerRequest extends React.Component {
     this.setState(() => ({
       request: {
         ...this.state.request,
+        status: e.target.value,
+      },
+      answer: {
+        ...this.state.answer,
         status: e.target.value,
       },
     }));
@@ -129,16 +156,12 @@ class AnswerRequest extends React.Component {
                     A: RE: {this.state.request.title}{' '}
                     {' (' + moment(this.state.request.date).format('ll') + ')'}
                   </Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={3}
-                    value={this.state.request.answer}
-                    onChange={this.onAnswerChange.bind(this)}
-                  />
+                  <Form.Control as="textarea" rows={3} value={this.state.request.answer} onChange={this.onAnswerChange.bind(this)} isInvalid={this.state.answerNull} />
+                  <Form.Control.Feedback type='invalid'>Answer is required</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
                   <Form.Label style={reqTitle}>Request Status</Form.Label>
-                  <Form.Control as="select" onChange={this.onStatusChange.bind(this)}>
+                  <Form.Control as="select" onChange={this.onStatusChange.bind(this)} isInvalid={this.state.statusNull}>
                     <option default>
                       ----Choose----
                     </option>
@@ -146,6 +169,7 @@ class AnswerRequest extends React.Component {
                     <option value="in-progress">In-Progress</option>
                     <option value="solved">Solved</option>
                   </Form.Control>
+                  <Form.Control.Feedback type='invalid'>Status is required</Form.Control.Feedback>
                 </Form.Group>
                 <Container>
                   <Row>
