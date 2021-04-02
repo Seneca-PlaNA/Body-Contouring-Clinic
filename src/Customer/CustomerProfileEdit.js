@@ -223,7 +223,7 @@ class CustomerProfileEdit extends React.Component {
                 <Col sm={6}>
                   <Form.Control type="text" value={this.state.profile.firstName} onChange={this.onFirstNameChange.bind(this)} isInvalid={this.state.fNameStatus}/>
                   <Form.Control.Feedback type='invalid' > 
-                    First Name should not be null
+                    First Name is required
                   </Form.Control.Feedback>
                 </Col>
               </Form.Group>
@@ -234,7 +234,7 @@ class CustomerProfileEdit extends React.Component {
                 <Col sm={6}>
                   <Form.Control type="text" value={this.state.profile.lastName} onChange={this.onLastNameChange.bind(this)} isInvalid={this.state.lNameStatus}/>
                   <Form.Control.Feedback type='invalid' > 
-                    Last Name should not be null
+                    Last Name is required
                   </Form.Control.Feedback>
                 </Col>
               </Form.Group>
@@ -264,7 +264,7 @@ class CustomerProfileEdit extends React.Component {
                 <Col sm={6}>
                   <Form.Control type="email" value={this.state.profile.email} onChange={this.onEmailChange.bind(this)} isInvalid={this.state.emailStatus}/>
                   <Form.Control.Feedback type='invalid' > 
-                    Email should not be null
+                    Email is required
                   </Form.Control.Feedback>
                 </Col>
               </Form.Group>
@@ -275,7 +275,7 @@ class CustomerProfileEdit extends React.Component {
                 <Col sm={6}>
                   <Form.Control type="text" value={this.state.profile.address} onChange={this.onAddressChange.bind(this)} isInvalid={this.state.adStatus}/>
                   <Form.Control.Feedback type='invalid' > 
-                    Address should not be null
+                    Address is required
                   </Form.Control.Feedback>
                 </Col>
               </Form.Group>
