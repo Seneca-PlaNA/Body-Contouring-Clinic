@@ -5,7 +5,6 @@ import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 import { Redirect } from 'react-router';
 import { PropTypes } from 'prop-types';
 
-
 class EditFAQ extends React.Component {
   constructor(props) {
     super(props);
@@ -14,26 +13,30 @@ class EditFAQ extends React.Component {
         { url: '/Request/Admin', title: 'View All Request' },
         { url: '/Request/FAQ/Admin', title: 'FAQ' },
       ],
-      faq:[],
-      faqCategory:[],
+      faq: [],
+      faqCategory: [],
       completed: false,
       faqCategories: [],
+      isSave: true,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    fetch(`${process.env.REACT_APP_API_URL}/faq/${this.props.id}`,{
-      method: "PUT",
-      body: JSON.stringify(this.state.faq),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },})
-    .then((response) => (response.json()))
-    .then(()=> this.setState({completed: true}))
-    .catch((err) => (console.log(err)));
+    if (this.state.isSave) {
+      fetch(`${process.env.REACT_APP_API_URL}/faq/${this.props.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(this.state.faq),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then(() => this.setState({ completed: true }))
+        .catch((err) => console.log(err));
+    }
   }
 
   onCategoryChange(event) {
@@ -41,6 +44,7 @@ class EditFAQ extends React.Component {
       faq: {
         ...this.state.faq,
         faqCategory: event.target.value,
+        isSave: true,
       },
     }));
   }
@@ -51,7 +55,7 @@ class EditFAQ extends React.Component {
         ...this.state.faqCategory,
         _id: event.target.value,
       },
-      faq:{
+      faq: {
         ...this.state.faq,
         faqCategory: event.target.value,
       },
@@ -59,22 +63,43 @@ class EditFAQ extends React.Component {
   }
 
   onTitleChange(event) {
-    this.setState(() => ({
-      faq:{
-        ...this.state.faq,
-        title: event.target.value
-      }
-    }));
+    if (event.target.value == '') {
+      this.setState(() => ({
+        isSave: false,
+        faq: {
+          ...this.state.faq,
+          title: event.target.value,
+        },
+      }));
+    } else {
+      this.setState(() => ({
+        isSave: true,
+        faq: {
+          ...this.state.faq,
+          title: event.target.value,
+        },
+      }));
+    }
   }
 
   onContentsChange(event) {
-    console.log(event.target.value);
-    this.setState(() => ({
-      faq:{
-        ...this.state.faq,  
-        contents: event.target.value,
-      }
-    }));
+    if (event.target.value == '') {
+      this.setState(() => ({
+        isSave: false,
+        faq: {
+          ...this.state.faq,
+          title: event.target.value,
+        },
+      }));
+    } else {
+      this.setState(() => ({
+        isSave: true,
+        faq: {
+          ...this.state.faq,
+          title: event.target.value,
+        },
+      }));
+    }
   }
 
   getFAQ(id) {
@@ -97,15 +122,13 @@ class EditFAQ extends React.Component {
     });
   }
 
-
-
   componentDidMount() {
     this.getFAQ(this.props.id).then((data) => {
       this.setState({
         faq: data,
         faqId: data._id,
         faqCategory: data.faqCategory,
-      })
+      });
     });
     this.getFAQCategories().then((data) => {
       this.setState({
@@ -139,8 +162,9 @@ class EditFAQ extends React.Component {
                   Category:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control as="select"
-                  onChange={this.onFAQCategoryChange.bind(this)}
+                  <Form.Control
+                    as="select"
+                    onChange={this.onFAQCategoryChange.bind(this)}
                     value={this.state.faqCategory._id}
                   >
                     <option value="">--Choose--</option>
@@ -157,7 +181,12 @@ class EditFAQ extends React.Component {
                   Title:
                 </Form.Label>
                 <Col sm={6}>
-                <Form.Control type="text" placeholder="FAQ Title" value={this.state.faq.title} onChange={this.onTitleChange.bind(this)}></Form.Control>
+                  <Form.Control
+                    type="text"
+                    placeholder="FAQ Title"
+                    value={this.state.faq.title}
+                    onChange={this.onTitleChange.bind(this)}
+                  ></Form.Control>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -165,7 +194,12 @@ class EditFAQ extends React.Component {
                   Contents:
                 </Form.Label>
                 <Col sm={6}>
-                <Form.Control as="textarea" rows={3} value={this.state.faq.contents} onChange={this.onContentsChange.bind(this)}/>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    value={this.state.faq.contents}
+                    onChange={this.onContentsChange.bind(this)}
+                  />
                 </Col>
               </Form.Group>
 
@@ -195,10 +229,9 @@ class EditFAQ extends React.Component {
       </div>
     );
   }
-
 }
 EditFAQ.propTypes = {
- id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
 };
 
 export default EditFAQ;

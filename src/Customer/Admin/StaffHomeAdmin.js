@@ -154,7 +154,7 @@ class StaffHomeAdmin extends React.Component {
                 type="text"
                 placeholder="Search staff"
                 value={this.state.seachStaff}
-                style={{'margin-left': '750px' }}
+                style={{'margin-left': '800px' }}
                 onChange={this.handleSearchStaffChange.bind(this)}
               ></Form.Control>
               <Button
