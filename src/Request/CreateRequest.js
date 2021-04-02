@@ -32,6 +32,7 @@ class CreateRequest extends React.Component {
       completed: false,
       file: null,
       imageSuccess : false,
+      authName: {},
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.imageShow = this.imageShow.bind(this);
@@ -144,6 +145,7 @@ class CreateRequest extends React.Component {
         });
     });
   }
+
   getServiceCategories() {
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/service-categories`)
@@ -153,7 +155,26 @@ class CreateRequest extends React.Component {
         });
     });
   }
+
+  getCustomerProfile(id) {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/account/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        });
+    });
+  }
+
   componentDidMount() {
+
+    this.getCustomerProfile(this.state._id)
+    .then((data)=>{
+      this.setState({
+        authName: data.accountLevelId,
+      });
+    });
+
     fetch(`${process.env.REACT_APP_API_URL}/customer?account=${this.state._id}`)
       .then((response) => response.json())
       .then((data) => {
@@ -175,6 +196,13 @@ class CreateRequest extends React.Component {
     });
   }
   render() {
+    if(this.state.authName == null)
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+    
     if (this.state.completed) {
       return (
         <Redirect
