@@ -28,6 +28,7 @@ class CreateAppointment extends React.Component {
       filterData: [],
       technicians: [],
       dateData: [],
+      uniqueDates: [],
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
@@ -85,25 +86,25 @@ class CreateAppointment extends React.Component {
   }
 
   onTechnicianChange(event) {
-    console.log(event.target.value);
     fetch(`${process.env.REACT_APP_API_URL}/staffWorkSchedules?staff=${event.target.value}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         this.setState({
           filterData: data,
+          uniqueDates: data
+            .map((d) => d.date)
+            .map(({ _id, date }) => ({ _id, date }))
+            .filter((obj, pos, arr) => {
+              return arr.map((mapObj) => mapObj._id).indexOf(obj._id) === pos;
+            }),
         });
       });
   }
 
   onDateChange(event) {
-    // var pureDate = (event.target.value).split("-");
-    // var searchDate = pureDate[1] + "/" + pureDate[2] +"/" + pureDate[0];
-    console.log(event.target.value);
     fetch(`${process.env.REACT_APP_API_URL}/workSchedule?date=${event.target.value}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         this.setState({
           dateData: data,
         });
@@ -126,7 +127,6 @@ class CreateAppointment extends React.Component {
   }
 
   onScheduleChange(event) {
-    console.log('id: ' + event.target.value);
     this.setState({
       appointment: {
         ...this.state.appointment,
@@ -152,7 +152,6 @@ class CreateAppointment extends React.Component {
         this.setState({
           technicians: data,
         });
-        console.log(this.state.technicians);
       });
   }
 
@@ -226,12 +225,12 @@ class CreateAppointment extends React.Component {
                 <Col sm="8">
                   <Form.Control inline as="select" onChange={this.onDateChange.bind(this)}>
                     <option value="">-- select Date --</option>
-                    {this.state.filterData.map(
+                    {this.state.uniqueDates.map(
                       (result) =>
                         // eslint-disable-next-line react/jsx-key
-                        moment(result.date.date).isAfter() && (
-                          <option value={result.date.date}>
-                            {moment(result.date.date).format('ll')}
+                        moment(result.date).isAfter() && (
+                          <option value={result.date}>
+                            {moment(result.date).format('ll')}
                           </option>
                         )
                     )}

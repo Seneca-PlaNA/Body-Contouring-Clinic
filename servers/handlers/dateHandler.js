@@ -73,3 +73,15 @@ exports.deleteDateById = function (id) {
       });
   });
 };
+
+exports.viewDateByInput = function (query) {
+  return new Promise((resolve, reject) => {
+    Date.find(query)
+      .then((dates) => {
+        resolve(dates);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
