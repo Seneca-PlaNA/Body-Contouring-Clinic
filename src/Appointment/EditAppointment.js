@@ -227,7 +227,7 @@ class EditAppointment extends React.Component {
                         Service(s):
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control inline as="select" className="col-md-7" value={this.state.service._id} onChange={this.onServiceChange.bind(this)}>
+                        <Form.Control inline as="select" value={this.state.service._id} onChange={this.onServiceChange.bind(this)}>
                         {this.state.allServices.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
                             <option key={result._id} value={result._id}>{result.name}</option>
@@ -293,7 +293,7 @@ class EditAppointment extends React.Component {
                     <Row>
                       <Col></Col>
                       <Col md="auto">
-                        <Button variant="outline-secondary" href="/Appointment/">
+                        <Button variant="outline-secondary" href="/Appointment/Appointments">
                           Cancel
                         </Button>
                       </Col>
