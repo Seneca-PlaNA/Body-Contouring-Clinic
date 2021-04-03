@@ -32,6 +32,13 @@ class EditAppointmentAdmin extends React.Component {
       filterData: [],
       technician:[],
       printDate: String,
+      editAppmnt:{
+        contactNumber: '',
+        schedule: '',
+      },
+      technicianNull: false,
+      contactNumberNull: false,
+      timeNull: true,
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
@@ -47,9 +54,21 @@ class EditAppointmentAdmin extends React.Component {
 
   handlSubmit(event) {
     event.preventDefault();
+
+    this.setState({
+      contactNumberNull: false,
+      technicianNull: false,
+    });
+
+    if(this.state.appointment.contactNumber == '' || this.state.editAppmnt.schedule == '')
+    {
+      this.state.appointment.contactNumber == '' ? this.setState({contactNumberNull: true}) : this.setState({contactNumberNull: false});
+      this.state.editAppmnt.schedule == '' ? this.setState({technicianNull: true}) : this.setState({technicianNull: false});
+    }
+    else{
     fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`,{
       method: "PUT",
-      body: JSON.stringify(this.state.appointment),
+      body: JSON.stringify(this.state.editAppmnt),
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -57,12 +76,17 @@ class EditAppointmentAdmin extends React.Component {
     .then((response) => (response.json()))
     .then(()=> this.setState({completed: true}))
     .catch((err) => (console.log(err)));
+    }
   }
 
   onContactNumChange(event){
     this.setState(() => ({
       appointment:{
         ...this.state.appointment,
+        contactNumber: event.target.value,
+      },
+      editAppmnt: {
+        ...this.state.editAppmnt,
         contactNumber: event.target.value,
       }
     }));
@@ -73,6 +97,10 @@ class EditAppointmentAdmin extends React.Component {
       appointment:{
         ...this.state.appointment,
         specialRequest: event.target.value,
+      },
+      editAppmnt: {
+        ...this.state.editAppmnt,
+        specialRequest: event.target.value,
       }
     }));
   }
@@ -81,6 +109,10 @@ class EditAppointmentAdmin extends React.Component {
     this.setState(() => ({
       appointment:{
         ...this.state.appointment,
+        service: event.target.value,
+      },
+      editAppmnt: {
+        ...this.state.editAppmnt,
         service: event.target.value,
       }
     }));
@@ -115,6 +147,7 @@ class EditAppointmentAdmin extends React.Component {
     });
     this.setState({
       technician: technicianData,
+      timeNull: false,
   }); 
   }
 
@@ -123,6 +156,10 @@ class EditAppointmentAdmin extends React.Component {
     this.setState({
       appointment:{
         ...this.state.appointment,
+        schedule: event.target.value,
+      },
+      editAppmnt: {
+        ...this.state.editAppmnt,
         schedule: event.target.value,
       }
     });
@@ -214,13 +251,14 @@ class EditAppointmentAdmin extends React.Component {
                         Time
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)}>
+                        <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)} isInvalid={this.state.timeNull}>
                           <option value="">-- select time --</option>
                           {this.state.filterData.map((result)=>(
                               // eslint-disable-next-line react/jsx-key
                               <option value={result.time._id}>{result.time.time}</option>
                           ))}
                           </Form.Control>
+                          <Form.Control.Feedback type='invalid'>Time is required</Form.Control.Feedback>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="staff">
@@ -228,13 +266,14 @@ class EditAppointmentAdmin extends React.Component {
                         Technician:
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control as="select" onChange={this.onScheduleChange.bind(this)}>
+                        <Form.Control as="select" onChange={this.onScheduleChange.bind(this)} isInvalid={this.state.technicianNull}>
                           <option value="">-- select technician --</option>
                           {this.state.technician.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
                             <option value={result._id}>{result.staff.account.firstName} {result.staff.account.lastName}</option>
                           ))}
                         </Form.Control>
+                        <Form.Control.Feedback type='invalid'>Technician is required</Form.Control.Feedback>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
@@ -242,7 +281,8 @@ class EditAppointmentAdmin extends React.Component {
                         Contact Number:
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control placeholder="647-596-9521" value={this.state.appointment.contactNumber} onChange={this.onContactNumChange.bind(this)}/>
+                        <Form.Control placeholder="647-596-9521" value={this.state.appointment.contactNumber} onChange={this.onContactNumChange.bind(this)} isInvalid={this.state.contactNumberNull}/>
+                        <Form.Control.Feedback type='invalid'>Contact Number is required</Form.Control.Feedback>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="exampleForm.ControlTextarea1">

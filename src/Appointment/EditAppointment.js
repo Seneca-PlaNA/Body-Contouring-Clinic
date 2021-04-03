@@ -38,6 +38,7 @@ class EditAppointment extends React.Component {
       },
       technicianNull: false,
       contactNumberNull: false,
+      timeNull: true,
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
@@ -145,6 +146,7 @@ class EditAppointment extends React.Component {
     })
     this.setState({
       technician: technicianData,
+      timeNull: false,
   }); 
   }
 
@@ -238,8 +240,7 @@ class EditAppointment extends React.Component {
                         Date
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control type="date" value={this.state.printDate} onChange={this.onDateChange.bind(this)} isInvalid={this.state.technicianNull}/>
-                        <Form.Control.Feedback type='invalid'>Check date option</Form.Control.Feedback>
+                        <Form.Control type="date" value={this.state.printDate} onChange={this.onDateChange.bind(this)}/>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
@@ -247,14 +248,14 @@ class EditAppointment extends React.Component {
                         Time
                       </Form.Label>
                       <Col sm="6">
-                        <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)} isInvalid={this.state.technicianNull}>
+                        <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)} isInvalid={this.state.timeNull}>
                           <option value="">-- select time --</option>
                           {this.state.filterData.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
                             <option value={result.time._id}>{result.time.time}</option>
                           ))}
                           </Form.Control>
-                          <Form.Control.Feedback type='invalid'>Check time option</Form.Control.Feedback>
+                          <Form.Control.Feedback type='invalid'>Time is required</Form.Control.Feedback>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
@@ -269,7 +270,7 @@ class EditAppointment extends React.Component {
                             <option value={result._id}>{result.staff.account.firstName} {result.staff.account.lastName}</option>
                           ))}
                         </Form.Control>
-                        <Form.Control.Feedback type="invalid">Check technician option</Form.Control.Feedback>
+                        <Form.Control.Feedback type="invalid">Technician is required</Form.Control.Feedback>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
