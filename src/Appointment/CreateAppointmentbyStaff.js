@@ -304,7 +304,7 @@ class CreateAppointment extends React.Component {
                     placeholder="647-596-9521"
                     value={this.state.appointment.contactNumber}
                     onChange={this.onContactNumChange.bind(this)}
-                    isInvalid={this.state.contactNumberNull}
+                    isInvalid={this.state.contactNumberNull }
                   />
                   <Form.Control.Feedback type="invalid">Contact Number is required</Form.Control.Feedback>
                 </Col>
