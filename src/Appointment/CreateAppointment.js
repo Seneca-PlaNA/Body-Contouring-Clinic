@@ -16,15 +16,22 @@ class CreateAppointment extends React.Component {
       _id: localStorage.getItem('_id'),
       appointment: {
         customer: String,
-        contactNumber: String,
+        contactNumber: '',
         specialRequest: String,
-        service: String,
-        schedule: String,
+        service: '',
+        schedule: '',
+        confirmation: 'false',
       },
       services: [],
       customer: {},
       filterData: [],
       technician:[],
+      tempTime: '',
+      serviceNull: false,
+      timeNull: false,
+      dateNull: false,
+      technicianNull: false,
+      contactNumNull: false,
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
@@ -40,6 +47,13 @@ class CreateAppointment extends React.Component {
 
   handlSubmit(event) {
     event.preventDefault();
+
+    this.state.appointment.service == ''? this.setState({serviceNull: true}):this.setState({serviceNull: false}); 
+    this.state.appointment.schedule == ''? this.setState({technicianNull: true}):this.setState({technicianNull: false}); 
+    this.state.filterData == ''? this.setState({dateNull: true}):this.setState({dateNull: false}); 
+    this.state.tempTime == '' ? this.setState({timeNull: true}):this.setState({timeNull: false}); 
+    this.state.appointment.contactNumber == ''? this.setState({contactNumNull: true}):this.setState({contactNumNull: false});
+
     fetch(`${process.env.REACT_APP_API_URL}/create-appointment`,{
       method: "POST",
       body: JSON.stringify(this.state.appointment),
@@ -58,7 +72,8 @@ class CreateAppointment extends React.Component {
         ...this.state.appointment,
         customer: this.state.customer._id,
         service: event.target.value,
-      }
+      },
+      serviceNull: false,
     }));
   }
 
@@ -67,7 +82,8 @@ class CreateAppointment extends React.Component {
       appointment:{
         ...this.state.appointment,
         contactNumber: event.target.value,
-      }
+      },
+      contactNumNull: false
     }));
   }
 
@@ -84,12 +100,15 @@ class CreateAppointment extends React.Component {
     var pureDate = (event.target.value).split("-");
     var searchDate = pureDate[1] + "/" + pureDate[2] +"/" + pureDate[0];
     console.log(searchDate);
+    
     fetch(`${process.env.REACT_APP_API_URL}/workSchedule?date=${searchDate}`)
     .then(response => response.json())  
     .then((data)=>{
       console.log(data);
       this.setState({
-        filterData: data
+        filterData: data,
+        dateNull: false,
+        timeNull: true,
       })
     });
   }
@@ -105,6 +124,8 @@ class CreateAppointment extends React.Component {
     })
     this.setState({
       technician: technicianData,
+      timeNull: false,
+      tempTime: event.target.value,
   }); 
   }
 
@@ -114,7 +135,8 @@ class CreateAppointment extends React.Component {
       appointment:{
         ...this.state.appointment,
         schedule: event.target.value,
-      }
+      },
+      technicianNull: false,
     });
   }
 
@@ -159,13 +181,14 @@ class CreateAppointment extends React.Component {
                         Service(s):
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control inline as="select" onChange={this.onServiceChange.bind(this)}>
+                        <Form.Control inline as="select" onChange={this.onServiceChange.bind(this)} isInvalid={this.state.serviceNull}>
                         <option>-- select service --</option>
                         {this.state.services.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
                             <option key={result._id} value={result._id}>{result.name}</option>
                           ))}
                         </Form.Control>
+                        <Form.Control.Feedback type="invalid">Service is required</Form.Control.Feedback>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
@@ -173,7 +196,8 @@ class CreateAppointment extends React.Component {
                         Date
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control type="date" onChange={this.onDateChange.bind(this)}/>
+                        <Form.Control type="date" onChange={this.onDateChange.bind(this)} isInvalid={this.state.dateNull}/>
+                        <Form.Control.Feedback type="invalid">Date is required</Form.Control.Feedback>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
@@ -181,13 +205,14 @@ class CreateAppointment extends React.Component {
                         Time
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)}>
+                        <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)} isInvalid={this.state.timeNull}>
                           <option value="">-- select time --</option>
                           {this.state.filterData.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
                               <option value={result.time._id}>{result.time.time}</option>
                           ))}
                           </Form.Control>
+                          <Form.Control.Feedback type="invalid">Time is required</Form.Control.Feedback>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
@@ -195,13 +220,14 @@ class CreateAppointment extends React.Component {
                         Technician:
                       </Form.Label>
                       <Col sm="8">
-                      <Form.Control as="select" onChange={this.onScheduleChange.bind(this)}>
+                      <Form.Control as="select" onChange={this.onScheduleChange.bind(this)} isInvalid={this.state.technicianNull}>
                           <option value="">-- select technician --</option>
                           {this.state.technician.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
                             <option value={result._id}>{result.staff.account.firstName} {result.staff.account.lastName}</option>
                           ))}
                         </Form.Control>
+                        <Form.Control.Feedback type="invalid">Technician is required</Form.Control.Feedback>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
@@ -209,7 +235,8 @@ class CreateAppointment extends React.Component {
                         Contact Number:
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control placeholder="647-596-9521" value={this.state.appointment.contactNumber} onChange={this.onContactNumChange.bind(this)}/>
+                        <Form.Control placeholder="647-596-9521" value={this.state.appointment.contactNumber} onChange={this.onContactNumChange.bind(this)} isInvalid={this.state.contactNumNull}/>
+                        <Form.Control.Feedback type="invalid">Contact Number is required</Form.Control.Feedback>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
