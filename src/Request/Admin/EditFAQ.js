@@ -204,7 +204,7 @@ class EditFAQ extends React.Component {
         <div className="col-md-1"></div>
         <SideBar items={this.state.items} />
         <div className="col-md-8" style={{ 'margin-left': '80px' }}>
-          <h2 className="PageTitle">Edit FAQ for title</h2>
+          <h2 className="PageTitle">Edit FAQ</h2>
           <br />
           <Container>
             <Form onSubmit={this.handleSubmit.bind(this)} method="PUT">
