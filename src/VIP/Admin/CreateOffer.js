@@ -18,11 +18,12 @@ class CreateOffer extends React.Component {
       ],
       // create offer data
       offer: {
-        name: String,
+        name: '',
         services: [],
-        startDate: Date,
-        endDate: Date,
-        description: String,
+        price: '',
+        startDate: '',
+        endDate: '',
+        description: '',
         imageURL: String,
       },
       completed: false,
@@ -33,6 +34,11 @@ class CreateOffer extends React.Component {
       dateStatus: false,
       _id: localStorage.getItem('_id'),
       authName: {},
+      nameNull: false,
+      priceNull: false,
+      description: false,
+      sDateNull: false,
+      eDateNull: false,
     };
     this.imageShow = this.imageShow.bind(this);
     this.imageHide = this.imageHide.bind(this);
@@ -51,6 +57,11 @@ class CreateOffer extends React.Component {
   }
   handlSubmit(event) {
     event.preventDefault();
+    this.state.offer.name == '' ? this.setState({ nameNull: true }) : this.setState({nameNull: false})
+    this.state.offer.description == '' ? this.setState({ descNull: true }) : this.setState({descNull: false})
+    this.state.offer.price == '' ? this.setState({ priceNull: true }) : this.setState({priceNull: false})
+    this.state.offer.startDate == '' ? this.setState({ sDateNull: true }) : this.setState({sDateNull: false})
+    this.state.offer.endDate == '' ? this.setState({ eDateNull: true }) : this.setState({eDateNull: false})
     fetch(`${process.env.REACT_APP_API_URL}/create-offer`,{
       method: "POST",
       body: JSON.stringify(this.state.offer),
@@ -102,7 +113,8 @@ class CreateOffer extends React.Component {
       offer: {
         ...this.state.offer,
         name: event.target.value
-      }
+      },
+      nameNull: false,
     }));
   }
 
@@ -112,6 +124,7 @@ class CreateOffer extends React.Component {
         ...this.state.offer,
         description: event.target.value,
       },
+      descNull: false,
     }));
   }
 
@@ -121,12 +134,14 @@ class CreateOffer extends React.Component {
         ...this.state.offer,
         price: event.target.value,
       },
+      priceNull: false,
     }));
   }
 
   onStartDateChange(event) {
     this.setState(() => ({
       tempStartDate : event.target.value,
+      sDateNull: false,
     }));
   }
 
@@ -148,6 +163,7 @@ class CreateOffer extends React.Component {
     {
       this.setState(()=>({
         dateStatus : true,
+        eDateNull: false,
       }));
     }
   }
@@ -206,8 +222,12 @@ class CreateOffer extends React.Component {
                   <Form.Control
                     type="text"
                     placeholder="Offer Title"
-                    onChange={this.onNameChange.bind(this)}
-                  />
+                    onChange={this.onNameChange.bind(this)} 
+                    isInvalid={this.state.nameNull}>
+                  </Form.Control>
+                  <Form.Control.Feedback type="invalid">
+                    Title is required
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row} controlId="description">
@@ -218,8 +238,12 @@ class CreateOffer extends React.Component {
                   <Form.Control
                     as="textarea"
                     rows={3}
-                    onChange={this.onDescriptionChange.bind(this)}
-                  />
+                    onChange={this.onDescriptionChange.bind(this)} 
+                    isInvalid={this.state.descNull}>
+                  </Form.Control>
+                  <Form.Control.Feedback type="invalid">
+                    Content is required
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -227,27 +251,58 @@ class CreateOffer extends React.Component {
                   Price:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control rows={3} placeholder="120" onChange={this.onPriceChange.bind(this)}></Form.Control>
+                  <Form.Control 
+                    rows={3} 
+                    placeholder="120" 
+                    onChange={this.onPriceChange.bind(this)} 
+                    isInvalid={this.state.priceNull}>
+                  </Form.Control>
+                  <Form.Control.Feedback type="invalid">
+                    Price is required
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row} inline>
                 <Form.Label column sm={2}>
                   Active Date
                 </Form.Label>
+                {(this.state.offer.startDate != '' || this.state.offer.endDate != '') ? 
+                <>
+                <Col sm={3}>
+                  <Form.Control
+                    controlId="startDate"
+                    type="date"
+                    placeholder="start date"
+                    onChange={this.onStartDateChange.bind(this)}>
+                  </Form.Control>
+                </Col>
+                <Col sm={3}>
+                  <Form.Control controlId="endDate" type="date" placeholder="end date" onChange={this.onEndDateChange.bind(this)} isInvalid={this.state.dateStatus}/>
+                  <Form.Control.Feedback type='invalid'>
+                    start-date should be before end-date
+                  </Form.Control.Feedback>                
+                </Col>
+                </> : <>
                 <Col sm={3}>
                   <Form.Control
                     controlId="startDate"
                     type="date"
                     placeholder="start date"
                     onChange={this.onStartDateChange.bind(this)}
-                  />
-                </Col>
-                <Col sm={3}>
-                  <Form.Control controlId="endDate" type="date" placeholder="end date" onChange={this.onEndDateChange.bind(this)} isInvalid={this.state.dateStatus}/>
-                  <Form.Control.Feedback type='invalid'>
-                    start-date should be before end-date
+                    isInvalid={this.state.sDateNull}>
+                  </Form.Control>
+                  <Form.Control.Feedback type="invalid">
+                    Start Date is required
                   </Form.Control.Feedback>
                 </Col>
+                <Col sm={3}>
+                  <Form.Control controlId="endDate" type="date" placeholder="end date" onChange={this.onEndDateChange.bind(this)} isInvalid={this.state.eDateNull}/>
+                  <Form.Control.Feedback type='invalid'>
+                    End Date is required
+                  </Form.Control.Feedback>                
+                </Col>
+                </>
+              } 
               </Form.Group>
               <Form.Group as={Row}>
                 <Form.Label column sm={2}>
