@@ -19,14 +19,27 @@ class EditFAQ extends React.Component {
       faqCategories: [],
       _id: localStorage.getItem('_id'),
       authName: {},
-      isSave: true,
+      faqCatNull: false,
+      titleNull: false,
+      contentsNull: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    if (this.state.isSave) {
+    this.setState({
+      faqCatNull: false,
+      titleNull: false,
+      contentsNull: false,
+    })
+    if(this.state.faq.faqCategory == '' || this.state.faq.title == '' || this.state.faq.contents == '')
+    {
+      this.state.faq.faqCategory == '' ? this.setState({ faqCatNull: true }) : this.setState({ faqCatNull: false });
+      this.state.faq.title == '' ? this.setState({ titleNull: true }) : this.setState({ titleNull: false });
+      this.state.faq.contents == '' ? this.setState({ contentsNull: true }) : this.setState({ contentsNull: false });
+      }
+      else{
       fetch(`${process.env.REACT_APP_API_URL}/faq/${this.props.id}`, {
         method: 'PUT',
         body: JSON.stringify(this.state.faq),
@@ -38,21 +51,15 @@ class EditFAQ extends React.Component {
         .then((response) => response.json())
         .then(() => this.setState({ completed: true }))
         .catch((err) => console.log(err));
-    }
-  }
-
-  onCategoryChange(event) {
-    this.setState(() => ({
-      faq: {
-        ...this.state.faq,
-        faqCategory: event.target.value,
-        isSave: true,
-      },
-    }));
+      }
   }
 
   onFAQCategoryChange(event) {
     this.setState(() => ({
+      faqCatNull: false,
+    }))
+    if(event.target.value != ''){
+      this.setState(() => ({
       faqCategory: {
         ...this.state.faqCategory,
         _id: event.target.value,
@@ -62,44 +69,61 @@ class EditFAQ extends React.Component {
         faqCategory: event.target.value,
       },
     }));
+  } else {
+    this.setState(() => ({
+      faqCategory: {
+        ...this.state.faqCategory,
+        _id: event.target.value,
+      },
+      faq: {
+        ...this.state.faq,
+        faqCategory: event.target.value,
+      },
+      faqCatNull: true,
+    }));
+  }
   }
 
   onTitleChange(event) {
-    if (event.target.value == '') {
+    this.setState(() => ({
+      titleNull: false,
+    }))
+    if(event.target.value != ''){
       this.setState(() => ({
-        isSave: false,
         faq: {
           ...this.state.faq,
           title: event.target.value,
         },
-      }));
-    } else {
+    }));
+  } else {
       this.setState(() => ({
-        isSave: true,
         faq: {
           ...this.state.faq,
           title: event.target.value,
         },
-      }));
+        titleNull: true,
+      }))
     }
   }
 
   onContentsChange(event) {
+    this.setState(() => ({
+      contentsNull: false,
+    }))
     if (event.target.value == '') {
       this.setState(() => ({
-        isSave: false,
         faq: {
           ...this.state.faq,
-          title: event.target.value,
+          contents: event.target.value,
         },
       }));
     } else {
       this.setState(() => ({
-        isSave: true,
         faq: {
           ...this.state.faq,
-          title: event.target.value,
+          contents: event.target.value,
         },
+        contentsNull: true,
       }));
     }
   }
@@ -193,6 +217,7 @@ class EditFAQ extends React.Component {
                     as="select"
                     onChange={this.onFAQCategoryChange.bind(this)}
                     value={this.state.faqCategory._id}
+                    isInvalid={this.state.faqCatNull}
                   >
                     <option value="">--Choose--</option>
                     {this.state.faqCategories.map((faqCategory) => (
@@ -201,6 +226,7 @@ class EditFAQ extends React.Component {
                       </option>
                     ))}
                   </Form.Control>
+                  <Form.Control.Feedback type="invalid">FAQ Category is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -213,7 +239,9 @@ class EditFAQ extends React.Component {
                     placeholder="FAQ Title"
                     value={this.state.faq.title}
                     onChange={this.onTitleChange.bind(this)}
-                  ></Form.Control>
+                    isInvalid={this.state.titleNull}
+                  />
+                  <Form.Control.Feedback type="invalid">Title is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -226,7 +254,9 @@ class EditFAQ extends React.Component {
                     rows={3}
                     value={this.state.faq.contents}
                     onChange={this.onContentsChange.bind(this)}
+                    isInvalid={this.state.contentsNull}
                   />
+                  <Form.Control.Feedback type="invalid">Content is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
 
