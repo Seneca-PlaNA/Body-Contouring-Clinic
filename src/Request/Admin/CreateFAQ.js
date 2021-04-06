@@ -17,20 +17,26 @@ class CreateFAQ extends React.Component {
       ],
       // create faq data
       faq: {
-        faqCategory: String,
-        title: String,
-        contents: String,
+        faqCategory: '',
+        title: '',
+        contents: '',
       },
       faqCategories:[],
       completed: false,
       _id: localStorage.getItem('_id'),
       authName: {},
+      faqCatNull: false,
+      titleNull: false,
+      contentsNull: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(event) {
     event.preventDefault();
+    this.state.faq.faqCategory == '' ? this.setState({ faqCatNull: true }) : this.setState({ faqCatNull: false });
+    this.state.faq.title == '' ? this.setState({ titleNull: true }) : this.setState({ titleNull: false });
+    this.state.faq.contents == '' ? this.setState({ contentsNull: true }) : this.setState({ contentsNull: false });
     fetch(`${process.env.REACT_APP_API_URL}/create-faq`,{
       method: "POST",
       body: JSON.stringify(this.state.faq),
@@ -49,6 +55,7 @@ class CreateFAQ extends React.Component {
         ...this.state.faq,
         faqCategory: event.target.value,
       },
+      faqCatNull: false,
     }));
   }
 
@@ -57,7 +64,8 @@ class CreateFAQ extends React.Component {
       faq:{
         ...this.state.faq,
         title: event.target.value
-      }
+      },
+      titleNull: false,
     }));
   }
 
@@ -66,7 +74,8 @@ class CreateFAQ extends React.Component {
       faq:{
         ...this.state.faq,  
         contents: event.target.value,
-      }
+      },
+      contentsNull: false,
     }));
   }
 
@@ -133,7 +142,7 @@ class CreateFAQ extends React.Component {
                   Category:
                 </Form.Label>
                  <Col sm={6}>
-                  <Form.Control as="select" onChange={this.onFAQCategoryChange.bind(this)}>    
+                  <Form.Control as="select" onChange={this.onFAQCategoryChange.bind(this)} isInvalid={this.state.faqCatNull}>    
                     <option value="">--Choose--</option>
                     {this.state.faqCategories.map((faqCategory) => (
                       <option key={faqCategory._id} value={faqCategory._id}>
@@ -141,7 +150,7 @@ class CreateFAQ extends React.Component {
                       </option>
                     ))}
                   </Form.Control>
-                  
+                  <Form.Control.Feedback type="invalid">FAQ Category is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -149,7 +158,8 @@ class CreateFAQ extends React.Component {
                   Title:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="text" placeholder="FAQ Title" onChange={this.onTitleChange.bind(this)}></Form.Control>
+                  <Form.Control type="text" placeholder="FAQ Title" onChange={this.onTitleChange.bind(this)} isInvalid={this.state.titleNull}/>
+                  <Form.Control.Feedback type="invalid">Title is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -157,7 +167,8 @@ class CreateFAQ extends React.Component {
                   Contents:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control as="textarea" rows={3} onChange={this.onContentsChange.bind(this)}/>
+                  <Form.Control as="textarea" rows={3} onChange={this.onContentsChange.bind(this)} isInvalid={this.state.contentsNull}/>
+                  <Form.Control.Feedback type="invalid">Content is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               
