@@ -280,7 +280,7 @@ class CreateRequest extends React.Component {
                 <Form.Label column sm={2}>
                   Attach File:
                 </Form.Label>
-                <Form.File type="file" onChange={this.onFormSubmit.bind(this)}/>
+                <Form.File type="file" onChange={this.onFormSubmit.bind(this)} accept=".gif, .jpg, .png .pdf .txt"/>
                 <Button variant="outline-secondary" onClick={this.fileUpload.bind(this)}>
                       Upload
                 </Button>

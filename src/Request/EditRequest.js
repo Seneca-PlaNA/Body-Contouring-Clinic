@@ -304,7 +304,7 @@ class EditRequest extends React.Component {
                 <Form.Label column sm={2}>
                   Attach File:
                 </Form.Label>
-                <Form.File type="file" onChange={this.onFormSubmit.bind(this)} aria-describedby="fileSuccessBlock"/>
+                <Form.File type="file" onChange={this.onFormSubmit.bind(this)} aria-describedby="fileSuccessBlock" accept=".gif, .jpg, .png .pdf .txt"/>
                 <Button variant="outline-secondary" id="fileSuccessBlock" onClick={this.fileUpload.bind(this)}>
                       Upload
                 </Button>
