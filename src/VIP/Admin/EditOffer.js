@@ -29,6 +29,9 @@ class EditOffer extends React.Component {
       dateStatus: false,
       _id: localStorage.getItem('_id'),
       authName: {},
+      nameNull: false,
+      descNull: false,
+      priceNull: false,
     };
     this.imageShow = this.imageShow.bind(this);
     this.imageHide = this.imageHide.bind(this);
@@ -45,19 +48,33 @@ class EditOffer extends React.Component {
     })
   }
 
-  handlSubmit(event) {
+  handleSubmit(event) {
     event.preventDefault();
-    console.log(this.state.offer);
-    fetch(`${process.env.REACT_APP_API_URL}/offer/${this.props.id}`,{
-      method: "PUT",
-      body: JSON.stringify(this.state.offer),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },})
-    .then((response) => (response.json()))
-    .then(()=> this.setState({completed: true}))
-    .catch((err) => (console.log(err)));
+    this.setState({
+      nameNull: false,
+      descNull: false,
+      priceNull: false,
+    });
+    if(this.state.offer.name == '' || this.state.offer.description == '' || this.state.offer.price == '')
+    {
+    this.state.offer.name == '' ? this.setState({ nameNull: true }) : this.setState({nameNull: false})
+    this.state.offer.description == '' ? this.setState({ descNull: true }) : this.setState({descNull: false})
+    this.state.offer.price == '' ? this.setState({ priceNull: true }) : this.setState({priceNull: false})
+    }
+    
+    else{
+      fetch(`${process.env.REACT_APP_API_URL}/offer/${this.props.id}`,{
+        method: "PUT",
+        body: JSON.stringify(this.state.offer),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+      })
+      .then((response) => (response.json()))
+      .then(()=> this.setState({completed: true}))
+      .catch((err) => (console.log(err)));
+    }
   }
 
   onFormSubmit(event){
@@ -94,40 +111,76 @@ class EditOffer extends React.Component {
   }
 
   onNameChange(event) {
-    this.setState(() => ({
-      offer: {
-        ...this.state.offer,
-        name: event.target.value,
-      }
-    }));
-    console.log(this.state.offer);
+    this.setState(()=>({
+      nameNull: false,
+    }))
+    if(event.target.value != ''){
+      this.setState(() => ({     
+        isSave: false,
+        offer: {
+          ...this.state.offer,
+          name: event.target.value,
+        }
+      }));
+    } else{
+      this.setState(()=>({
+        isSave: true,
+        offer: {
+          ...this.state.offer,
+          name: event.target.value,
+        },
+        nameNull: true,
+      }))
+    }
   }
 
   onDescriptionChange(event) {
-    this.setState(() => ({
-      offer: {
-       ...this.state.offer,
-        description: event.target.value,
-      }
-    }));
+    this.setState(()=>({
+      descNull: false,
+    }))
+    if(event.target.value != ''){
+        this.setState(() => ({
+          offer: {
+            ...this.state.offer,
+            description: event.target.value,
+          }
+      }));
+    } else{
+      this.setState(()=>({
+        offer: {
+          ...this.state.offer,
+          description: event.target.value,
+        },
+        descNull: true,
+      }))
+    }
   }
 
   onPriceChange(event) {
-    this.setState(() => ({
-      offer: {
-        ...this.state.offer,
-        price: event.target.value,
-      },
-    }));
+    this.setState(()=>({
+      priceNull: false,
+    }))
+    if(event.target.value != ''){
+      this.setState(() => ({
+        offer: {
+          ...this.state.offer,
+          price: event.target.value,
+        },
+      }));
+    } else{
+      this.setState(()=>({
+        offer: {
+          ...this.state.offer,
+          price: event.target.value,
+        },
+        priceNull: true,
+      }))
+    }
   }
 
   onStartDateChange(event) {
     this.setState(() => ({
       startDate: event.target.value,
-      // offer: {
-      //   ...this.state.offer,
-      //   startDate: event.target.value,
-      // },
       tempStartDate : event.target.value,
     }));
   }
@@ -207,13 +260,16 @@ class EditOffer extends React.Component {
           <h2 className="PageTitle">Edit Offer</h2>
           <br />
           <Container>
-            <Form onSubmit={this.handlSubmit.bind(this)} method="PUT">
+            <Form onSubmit={this.handleSubmit.bind(this)} method="PUT">
               <Form.Group as={Row}>
                 <Form.Label column sm={2}>
                   Title:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="text" placeholder="Offer Title" value={this.state.offer.name} onChange={this.onNameChange.bind(this)}></Form.Control>
+                  <Form.Control type="text" placeholder="Offer Title" value={this.state.offer.name} onChange={this.onNameChange.bind(this)} isInvalid={this.state.nameNull}></Form.Control>
+                  <Form.Control.Feedback type='invalid' > 
+                    Title is required
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -221,7 +277,10 @@ class EditOffer extends React.Component {
                   Contents:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control as="textarea" rows={3} value={this.state.offer.description} onChange={this.onDescriptionChange.bind(this)} />
+                  <Form.Control as="textarea" rows={3} value={this.state.offer.description} onChange={this.onDescriptionChange.bind(this)}  isInvalid={this.state.descNull}/>
+                  <Form.Control.Feedback type='invalid' > 
+                    Content is required
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -229,7 +288,10 @@ class EditOffer extends React.Component {
                   Price:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control rows={3} value={this.state.offer.price} onChange={this.onPriceChange.bind(this)}></Form.Control>
+                  <Form.Control rows={3} value={this.state.offer.price} onChange={this.onPriceChange.bind(this)} isInvalid={this.state.priceNull}/>
+                  <Form.Control.Feedback type='invalid' > 
+                    Price is required
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row} inline>
@@ -237,10 +299,10 @@ class EditOffer extends React.Component {
                   Active Date
                 </Form.Label>
                 <Col sm={3}>
-                  <Form.Control controlId="startDate" type="date" value={this.state.startDate} onChange={this.onStartDateChange.bind(this)} />
+                  <Form.Control controlId="startDate" type="date" value={this.state.startDate} onChange={this.onStartDateChange.bind(this)}/>
                 </Col>
                 <Col sm={3}>
-                  <Form.Control controlId="endDate" type="date" value={this.state.endDate} onChange={this.onEndDateChange.bind(this)} isInvalid={this.state.dateStatus}/>
+                  <Form.Control controlId="endDate" type="date" value={this.state.endDate} onChange={this.onEndDateChange.bind(this)} isInvalid={this.state.dateStatus} />
                   <Form.Control.Feedback type='invalid'>
                     start-date should be before end-date
                   </Form.Control.Feedback>
@@ -291,7 +353,7 @@ class EditOffer extends React.Component {
 }
 
 EditOffer.propTypes = {
-  id : PropTypes.string.isRequired
+  id : PropTypes.string.isRequired,
 }
 
 export default EditOffer;
