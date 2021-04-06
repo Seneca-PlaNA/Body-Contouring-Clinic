@@ -15,26 +15,44 @@ class CreateAppointmentAdmin extends React.Component {
       title: 'Appointment Saved!',
       completed: false,
       appointment: {
-        customer: String,
-        contactNumber: String,
+        customer: '',
+        contactNumber: '',
         specialRequest: String,
-        service: String,
-        schedule: String,
+        service: '',
+        schedule: '',
         confirmation: 'false',
       },
       services: [],
       customers: [],
       filterData: [],
+      uniqueDates: [],
       technicians: [],
       dateData: [],
+      schedule: {
+        booked: 'true',
+      },
+      serviceNull: false, 
+      technicianNull: false,
+      tempTechnician: '',
+      tempDate: '',
+      dateNull: false,
+      timeNull: false,
+      contactNumberNull: false,
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
   }
 
   handlSubmit(event) {
-    console.log(this.state.appointment);
     event.preventDefault();
+
+    this.state.appointment.customer == ''? this.setState({customerNull: true}):this.setState({customerNull: false}); 
+    this.state.appointment.service == ''? this.setState({serviceNull: true}): this.setState({serviceNull: false});
+    this.state.tempTechnician == ''? this.setState({technicianNull: true}): this.setState({technicianNull: false});
+    this.state.tempDate == ''? this.setState({dateNull: true}): this.setState({dateNull: false});
+    this.state.appointment.schedule == ''? this.setState({timeNull: true}): this.setState({timeNull: false});
+    this.state.appointment.contactNumber == ''? this.setState({contactNumberNull: true}): this.setState({contactNumberNull: false});
+
     fetch(`${process.env.REACT_APP_API_URL}/create-appointment`, {
       method: 'POST',
       body: JSON.stringify(this.state.appointment),
@@ -46,6 +64,16 @@ class CreateAppointmentAdmin extends React.Component {
       .then((response) => response.json())
       .then(() => this.setState({ completed: true }))
       .catch((err) => console.log(err));
+    fetch(`${process.env.REACT_APP_API_URL}/workSchedule/${this.state.appointment.schedule._id}`, {
+      method: 'PUT',
+      body: JSON.stringify(this.state.schedule),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .catch((err) => console.log(err));
   }
 
   onCustomerChange(event) {
@@ -54,6 +82,7 @@ class CreateAppointmentAdmin extends React.Component {
         ...this.state.appointment,
         customer: event.target.value,
       },
+      customerNull: false,
     }));
   }
 
@@ -63,6 +92,7 @@ class CreateAppointmentAdmin extends React.Component {
         ...this.state.appointment,
         service: event.target.value,
       },
+      serviceNull: false,
     }));
   }
 
@@ -72,6 +102,7 @@ class CreateAppointmentAdmin extends React.Component {
         ...this.state.appointment,
         contactNumber: event.target.value,
       },
+      contactNumberNull: false,
     }));
   }
 
@@ -83,30 +114,40 @@ class CreateAppointmentAdmin extends React.Component {
       },
     }));
   }
-
   onTechnicianChange(event) {
-    console.log(event.target.value);
     fetch(`${process.env.REACT_APP_API_URL}/staffWorkSchedules?staff=${event.target.value}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         this.setState({
           filterData: data,
+          uniqueDates: data
+            .filter(s => s.booked != true)
+            .map((d) => d.date)
+            .map(({ _id, date }) => ({ _id, date }))
+            .filter((obj, pos, arr) => {
+              return arr.map((mapObj) => mapObj._id).indexOf(obj._id) === pos;
+            }),
         });
+      });
+
+      this.setState({
+        technicianNull: false,
+        tempTechnician: event.target.value,
       });
   }
 
   onDateChange(event) {
-    // var pureDate = (event.target.value).split("-");
-    // var searchDate = pureDate[1] + "/" + pureDate[2] +"/" + pureDate[0];
-    console.log(event.target.value);
     fetch(`${process.env.REACT_APP_API_URL}/workSchedule?date=${event.target.value}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         this.setState({
-          dateData: data,
+          dateData: data.filter(d => d.booked != true),
         });
+      });
+      this.setState({
+        dateNull: false,
+        timeNull: true,
+        tempDate: event.target.value,
       });
   }
 
@@ -122,11 +163,11 @@ class CreateAppointmentAdmin extends React.Component {
         ...this.state.appointment,
         schedule: finalWorkSchedule,
       },
+      timeNull: false,
     });
   }
 
   onScheduleChange(event) {
-    console.log('id: ' + event.target.value);
     this.setState({
       appointment: {
         ...this.state.appointment,
@@ -150,7 +191,6 @@ class CreateAppointmentAdmin extends React.Component {
         this.setState({
           technicians: data,
         });
-        console.log(this.state.technicians);
       });
   }
 
@@ -198,7 +238,7 @@ class CreateAppointmentAdmin extends React.Component {
                   Customer Name:
                 </Form.Label>
                 <Col sm="8">
-                  <Form.Control inline as="select" onChange={this.onCustomerChange.bind(this)}>
+                  <Form.Control inline as="select" onChange={this.onCustomerChange.bind(this)} isInvalid={this.state.customerNull}>
                     <option value="">-- select customer --</option>
                     {this.state.customers.map((result) => (
                       // eslint-disable-next-line react/jsx-key
@@ -208,6 +248,7 @@ class CreateAppointmentAdmin extends React.Component {
                       </option>
                     ))}
                   </Form.Control>
+                  <Form.Control.Feedback type="invalid">Customer is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row} controlId="service">
@@ -215,13 +256,14 @@ class CreateAppointmentAdmin extends React.Component {
                   Services:
                 </Form.Label>
                 <Col sm="8">
-                  <Form.Control inline as="select" onChange={this.onServiceChange.bind(this)}>
+                  <Form.Control inline as="select" onChange={this.onServiceChange.bind(this)} isInvalid={this.state.serviceNull}> 
                     <option value="">-- select service --</option>
                     {this.state.services.map((result) => (
                       // eslint-disable-next-line react/jsx-key
                       <option value={result._id}>{result.name}</option>
                     ))}
                   </Form.Control>
+                  <Form.Control.Feedback type="invalid">Service is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row} controlId="schedule">
@@ -229,7 +271,7 @@ class CreateAppointmentAdmin extends React.Component {
                   Technician:
                 </Form.Label>
                 <Col sm="8">
-                  <Form.Control as="select" onChange={this.onTechnicianChange.bind(this)}>
+                  <Form.Control as="select" onChange={this.onTechnicianChange.bind(this)} isInvalid={this.state.technicianNull}>
                     <option value="">-- select technician --</option>
                     {this.state.technicians.map((result) => (
                       <option value={result._id}>
@@ -237,6 +279,7 @@ class CreateAppointmentAdmin extends React.Component {
                       </option>
                     ))}
                   </Form.Control>
+                  <Form.Control.Feedback type="invalid">Technician is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -244,18 +287,17 @@ class CreateAppointmentAdmin extends React.Component {
                   Date
                 </Form.Label>
                 <Col sm="8">
-                  <Form.Control inline as="select" onChange={this.onDateChange.bind(this)}>
+                  <Form.Control inline as="select" onChange={this.onDateChange.bind(this)} isInvalid={this.state.dateNull}>
                     <option value="">-- select Date --</option>
-                    {this.state.filterData.map(
+                    {this.state.uniqueDates.map(
                       (result) =>
                         // eslint-disable-next-line react/jsx-key
-                        moment(result.date.date).isAfter() && (
-                          <option value={result.date.date}>
-                            {moment(result.date.date).format('ll')}
-                          </option>
+                        moment(result.date).isAfter() && (
+                          <option value={result.date}>{moment(result.date).format('ll')}</option>
                         )
                     )}
                   </Form.Control>
+                  <Form.Control.Feedback type="invalid">Date is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -263,13 +305,14 @@ class CreateAppointmentAdmin extends React.Component {
                   Time:
                 </Form.Label>
                 <Col sm="8">
-                  <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)}>
+                  <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)} isInvalid={this.state.timeNull}>
                     <option value="">-- select time --</option>
                     {this.state.dateData.map((result) => (
                       // eslint-disable-next-line react/jsx-key
                       <option value={result.time._id}>{result.time.time}</option>
                     ))}
                   </Form.Control>
+                  <Form.Control.Feedback type="invalid">Time is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -280,7 +323,9 @@ class CreateAppointmentAdmin extends React.Component {
                   <Form.Control
                     placeholder="647-596-9521"
                     onChange={this.onContactNumChange.bind(this)}
+                    isInvalid={this.state.contactNumberNull}
                   />
+                  <Form.Control.Feedback type="invalid">Contact Number is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>

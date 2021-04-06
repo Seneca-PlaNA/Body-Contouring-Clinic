@@ -162,7 +162,7 @@ class StaffActiveAdmin extends React.Component {
               <Form.Control
                 type="text"
                 placeholder="Search account"
-                style={{ 'margin-left': '800px' }}
+                style={{ 'margin-left': '900px' }}
                 value={this.state.seachCustomer}
                 onChange={this.handleSearchCustomerChange.bind(this)}
               ></Form.Control>

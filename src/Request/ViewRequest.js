@@ -23,6 +23,8 @@ class ViewRequest extends React.Component {
       requestCategory: [],
       serviceCategory: [],
       completed: false,
+      _id: localStorage.getItem('_id'),
+      authName:{},
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -73,8 +75,24 @@ class ViewRequest extends React.Component {
         });
     });
   }
+  
+  getCustomerProfile(id) {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/account/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        });
+    });
+  }
 
   componentDidMount() {
+    this.getCustomerProfile(this.state._id)
+    .then((data)=>{
+      this.setState({
+        authName: data.accountLevelId,
+      });
+    });
     this.getRequest(this.props.id).then((data) => {
       this.setState({
         request: data,
@@ -85,6 +103,13 @@ class ViewRequest extends React.Component {
     });
   }
   render() {
+    if(this.state.authName == null)
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+
     if (this.state.completed) {
       return (
         <Redirect

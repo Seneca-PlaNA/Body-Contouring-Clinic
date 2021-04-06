@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-key */
 import React from 'react';
 import '../../App.css';
-import ViewFAQ from './ViewFAQ';
 import { Accordion, Container, Tabs, Tab, Card } from 'react-bootstrap';
 
 class ViewAllFAQ extends React.Component {
@@ -78,8 +77,6 @@ class ViewAllFAQ extends React.Component {
 
                       <br/><br/><br/><br/><br/>
         </Container>
-        <ViewFAQ show={this.state.show} 
-        />
         <br />
         <br />
       </div>

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import SideBar from '../SideBar/SideBar';
 import { Button, Form, Pagination } from 'react-bootstrap';
+import { Redirect } from 'react-router';
 
 class RequestHome extends React.Component {
   constructor() {
@@ -27,9 +28,12 @@ class RequestHome extends React.Component {
       startDate: '',
       endDate: '',
       status: '',
+      sDateStatus: false,
+      eDateStatus: false,
 
       currentPage: 1,
       perPage: 4,
+      authName:{},
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -83,16 +87,53 @@ class RequestHome extends React.Component {
       status: e.target.value,
     });
   }
+
   onStartDateChange = (e) => {
-    this.setState({ startDate: e.target.value });
+    this.setState({
+      eDateStatus: false,
+      sDateStatus: false,
+      startDate: e.target.value,
+    })
+
+    if(moment(e.target.value).isBefore(this.state.endDate)){
+      this.setState({ 
+        eDateStatus: false,
+        sDateStatus: false,
+    });
+    }
+    else{
+      this.setState({
+        sDateStatus: true,
+        eDateStatus: true,
+      })
+    }
   };
 
   onEndDateChange = (e) => {
-    this.setState({ endDate: e.target.value });
-  };
+    this.setState({
+      eDateStatus: false,
+      sDateStatus: false,
+      endDate: e.target.value,
+    })
+
+    if(moment(this.state.startDate).isBefore(e.target.value)){
+      this.setState({ 
+        eDateStatus: false,
+        sDateStatus: false,
+      });
+    }
+    else{
+      this.setState({
+        sDateStatus: true,
+        eDateStatus: true,
+      })
+    }
+  }
+  
   handleChange = (event) => {
     this.setState({ filter: event.target.value });
   };
+
   getRequests(id) {
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/request?customer=${id}`)
@@ -164,13 +205,20 @@ class RequestHome extends React.Component {
         this.setState({
           user: data.account,
           account: data,
+          authName: data.account != null? data.account.accountLevelId: null,
         });
         this.getRequests(this.state.account._id);
       });
   }
 
   render() {
-    console.log(this.state.currentPage);
+    if(this.state.authName == null)
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+
     const indexOfLast = this.state.currentPage * this.state.perPage;
     const indexOfFirst = indexOfLast - this.state.perPage;
     const currentItems = this.state.filterRequests.slice(indexOfFirst, indexOfLast);
@@ -211,6 +259,7 @@ class RequestHome extends React.Component {
                 value={this.state.startDate}
                 type="date"
                 style={{ 'margin-left': '30px', 'margin-right': '15px' }}
+                isInvalid={this.state.sDateStatus}
               />
               ~
               <Form.Control
@@ -219,6 +268,7 @@ class RequestHome extends React.Component {
                 value={this.state.endDate}
                 type="date"
                 style={{ 'margin-left': '15px' }}
+                isInvalid={this.state.eDateStatus}
               />
               <Form.Control
                 as="select"

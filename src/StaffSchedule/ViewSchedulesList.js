@@ -24,6 +24,7 @@ class ViewSchedulesList extends React.Component {
       time: [],
       filter: '',
       filteredSchedules: [],
+      status: '',
     };
   }
 
@@ -44,42 +45,68 @@ class ViewSchedulesList extends React.Component {
     this.setState({ filter: e.target.value });
   }
 
+  handleStatusChange(e) {
+    this.setState({ status: e.target.value });
+  }
+
   filterSchedules() {
-    if (this.state.filter == 'today') {
-      const newSchedules = this.state.workSchedules.filter((sch) => {
-        return moment(sch.date.date).isSame(new Date(), 'day');
-      });
-      this.setState({ filteredSchedules: newSchedules });
-    } else if (this.state.filter == 'tomorrow') {
-      const newSchedules = this.state.workSchedules.filter((sch) => {
-        return moment(sch.date.date).isSame(moment().add(1, 'day'), 'day');
-      });
-      this.setState({ filteredSchedules: newSchedules });
-    } else if (this.state.filter == 'week') {
-      const newSchedules = this.state.workSchedules.filter((sch) => {
-        return moment(sch.date.date).isSame(new Date(), 'isoWeek');
-      });
-      this.setState({ filteredSchedules: newSchedules });
-    } else if (this.state.filter == 'nextWeek') {
-      const dayInNextWeek = moment().startOf('isoWeek').add(7, 'day');
-      const newSchedules = this.state.workSchedules.filter((sch) => {
-        return moment(sch.date.date).isSame(dayInNextWeek, 'isoWeek');
-      });
-      this.setState({ filteredSchedules: newSchedules });
-    } else if (this.state.filter == 'month') {
-      const newSchedules = this.state.workSchedules.filter((sch) => {
-        return moment(sch.date.date).isSame(new Date(), 'month');
-      });
-      this.setState({ filteredSchedules: newSchedules });
-    } else if (this.state.filter == 'nextMonth') {
-      const dayInNextMonth = moment().add(1, 'month');
-      const newSchedules = this.state.workSchedules.filter((sch) => {
-        return moment(sch.date.date).isSame(dayInNextMonth, 'month');
-      });
-      this.setState({ filteredSchedules: newSchedules });
-    } else if (this.state.filter == 'all') {
-      this.setState({ filteredSchedules: this.state.workSchedules });
+    if (this.state.filter.length > 0) {
+      if (this.state.filter == 'today') {
+        const newSchedules = this.state.workSchedules.filter((sch) => {
+          return moment(sch.date.date).isSame(new Date(), 'day');
+        });
+        this.setState({ filteredSchedules: newSchedules });
+      } else if (this.state.filter == 'tomorrow') {
+        const newSchedules = this.state.workSchedules.filter((sch) => {
+          return moment(sch.date.date).isSame(moment().add(1, 'day'), 'day');
+        });
+        this.setState({ filteredSchedules: newSchedules });
+      } else if (this.state.filter == 'week') {
+        const newSchedules = this.state.workSchedules.filter((sch) => {
+          return moment(sch.date.date).isSame(new Date(), 'isoWeek');
+        });
+        this.setState({ filteredSchedules: newSchedules });
+      } else if (this.state.filter == 'nextWeek') {
+        const dayInNextWeek = moment().startOf('isoWeek').add(7, 'day');
+        const newSchedules = this.state.workSchedules.filter((sch) => {
+          return moment(sch.date.date).isSame(dayInNextWeek, 'isoWeek');
+        });
+        this.setState({ filteredSchedules: newSchedules });
+      } else if (this.state.filter == 'month') {
+        const newSchedules = this.state.workSchedules.filter((sch) => {
+          return moment(sch.date.date).isSame(new Date(), 'month');
+        });
+        this.setState({ filteredSchedules: newSchedules });
+      } else if (this.state.filter == 'nextMonth') {
+        const dayInNextMonth = moment().add(1, 'month');
+        const newSchedules = this.state.workSchedules.filter((sch) => {
+          return moment(sch.date.date).isSame(dayInNextMonth, 'month');
+        });
+        this.setState({ filteredSchedules: newSchedules });
+      } else if (this.state.filter == 'all') {
+        this.setState({ filteredSchedules: this.state.workSchedules });
+      }
+    } else if (this.state.status.length > 0) {
+      if (this.state.status == 'available') {
+        const newSchedules = this.state.workSchedules.filter((sch) => {
+          return sch.booked !== true;
+        });
+        this.setState({ filteredSchedules: newSchedules });
+      } else if (this.state.status == 'booked') {
+        const newSchedules = this.state.workSchedules.filter((sch) => {
+          return sch.booked === true;
+        });
+        this.setState({ filteredSchedules: newSchedules });
+      }
     }
+  }
+
+  resetAll() {
+      this.setState({
+        filteredSchedules: this.state.workSchedules,
+        filter: '',
+        status: '',
+      });
   }
 
   componentDidMount() {
@@ -122,6 +149,17 @@ class ViewSchedulesList extends React.Component {
                   <option value="month">This Month</option>
                   <option value="nextMonth">Next Month</option>
                 </Form.Control>
+                <Form.Control
+                  as="select"
+                  style={{ 'margin-left': '24px' }}
+                  onChange={this.handleStatusChange.bind(this)}
+                >
+                  <option value="" default>
+                    All
+                  </option>
+                  <option value="available">Available</option>
+                  <option value="booked">Booked</option>
+                </Form.Control>
                 <Button
                   variant="outline-*"
                   onClick={this.filterSchedules.bind(this)}
@@ -129,28 +167,30 @@ class ViewSchedulesList extends React.Component {
                 >
                   <img src={searchIcon} alt="Search" />
                 </Button>
+                <Button variant="link" onClick={this.resetAll.bind(this)}>
+                  Reset
+                </Button>
               </Form>
               <br />
               <table>
                 <tr>
                   <th>Date</th>
                   <th>Time</th>
+                  <th>Status</th>
                 </tr>
 
                 {this.state.filteredSchedules.map((sch) => (
                   <tr key={sch._id}>
                     <td>{moment(sch.date.date).format('ll')}</td>
                     <td>{sch.time.time}</td>
+                    <td>{sch.booked ? 'Booked' : 'Available'}</td>
                     <td>
                       <Button
                         variant="outline-secondary"
                         href={`/Staff/Schedule/Detail/${sch._id}`}
                       >
                         Details
-                      </Button>{' '}
-                      {/* <Button variant="outline-info" href={`/Staff/Schedule/Edit/${sch._id}`}>
-                        Edit
-                      </Button> */}
+                      </Button>
                     </td>
                   </tr>
                 ))}

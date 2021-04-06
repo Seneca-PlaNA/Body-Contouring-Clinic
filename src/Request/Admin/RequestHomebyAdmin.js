@@ -5,6 +5,7 @@ import SideBar from '../../SideBar/SideBar';
 import { Button, Form, Pagination } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import { Redirect } from 'react-router';
 
 class RequestHomebyAdmin extends React.Component {
   constructor() {
@@ -25,9 +26,15 @@ class RequestHomebyAdmin extends React.Component {
       requests: [],
       filterRequests: [],
       searchType: [],
+      eDateStatus: false,
+      sDateStatus: false,
+      tempStart: '',
+      tempEnd: '',
 
       currentPage: 1,
       perPage: 8,
+      _id: localStorage.getItem('_id'),
+      authName: {},
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -85,12 +92,46 @@ class RequestHomebyAdmin extends React.Component {
   };
 
   onStartDateChange = (e) => {
-    this.setState({ startDate: e.target.value });
+    this.setState({
+      eDateStatus: false,
+      sDateStatus: false,
+      startDate: e.target.value,
+    })
+
+    if(moment(e.target.value).isBefore(this.state.endDate)){
+      this.setState({ 
+        eDateStatus: false,
+        sDateStatus: false,
+    });
+    }
+    else{
+      this.setState({
+        sDateStatus: true,
+        eDateStatus: true,
+      })
+    }
   };
 
   onEndDateChange = (e) => {
-    this.setState({ endDate: e.target.value });
-  };
+    this.setState({
+      eDateStatus: false,
+      sDateStatus: false,
+      endDate: e.target.value,
+    })
+
+    if(moment(this.state.startDate).isBefore(e.target.value)){
+      this.setState({ 
+        eDateStatus: false,
+        sDateStatus: false,
+      });
+    }
+    else{
+      this.setState({
+        sDateStatus: true,
+        eDateStatus: true,
+      })
+    }
+  }
 
   handleChange = (event) => {
     this.setState({ filter: event.target.value });
@@ -159,7 +200,24 @@ class RequestHomebyAdmin extends React.Component {
     }
   }
 
+  getCustomerProfile() {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/account/${this.state._id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        });
+    });
+  }
+
   componentDidMount() {
+    this.getCustomerProfile(this.state._id)
+    .then((data)=>{
+      this.setState({
+        authName: data.accountLevelId,
+      });
+    });
+
     this.getRequests().then((data) => {
       this.setState({
         requests: data,
@@ -168,6 +226,13 @@ class RequestHomebyAdmin extends React.Component {
     });
   }
   render() {
+    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+
     console.log(this.state.filterRequests);
     const indexOfLast = this.state.currentPage * this.state.perPage;
     const indexOfFirst = indexOfLast - this.state.perPage;
@@ -186,7 +251,8 @@ class RequestHomebyAdmin extends React.Component {
         <div className="col-md-1"></div>
         <SideBar items={this.state.items} />
         <div className="col-md-8" style={{ 'margin-left': '80px' }}>
-          <h2 className="PageTitle">View All Request</h2>
+          <h2 className="PageTitle">View All Request
+          </h2> 
           <br />
           <div className="contents">
             <Form inline>
@@ -208,6 +274,7 @@ class RequestHomebyAdmin extends React.Component {
                 value={this.state.startDate}
                 type="date"
                 style={{ 'margin-left': '30px', 'margin-right': '15px' }}
+                isInvalid={this.state.sDateStatus}
               />
               ~
               <Form.Control
@@ -216,6 +283,7 @@ class RequestHomebyAdmin extends React.Component {
                 value={this.state.endDate}
                 type="date"
                 style={{ 'margin-left': '15px' }}
+                isInvalid={this.state.eDateStatus}
               />
               <Form.Control
                 as="select"

@@ -142,7 +142,7 @@ class CustomerHomeAdmin extends React.Component {
               <Form.Control
                 type="text"
                 placeholder="Search customer"
-                style={{ 'margin-left': '800px' }}
+                style={{ 'margin-left': '880px' }}
                 value={this.state.seachCustomer}
                 onChange={this.handleSearchCustomerChange.bind(this)}
               ></Form.Control>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Form, Table, Button, Pagination } from 'react-bootstrap';
+import { Container, Row, Col, Form, Table, Button, Pagination, Alert } from 'react-bootstrap';
 import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
 import PropTypes from 'prop-types';
@@ -10,22 +10,26 @@ class CustomerBalanceDetailAdmin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [{ url: `/Customer/Admin`, title: 'Home' },
-              { url: `/Staff/Admin`, title: 'Staff Management' },
-              { url: `/Customer/Admin/Balance`, title: 'Balance Management' },
+      items: [
+        { url: `/Customer/Admin`, title: 'Home' },
+        { url: `/Staff/Admin`, title: 'Staff Management' },
+        { url: `/Customer/Admin/Balance`, title: 'Balance Management' },
       ],
       _id: localStorage.getItem('_id'),
       balances: [],
       balanceHistory: [],
       profile: {},
-      balance :{
+      balance: {
         balanceAccount: 0,
-        info: "",
+        info: '',
         date: new Date(),
       },
       currentPage: 1,
       perPage: 8,
-      authName:{},
+      authName: {},
+      infoIsInput: true,
+      updateIsValid: true,
+      updateError: '',
     };
     this.handleAddBalance = this.handleAddBalance.bind(this);
   }
@@ -39,67 +43,102 @@ class CustomerBalanceDetailAdmin extends React.Component {
   }
 
   nextPage() {
-    if (
-      this.state.currentPage < Math.ceil(this.state.balances.length / this.state.perPage)
-    ) {
+    if (this.state.currentPage < Math.ceil(this.state.balances.length / this.state.perPage)) {
       this.setState({
         currentPage: parseInt(this.state.currentPage) + 1,
       });
     }
   }
-  
+
   handlePage(e) {
     this.setState({
       currentPage: Number(e.target.id),
     });
   }
 
-  onUpdateBalance(event){
+  onUpdateBalance(event) {
+    console.log(event.target.value);
+    if (event.target.value == '') {
+      this.setState({
+        updateError: 'Amount is required',
+        updateIsValid: false,
+        balance: {
+          ...this.state.balance,
+          balanceAccount: Number(event.target.value),
+        },
+      });
+    }
     this.setState({
-      balance : {
+      balance: {
         ...this.state.balance,
         balanceAccount: Number(event.target.value),
-      }
-    })
+      },
+      updateIsValid: true,
+    });
   }
 
-  onUpdateInfo(event){
-    this.setState({
-      balance : {
-        ...this.state.balance,
-        info: event.target.value,
-      }
-    })
+  onUpdateInfo(event) {
+    console.log(event.target.value);
+    if (event.target.value == '') {
+      this.setState({
+        balance: {
+          ...this.state.balance,
+          info: event.target.value,
+        },
+        infoIsInput: false,
+      });
+    } else {
+      this.setState({
+        balance: {
+          ...this.state.balance,
+          info: event.target.value,
+        },
+        infoIsInput: true,
+      });
+    }
   }
 
-  handleAddBalance(){
+  handleAddBalance(e) {
     console.log(this.state.balance);
     console.log(this.props.id);
-    fetch(`${process.env.REACT_APP_API_URL}/add-balance/${this.props.id}`,{
-      method: "POST",
-      body: JSON.stringify(this.state.balance),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },})
-    .then((response) => response.json())
-    .then(() => {
-      window.location.reload();
-    });
-  }
+    if (this.state.balance.balanceAccount == '') {
+      this.setState({
+        updateError: 'Amount is required',
+        updateIsValid: false,
+      });
+      e.preventDefault();
+    } else if (isNaN(this.state.balance.balanceAccount)) {
+      console.log(
+        this.state.balance.balanceAccount +
+          ' is not a number, type: ' +
+          typeof this.state.balance.balanceAccount
+      );
+      this.setState({
+        updateError: 'Amount should be digit',
+        updateIsValid: false,
+      });
+      e.preventDefault();
+    }
 
-  handleSubstractBalance(){
-    fetch(`${process.env.REACT_APP_API_URL}/substract-balance/${this.props.id}`,{
-      method: "POST",
+    if (this.state.balance.info == '') {
+      this.setState({
+        infoIsInput: false,
+      });
+      e.preventDefault();
+    }
+
+    fetch(`${process.env.REACT_APP_API_URL}/add-balance/${this.props.id}`, {
+      method: 'POST',
       body: JSON.stringify(this.state.balance),
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },})
-    .then((response) => response.json())
-    .then(() => {
-      window.location.reload();
-    });
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then(() => {
+        window.location.reload();
+      });
   }
 
   getCustomerProfile(id) {
@@ -109,19 +148,17 @@ class CustomerBalanceDetailAdmin extends React.Component {
         .then((data) => {
           resolve(data);
         });
-    
     });
   }
 
-  getBalance(id){
+  getBalance(id) {
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/balance-history/${id}`)
         .then((response) => response.json())
         .then((data) => {
           resolve(data);
-      });
-
-  });
+        });
+    });
   }
 
   getAuthProfile(id) {
@@ -140,29 +177,27 @@ class CustomerBalanceDetailAdmin extends React.Component {
       });
     });
 
-    this.getCustomerProfile(this.props.id)
-    .then((data)=>{
+    this.getCustomerProfile(this.props.id).then((data) => {
       this.setState({
         profile: data,
-      })
+      });
     });
 
-      this.getBalance(this.props.id)
-      .then((data)=>{
-        this.setState({
-          balanceHistory: data,
-          balances: data.balances,
-        });
+    this.getBalance(this.props.id).then((data) => {
+      this.setState({
+        balanceHistory: data,
+        balances: data.balances,
       });
+    });
   }
-  
-  render() {
 
-    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
-    {
-      return (
-        <Redirect push to={{pathname: '/', }}  refresh="true"/>
-      );
+  render() {
+    if (
+      this.state.authName == null ||
+      this.state.authName._id == '60371ad3fda1af6510e75e3a' ||
+      this.state.authName._id == '60371ae9fda1af6510e75e3b'
+    ) {
+      return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
 
     const indexOfLast = this.state.currentPage * this.state.perPage;
@@ -182,56 +217,86 @@ class CustomerBalanceDetailAdmin extends React.Component {
         <div className="col-md-1"></div>
         <SideBar items={this.state.items} />
         <div className="col-md-8" style={{ 'margin-left': '80px' }}>
-          <h2 className="PageTitle">Customer :  {this.state.profile.firstName + ' ' + this.state.profile.lastName}</h2>
+          <h2 className="PageTitle">
+            Customer : {this.state.profile.firstName + ' ' + this.state.profile.lastName}
+          </h2>
           <hr />
           <br />
 
           <Container class="col-md-8">
             <Form style={{ fontSize: '20px', textAlign: 'left' }}>
-            <h4>Balance Information</h4><br/>
+              <h4>
+                Modify Balance
+                <Alert
+                  variant="info"
+                  style={{
+                    fontSize: '16px',
+                    display: 'inline',
+                    margin: '10px',
+                    letterSpacing: '.5px',
+                  }}
+                >
+                  Input negative amount (-) for withdraw; positive amount for deposit
+                </Alert>
+              </h4>
+
+              <br />
               <Row>
-                <Col sm={4}>          
+                <Col sm={4}>
                   <Form.Label>
-                    Current Balance: $ {this.state.balanceHistory == null? 0 :this.state.balanceHistory.currentBalance}
+                    Current Balance: ${' '}
+                    {this.state.balanceHistory == null
+                      ? 0
+                      : this.state.balanceHistory.currentBalance}
                   </Form.Label>
                 </Col>
                 <Col>
-              <Row>
-                  <Col sm={2}>
-                      <Form.Label>
-                        Update 
-                      </Form.Label>
-                  </Col>
-                  <Col sm={6}>
-                    <Form.Control type="text" value={this.state.updateBalance} onChange={this.onUpdateBalance.bind(this)}/> 
-                  </Col>
-              </Row>
-              <Row>
-                  <Col sm={2}>
-                      <Form.Label>
-                        Info 
-                      </Form.Label>
-                  </Col>
-                  <Col sm={6}>
-                    <Form.Control type="text" value={this.state.info} onChange={this.onUpdateInfo.bind(this)}/> 
-                  </Col>
-                </Row>
-                <br/>
-                <Row>
-                  <Col sm={4}></Col>
-                  <Col sm={2}>
-                      <Button type="submit" variant="outline-info" onClick={this.handleAddBalance.bind(this)}>
-                        Add
+                  <Row>
+                    <Col sm={2}>
+                      <Form.Label>Amount</Form.Label>
+                    </Col>
+                    <Col sm={6}>
+                      <Form.Control
+                        type="text"
+                        value={this.state.updateBalance}
+                        onChange={this.onUpdateBalance.bind(this)}
+                        isInvalid={!this.state.updateIsValid}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {this.state.updateError}
+                      </Form.Control.Feedback>
+                    </Col>
+                  </Row>
+                  <br></br>
+                  <Row>
+                    <Col sm={2}>
+                      <Form.Label>Info</Form.Label>
+                    </Col>
+                    <Col sm={6}>
+                      <Form.Control
+                        type="text"
+                        value={this.state.info}
+                        onChange={this.onUpdateInfo.bind(this)}
+                        isInvalid={!this.state.infoIsInput}
+                      />
+                      <Form.Control.Feedback type="invalid">Info is required</Form.Control.Feedback>
+                    </Col>
+                  </Row>
+                  <br />
+                  <Row>
+                    <Col sm={7}></Col>
+                    <Col sm={2}>
+                      <Button
+                        type="submit"
+                        variant="outline-info"
+                        onClick={this.handleAddBalance.bind(this)}
+                      >
+                        Update
                       </Button>
-                  </Col>
-                  <Col sm={2}>
-                      <Button type="submit" variant="outline-info"onClick={this.handleSubstractBalance.bind(this)}>
-                        Subtract  
-                      </Button>
-                  </Col>
-                  <Col></Col>
-                </Row>
-              </Col>
+                    </Col>
+                    <Col></Col>
+                  </Row>
+                </Col>
               </Row>
             </Form>
           </Container>
@@ -240,32 +305,34 @@ class CustomerBalanceDetailAdmin extends React.Component {
           <Container class="col-md-8">
             <Table>
               <Row>
-                <Col md={12}>      
+                <Col md={12}>
                   <table>
                     <tr>
                       <th>Date</th>
                       <th>info</th>
                       <th>Update</th>
                     </tr>
-                    {currentItems == null? "" : currentItems.map((result) => (
-                    <tr key={result._id}>
-                      <td>{moment(result.date).format('ll')}</td>
-                      <td>{result.info}</td>
-                      <td>$ {result.balanceAccount}</td>
-                    </tr>
-                   ))}
+                    {currentItems == null
+                      ? ''
+                      : currentItems.map((result) => (
+                          <tr key={result._id}>
+                            <td>{moment(result.date).format('ll')}</td>
+                            <td>{result.info}</td>
+                            <td>$ {result.balanceAccount}</td>
+                          </tr>
+                        ))}
                   </table>
 
                   <br />
                 </Col>
               </Row>
             </Table>
-            <br/>
-          <Pagination style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Pagination.Prev onClick={this.prevPage.bind(this)} />
-                    <Pagination>{pageNums}</Pagination>
-                    <Pagination.Next onClick={this.nextPage.bind(this)} />
-          </Pagination>
+            <br />
+            <Pagination style={{ display: 'flex', justifyContent: 'center' }}>
+              <Pagination.Prev onClick={this.prevPage.bind(this)} />
+              <Pagination>{pageNums}</Pagination>
+              <Pagination.Next onClick={this.nextPage.bind(this)} />
+            </Pagination>
           </Container>
           <br />
           <br />
@@ -276,8 +343,7 @@ class CustomerBalanceDetailAdmin extends React.Component {
 }
 
 CustomerBalanceDetailAdmin.propTypes = {
-  id : PropTypes.string.isRequired
-}
-
+  id: PropTypes.string.isRequired,
+};
 
 export default CustomerBalanceDetailAdmin;

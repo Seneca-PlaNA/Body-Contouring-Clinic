@@ -22,13 +22,13 @@ class ViewAllFAQbyAdmin extends React.Component {
       faqCategories: [],
       selectedFAQ: {},
       completed: false,
+      _id: localStorage.getItem('_id'),
+      authName: {},
     };
      this.showFAQ = this.showFAQ.bind(this);
      this.hideFAQ = this.hideFAQ.bind(this);
      this.handleDelete = this.handleDelete.bind(this);
   }
-
-
 
   showFAQ = () => {
     this.setState({ show: true });
@@ -63,7 +63,6 @@ class ViewAllFAQbyAdmin extends React.Component {
     window.location.reload();
   }
 
-
   getFAQs() {
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/faqs`)
@@ -73,7 +72,6 @@ class ViewAllFAQbyAdmin extends React.Component {
         });
     });
   }
-
 
   deleteFAQ(){
     return new Promise((resolve) => {
@@ -95,7 +93,24 @@ class ViewAllFAQbyAdmin extends React.Component {
     });
   }
 
+  getCustomerProfile() {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/account/${this.state._id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        });
+    });
+  }
+
   componentDidMount() {
+    this.getCustomerProfile(this.state._id)
+    .then((data)=>{
+      this.setState({
+        authName: data.accountLevelId,
+      });
+    });
+
     this.getFAQs()
       .then((data) => {
         this.setState({
@@ -111,6 +126,13 @@ class ViewAllFAQbyAdmin extends React.Component {
   }
 
   render() {
+    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+    
     if (this.state.completed) {
       return (
         <Redirect

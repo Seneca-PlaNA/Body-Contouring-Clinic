@@ -20,6 +20,8 @@ class ViewRequestAdmin extends React.Component {
       requestCategory: [],
       request_answer: '',
       completed: false,
+      _id: localStorage.getItem('_id'),
+      authName: {},
     };
   }
 
@@ -32,7 +34,25 @@ class ViewRequestAdmin extends React.Component {
         });
     });
   }
+
+  getCustomerProfile() {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/account/${this.state._id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        });
+    });
+  }
+
   componentDidMount() {
+    this.getCustomerProfile(this.state._id)
+    .then((data)=>{
+      this.setState({
+        authName: data.accountLevelId,
+      });
+    });
+
     this.getRequest(this.props.id).then((data) => {
       this.setState({
         request: data,
@@ -45,6 +65,12 @@ class ViewRequestAdmin extends React.Component {
   }
 
   render() {
+    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
 
     if (this.state.completed) {
       return <Redirect push to={{

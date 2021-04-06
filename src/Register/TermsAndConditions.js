@@ -1,8 +1,31 @@
 import React, { Component } from 'react';
 import '../App.css';
 import { Scrollbars } from 'rc-scrollbars';
+import { Form } from 'react-bootstrap';
 
 class TermsAndConditions extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isChecked: true,
+    };
+  }
+
+  checkIfBoxIsChecked(e) {
+    let checked = document.getElementById('check');
+    if (checked.checked == false) {
+      e.preventDefault();
+      this.setState({ isChecked: false });
+    } else {
+      this.setState({ isChecked: true });
+    }
+  }
+  onCheckBoxChange() {
+    let checked = document.getElementById('check');
+    if (checked.checked == true) {
+      this.setState({ isChecked: true });
+    }
+  }
   render() {
     return (
       <div className="col-md-8" style={{ 'margin-left': '350px' }}>
@@ -42,19 +65,14 @@ class TermsAndConditions extends Component {
         <form style={{ marginRight: '380px' }}>
           <div className="form-group">
             <div className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="invalidCheck2"
+              <Form.Check
                 required
+                label="Agree to terms and conditions"
+                isInvalid={!this.state.isChecked}
+                feedback="You must agree before going to next step"
+                onChange={this.onCheckBoxChange.bind(this)}
+                id="check"
               />
-              <label className="form-check-label" htmlFor="invalidCheck2">
-                Agree to terms and conditions
-              </label>
-              <div id="invalidCheck3Feedback" className="invalid-feedback">
-                You must agree before submitting.{' '}
-              </div>
             </div>
           </div>
         </form>
@@ -65,7 +83,11 @@ class TermsAndConditions extends Component {
               ❮ Previous
             </a>
             <a style={{ marginLeft: '600px' }}></a>
-            <a className="page-link btn btn-outline-info" href="./SignUp">
+            <a
+              className="page-link btn btn-outline-info"
+              href="./SignUp"
+              onClick={this.checkIfBoxIsChecked.bind(this)}
+            >
               Next ❯
             </a>
           </div>

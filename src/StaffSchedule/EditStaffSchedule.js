@@ -28,6 +28,9 @@ class EditStaffSchedule extends React.Component {
 
       // for calendar
       todaySchedules: {},
+
+      dateIsSelected: false,
+      timeIsSelected: false,
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
@@ -60,28 +63,54 @@ class EditStaffSchedule extends React.Component {
 
   onDateChange(e) {
     this.setState(() => ({
-      date: {
-        ...this.state.date,
-        _id: e.target.value,
-      },
-      workSchedule: {
-        ...this.state.workSchedule,
-        date: e.target.value,
-      },
+      dateIsSelected: false,
     }));
+    if (e.target.value === '') {
+      this.setState(() => ({
+        date: {
+          ...this.state.date,
+          _id: e.target.value,
+        },
+        dateIsSelected: true,
+      }));
+    } else {
+      this.setState(() => ({
+        date: {
+          ...this.state.date,
+          _id: e.target.value,
+        },
+        workSchedule: {
+          ...this.state.workSchedule,
+          date: e.target.value,
+        },
+        dateIsSelected: false,
+      }));
+    }
   }
 
   onTimeChange(e) {
-    this.setState(() => ({
-      time: {
-        ...this.state.time,
-        _id: e.target.value,
-      },
-      workSchedule: {
-        ...this.state.workSchedule,
-        time: e.target.value,
-      },
-    }));
+    this.setState(() => ({ timeIsSelected: false }));
+    if (e.target.value === '') {
+      this.setState(() => ({
+        time: {
+          ...this.state.time,
+          _id: e.target.value,
+        },
+        timeIsSelected: true,
+      }));
+    } else {
+      this.setState(() => ({
+        time: {
+          ...this.state.time,
+          _id: e.target.value,
+        },
+        workSchedule: {
+          ...this.state.workSchedule,
+          time: e.target.value,
+        },
+        timeIsSelected: false,
+      }));
+    }
   }
 
   onDescriptionChange(e) {
@@ -176,6 +205,7 @@ class EditStaffSchedule extends React.Component {
                       as="select"
                       onChange={this.onDateChange.bind(this)}
                       value={this.state.date._id}
+                      isInvalid={!!this.state.dateIsSelected}
                     >
                       <option value="">--Choose--</option>
                       {this.state.dates.map((date) => (
@@ -184,6 +214,7 @@ class EditStaffSchedule extends React.Component {
                         </option>
                       ))}
                     </Form.Control>
+                    <Form.Control.Feedback type="invalid">date is required</Form.Control.Feedback>
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row}>
@@ -195,6 +226,7 @@ class EditStaffSchedule extends React.Component {
                       as="select"
                       onChange={this.onTimeChange.bind(this)}
                       value={this.state.time._id}
+                      isInvalid={!!this.state.timeIsSelected}
                     >
                       <option value="">--Choose--</option>
                       {this.state.times.map((time) => (
@@ -203,6 +235,7 @@ class EditStaffSchedule extends React.Component {
                         </option>
                       ))}
                     </Form.Control>
+                    <Form.Control.Feedback type="invalid">Time is required</Form.Control.Feedback>
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row}>

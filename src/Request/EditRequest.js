@@ -24,6 +24,8 @@ class EditRequest extends React.Component {
       serviceCategories: [],
       file: null,
       imageSuccess : false,
+      _id: localStorage.getItem('_id'),
+      authName: {},
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.imageShow = this.imageShow.bind(this);
@@ -173,7 +175,25 @@ class EditRequest extends React.Component {
         });
     });
   }
+
+  getCustomerProfile(id) {
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/account/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        });
+    });
+  }
+
   componentDidMount() {
+    this.getCustomerProfile(this.state._id)
+    .then((data)=>{
+      this.setState({
+        authName: data.accountLevelId,
+      });
+    });
+
     this.getRequest(this.props.id).then((data) => {
       this.setState({
         request: data,
@@ -195,14 +215,16 @@ class EditRequest extends React.Component {
   }
 
   render() {
+    if(this.state.authName == null)
+    {
+      return (
+        <Redirect push to={{pathname: '/', }}  refresh="true"/>
+      );
+    }
+
     if (this.state.completed) {
       return (
-        <Redirect
-          push
-          to={{
-            pathname: '/Request',
-          }}
-        />
+        <Redirect push to={{pathname: '/Request',}} />
       );
     }
     return (

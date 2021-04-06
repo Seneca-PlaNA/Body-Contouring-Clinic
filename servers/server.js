@@ -181,7 +181,7 @@ app.delete('/balance-history/:id', (req, res) => {
 });
 
 app.post('/add-balance/:id', (req, res) => {
-  console.log("Server");
+  console.log('Server');
   console.log(req.body);
   console.log(req.params.id);
   balanceHistoryHandler
@@ -518,6 +518,13 @@ app.get('/dates', (req, res) => {
 app.get('/date/:id', (req, res) => {
   dateHandler
     .viewDateById(req.params.id)
+    .then((date) => res.json(date))
+    .catch((err) => res.json(err));
+});
+
+app.get('/date', (req, res) => {
+  dateHandler
+    .viewDateByInput(req.query)
     .then((date) => res.json(date))
     .catch((err) => res.json(err));
 });

@@ -43,6 +43,9 @@ const accountSchema = new Schema(
       ref: 'balanceHistories',
       required: true,
     },
+    notes: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
