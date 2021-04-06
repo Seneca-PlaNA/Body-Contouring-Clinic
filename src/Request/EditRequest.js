@@ -17,7 +17,9 @@ class EditRequest extends React.Component {
         { url: '/Request/FAQ', title: 'FAQ' },
       ],
       request: [],
-      editRequest: [],
+      editRequest: {
+        lastRequestTime: new Date(),
+      },
       requestCategory: [],
       serviceCategory: [],
       completed: false,
