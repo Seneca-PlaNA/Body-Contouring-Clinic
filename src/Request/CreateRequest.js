@@ -15,10 +15,10 @@ class CreateRequest extends React.Component {
         { url: '/Request/FAQ', title: 'FAQ' },
       ],
       request: {
-        title: String,
-        requestCategory: String,
+        title: '',
+        requestCategory: '',
         serviceCategory: String,
-        contents: String,
+        contents: '',
         customer: {},
         date: new Date(),
         lastRequestTime: new Date(),
@@ -34,6 +34,9 @@ class CreateRequest extends React.Component {
       imageSuccess : false,
       authName: {},
       fileFormat: false,
+      titleNull: false,
+      requestCategoryNull: false,
+      contentsNull: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.imageShow = this.imageShow.bind(this);
@@ -61,6 +64,10 @@ class CreateRequest extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    this.state.request.title == '' ? this.setState({ titleNull: true }) : this.setState({ titleNull: false });
+    this.state.request.requestCategory == '' ? this.setState({ requestCategoryNull: true }) : this.setState({ requestCategoryNull: false });
+    this.state.request.contents == '' ? this.setState({ contentsNull: true }) : this.setState({ contentsNull: false });
+
     fetch(`${process.env.REACT_APP_API_URL}/create-request`, {
       method: 'POST',
       body: JSON.stringify(this.state.request),
@@ -140,6 +147,7 @@ class CreateRequest extends React.Component {
         customer: this.state.customer._id,
         title: e.target.value,
       },
+      titleNull: false,
     }));
   }
 
@@ -149,6 +157,7 @@ class CreateRequest extends React.Component {
         ...this.state.request,
         requestCategory: e.target.value,
       },
+      requestCategoryNull: false,
     }));
   }
 
@@ -167,6 +176,7 @@ class CreateRequest extends React.Component {
         ...this.state.request,
         contents: e.target.value,
       },
+      contentsNull: false,
     }));
   }
 
@@ -261,11 +271,8 @@ class CreateRequest extends React.Component {
                   Title:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control
-                    type="text"
-                    placeholder="Request Title"
-                    onChange={this.onTitleChange.bind(this)}
-                  ></Form.Control>
+                  <Form.Control type="text" placeholder="Request Title" onChange={this.onTitleChange.bind(this)} isInvalid={this.state.titleNull}></Form.Control>
+                  <Form.Control.Feedback type="invalid">Title is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -273,7 +280,7 @@ class CreateRequest extends React.Component {
                   Request Category:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control as="select" onChange={this.onRequestCategoryChange.bind(this)}>
+                  <Form.Control as="select" onChange={this.onRequestCategoryChange.bind(this)} isInvalid={this.state.requestCategoryNull}>
                     <option value="">--Choose--</option>
                     {this.state.requestCategories.map((reqCategory) => (
                       <option key={reqCategory._id} value={reqCategory._id}>
@@ -281,6 +288,7 @@ class CreateRequest extends React.Component {
                       </option>
                     ))}
                   </Form.Control>
+                  <Form.Control.Feedback type="invalid">Request Category is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -303,11 +311,8 @@ class CreateRequest extends React.Component {
                   Contents:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control
-                    as="textarea"
-                    rows={3}
-                    onChange={this.onContentsChange.bind(this)}
-                  />
+                  <Form.Control as="textarea" rows={3} onChange={this.onContentsChange.bind(this)} isInvalid={this.state.contentsNull}/>
+                  <Form.Control.Feedback type="invalid">Content is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
