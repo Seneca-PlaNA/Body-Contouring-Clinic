@@ -285,6 +285,7 @@ class EditRequest extends React.Component {
                     as="select"
                     onChange={this.onRequestCategoryChange.bind(this)}
                     value={this.state.requestCategory._id}
+                    isInvalid={this.state.requestCategoryNull}
                   >
                     <option value="">--Choose--</option>
                     {this.state.requestCategories.map((reqCategory) => (
@@ -293,7 +294,7 @@ class EditRequest extends React.Component {
                       </option>
                     ))}
                   </Form.Control>
-                  <Form.Control.Feedback>Title is required</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">Request Category is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
