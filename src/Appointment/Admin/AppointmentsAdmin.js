@@ -116,6 +116,7 @@ class AppointmentsAdmin extends React.Component {
         filterAppointments: data,
         searchDate: '',
         dayValue: 9999,
+        searchType: [],
       });
     });
   }
