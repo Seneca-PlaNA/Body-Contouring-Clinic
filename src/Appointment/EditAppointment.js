@@ -276,7 +276,7 @@ class EditAppointment extends React.Component {
                       <Form.Label column sm="4">
                         Time
                       </Form.Label>
-                      <Col sm="6">
+                      <Col sm="8">
                         <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)} isInvalid={this.state.timeNull}>
                           <option value="">-- select time --</option>
                           {this.state.filterData.map((result)=>(
