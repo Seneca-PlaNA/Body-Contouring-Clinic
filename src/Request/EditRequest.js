@@ -17,6 +17,9 @@ class EditRequest extends React.Component {
         { url: '/Request/FAQ', title: 'FAQ' },
       ],
       request: [],
+      editRequest: {
+        lastRequestTime: new Date(),
+      },
       requestCategory: [],
       serviceCategory: [],
       completed: false,
@@ -26,10 +29,15 @@ class EditRequest extends React.Component {
       imageSuccess : false,
       _id: localStorage.getItem('_id'),
       authName: {},
+      fileFormat: false,
+      titleNull: false,
+      requestCategoryNull: false,
+      contentNull: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.imageShow = this.imageShow.bind(this);
     this.imageHide = this.imageHide.bind(this);
+    this.fileCheck = this.fileCheck.bind(this);
   }
   imageShow = () => {
     this.setState({
@@ -43,11 +51,30 @@ class EditRequest extends React.Component {
     })
   }
 
+  fileCheck = () =>{
+    this.setState({
+      fileFormat: false
+    })
+  }
+
   handleSubmit(e) {
     e.preventDefault();
+    this.setState({
+      titleNull: false,
+      requestCategoryNull: false,
+      contentNull: false,
+    });
+
+    if(this.state.request.title == '' || this.state.request.requestCategory == '' || this.state.request.contents == '')
+    {
+      this.state.request.title == '' ? this.setState({ titleNull: true }) : this.setState({ titleNull: false });
+      this.state.request.requestCategory == '' ? this.setState({ requestCategoryNull: true }) : this.setState({ requestCategoryNull: false });
+      this.state.request.contents == '' ? this.setState({ contentNull: true }) : this.setState({ contentNull: false });
+    }
+    else{
     fetch(`${process.env.REACT_APP_API_URL}/request/${this.props.id}`, {
       method: 'PUT',
-      body: JSON.stringify(this.state.request),
+      body: JSON.stringify(this.state.editRequest),
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -57,14 +84,29 @@ class EditRequest extends React.Component {
       .then(() => this.setState({ completed: true }))
       .catch((err) => console.log(err));
   }
+  }
 
   onFormSubmit(event){
-    this.setState({
-      file: event.target.files[0],
-    });
+    var fileValue = event.target.files[0].name;
+    console.log("File name: "+ fileValue);
+    var extension = fileValue.split('.').pop();
+    console.log("File extension: "+ extension);
+
+    if(extension == 'jpg' || extension == 'png' || extension == 'gif' || extension == 'pdf' || extension == 'txt')
+    {
+      this.setState({
+        file: event.target.files[0],
+      });
+    }
+    else{
+      this.setState({
+        fileFormat: true,
+      })
+    }
   }
 
   fileUpload(){
+    if(!this.state.fileFormat){
     const url = process.env.REACT_APP_IMAGE_URL + "/upload";
     const formData = new FormData();
     formData.append('file', this.state.file)
@@ -88,38 +130,51 @@ class EditRequest extends React.Component {
       this.setState({
         imageSuccess: true
       })
+    })
+    .catch(()=>{
+      this.setState({
+        imageSuccess: false,
+        fileFormat: true,
+      })
     });
+  }
+  else{
+    this.setState({
+      fileFormat: true,
+    })
+  }
   }
 
   onTitleChange(e) {
-    this.setState(() => ({
-      request: {
-        ...this.state.request,
-        title: e.target.value,
-      },
-    }));
-  }
-
-  onCategoryChange(e) {
-    this.setState(() => ({
-      request: {
-        ...this.state.request,
-        requestCategory: e.target.value,
-      },
-    }));
+      this.setState(() => ({
+        request: {
+          ...this.state.request,
+          title: e.target.value,
+        },
+        editRequest: {
+          ...this.state.editRequest,
+          title: e.target.value,
+        },
+        titleNull: false,
+      }));
   }
 
   onContentChange(e) {
-    console.log(e.target.value);
     this.setState(() => ({
       request: {
         ...this.state.request,
         contents: e.target.value,
       },
+      editRequest: {
+        ...this.state.editRequest,
+        contents: e.target.value,
+      },
+      contentNull: false,
     }));
   }
 
   onRequestCategoryChange(e) {
+
     this.setState(() => ({
       requestCategory: {
         ...this.state.requestCategory,
@@ -129,6 +184,11 @@ class EditRequest extends React.Component {
         ...this.state.request,
         requestCategory: e.target.value,
       },
+      editRequest: {
+        ...this.state.editRequest,
+        requestCategory: e.target.value,
+      },
+      requestCategoryNull: false,
     }));
   }
 
@@ -143,8 +203,13 @@ class EditRequest extends React.Component {
         ...this.state.request,
         serviceCategory: e.target.value,
       },
+      editRequest: {
+        ...this.state.editRequest,
+        serviceCategory: e.target.value,
+      },
     }));
   }
+
   getRequest(id) {
     moment();
     return new Promise((resolve) => {
@@ -241,11 +306,8 @@ class EditRequest extends React.Component {
                   Title:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control
-                    type="text"
-                    Value={this.state.request.title}
-                    onChange={this.onTitleChange.bind(this)}
-                  />
+                  <Form.Control type="text"  value={this.state.request.title} onChange={this.onTitleChange.bind(this)} isInvalid={this.state.titleNull}/>
+                  <Form.Control.Feedback type="invalid">Title is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -257,6 +319,7 @@ class EditRequest extends React.Component {
                     as="select"
                     onChange={this.onRequestCategoryChange.bind(this)}
                     value={this.state.requestCategory._id}
+                    isInvalid={this.state.requestCategoryNull}
                   >
                     <option value="">--Choose--</option>
                     {this.state.requestCategories.map((reqCategory) => (
@@ -265,6 +328,7 @@ class EditRequest extends React.Component {
                       </option>
                     ))}
                   </Form.Control>
+                  <Form.Control.Feedback type="invalid">Request Category is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -297,14 +361,24 @@ class EditRequest extends React.Component {
                     rows={3}
                     value={this.state.request.contents}
                     onChange={this.onContentChange.bind(this)}
+                    isInvalid={this.state.contentNull}
                   />
+                  <Form.Control.Feedback type="invalid">Content is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
                 <Form.Label column sm={2}>
                   Attach File:
                 </Form.Label>
-                <Form.File type="file" onChange={this.onFormSubmit.bind(this)} aria-describedby="fileSuccessBlock"/>
+                <Form.File type="file" onChange={this.onFormSubmit.bind(this)}/>
+                  <Modal show={this.state.fileFormat} onHide={this.fileCheck}>
+                    <Modal.Header closeButton>
+                      <Modal.Title>Image Upload Result</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <p>Only .jpg .png .gif .pdf .txt file type is allowed</p>
+                    </Modal.Body>
+                  </Modal>
                 <Button variant="outline-secondary" id="fileSuccessBlock" onClick={this.fileUpload.bind(this)}>
                       Upload
                 </Button>

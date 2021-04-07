@@ -21,6 +21,7 @@ class RequestHomebyAdmin extends React.Component {
       dayValue: 0,
       status: '',
       startDate: '',
+      endDate: '',
       filter: '',
       requests: [],
       filterRequests: [],
@@ -270,6 +271,7 @@ class RequestHomebyAdmin extends React.Component {
               <Form.Control
                 id="startDate"
                 onChange={this.onStartDateChange.bind(this)}
+                value={this.state.startDate}
                 type="date"
                 style={{ 'margin-left': '30px', 'margin-right': '15px' }}
                 isInvalid={this.state.sDateStatus}
@@ -278,6 +280,7 @@ class RequestHomebyAdmin extends React.Component {
               <Form.Control
                 id="endDate"
                 onChange={this.onEndDateChange.bind(this)}
+                value={this.state.endDate}
                 type="date"
                 style={{ 'margin-left': '15px' }}
                 isInvalid={this.state.eDateStatus}
