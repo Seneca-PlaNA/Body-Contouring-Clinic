@@ -228,8 +228,7 @@ class CreateAppointment extends React.Component {
                           showOutsideDays 
                           selectedDays={this.state.availableDays} 
                           disabledDays={[{before: new Date()}]} 
-                          onDayClick={this.onDateChange.bind(this)} 
-                          isInvalid={this.state.dateNull}/>
+                          onDayClick={this.onDateChange.bind(this)} />
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>

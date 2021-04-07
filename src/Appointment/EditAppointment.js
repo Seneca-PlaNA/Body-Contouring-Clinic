@@ -5,6 +5,9 @@ import SideBar from '../SideBar/SideBar';
 import styles from '../app.module.css';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
+import DayPicker from 'react-day-picker';
+import 'react-day-picker/lib/style.css';
+import moment from 'moment';
 
 class EditAppointment extends React.Component {
   constructor(props) {
@@ -39,9 +42,12 @@ class EditAppointment extends React.Component {
       technicianNull: false,
       contactNumberNull: false,
       timeNull: true,
+      selectedDay: null,
+      availableDays: [],
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
+    this.getAvailableDays = this.getAvailableDays.bind(this);
   }
 
   showSave = () => {
@@ -117,20 +123,19 @@ class EditAppointment extends React.Component {
     }));
   }
 
-  onDateChange(event){
+  onDateChange(day, {selected}){
     this.setState({
-      printDate: event.target.value,
+      printDate: day,
+      selectedDay: selected ? undefined : day,
     });
 
-    var pureDate = (event.target.value).split("-");
-    var searchDate = pureDate[1] + "/" + pureDate[2] +"/" + pureDate[0];
-    console.log(searchDate);
-    fetch(`${process.env.REACT_APP_API_URL}/workSchedule?date=${searchDate}`)
+    fetch(`${process.env.REACT_APP_API_URL}/workSchedule?date=${moment(day).format("MM/DD/YYYY")}`)
     .then(response => response.json())  
     .then((data)=>{
       console.log(data);
       this.setState({
         filterData: data,
+        timeNull: true,
       })
     });
   }
@@ -161,6 +166,25 @@ class EditAppointment extends React.Component {
         ...this.state.editAppmnt,
         schedule: event.target.value,
       }
+    });
+  }
+
+  getAvailableDays(){
+    fetch(`${process.env.REACT_APP_API_URL}/workSchedules`)
+    .then(response => response.json())
+    .then((data) => {
+      var allDays = [];
+      data.map((schedule)=>{
+        if(schedule.booked == false && moment(schedule.date.date).isAfter(new Date()))
+        {
+            allDays = allDays.concat(moment(schedule.date.date, "MM/DD/YYYY").toDate());
+        }
+      });
+ 
+      console.log(allDays);
+      this.setState({
+        availableDays: allDays,
+      });
     });
   }
 
@@ -199,6 +223,7 @@ class EditAppointment extends React.Component {
         })
       });
   });
+  this.getAvailableDays();
   }
 
   render() {
@@ -240,7 +265,11 @@ class EditAppointment extends React.Component {
                         Date
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control type="date" value={this.state.printDate} onChange={this.onDateChange.bind(this)}/>
+                        <DayPicker 
+                            showOutsideDays 
+                            selectedDays={this.state.availableDays} 
+                            disabledDays={[{before: new Date()}]} 
+                            onDayClick={this.onDateChange.bind(this)} />
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
