@@ -2,6 +2,9 @@ import React from 'react';
 import '../App.css';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 import { Redirect } from 'react-router';
+import DayPicker from 'react-day-picker';
+import 'react-day-picker/lib/style.css';
+import moment from 'moment';
 
 class CreateAppointment extends React.Component {
   constructor(props) {
@@ -32,9 +35,12 @@ class CreateAppointment extends React.Component {
       dateNull: false,
       technicianNull: false,
       contactNumNull: false,
+      selectedDay: null,
+      availableDays: [],
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
+    this.getAvailableDays = this.getAvailableDays.bind(this);
   }
 
   showSave = () => {
@@ -96,12 +102,13 @@ class CreateAppointment extends React.Component {
     }));
   }
 
-  onDateChange(event){
-    var pureDate = (event.target.value).split("-");
-    var searchDate = pureDate[1] + "/" + pureDate[2] +"/" + pureDate[0];
-    console.log(searchDate);
-    
-    fetch(`${process.env.REACT_APP_API_URL}/workSchedule?date=${searchDate}`)
+  onDateChange(day, {selected}){
+
+    this.setState({
+      selectedDay: selected ? undefined : day,
+    });
+
+    fetch(`${process.env.REACT_APP_API_URL}/workSchedule?date=${moment(day).format("MM/DD/YYYY")}`)
     .then(response => response.json())  
     .then((data)=>{
       console.log(data);
@@ -149,6 +156,26 @@ class CreateAppointment extends React.Component {
       })
     });
   }
+
+  getAvailableDays(){
+    fetch(`${process.env.REACT_APP_API_URL}/workSchedules`)
+    .then(response => response.json())
+    .then((data) => {
+      var allDays = [];
+      data.map((schedule)=>{
+        if(schedule.booked == false && moment(schedule.date.date).isAfter(new Date()))
+        {
+            allDays = allDays.concat(moment(schedule.date.date, "MM/DD/YYYY").toDate());
+        }
+      });
+ 
+      console.log(allDays);
+      this.setState({
+        availableDays: allDays,
+      });
+    });
+  }
+  
   componentDidMount() {
     document.title = 'Create New Appointment | Body Contouring Clinic';
 
@@ -159,6 +186,7 @@ class CreateAppointment extends React.Component {
         customer: data,
       });
       this.getService();
+      this.getAvailableDays();
     });
 
   }
@@ -196,8 +224,12 @@ class CreateAppointment extends React.Component {
                         Date
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control type="date" onChange={this.onDateChange.bind(this)} isInvalid={this.state.dateNull}/>
-                        <Form.Control.Feedback type="invalid">Date is required</Form.Control.Feedback>
+                        <DayPicker 
+                          showOutsideDays 
+                          selectedDays={this.state.availableDays} 
+                          disabledDays={[{before: new Date()}]} 
+                          onDayClick={this.onDateChange.bind(this)} 
+                          isInvalid={this.state.dateNull}/>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
