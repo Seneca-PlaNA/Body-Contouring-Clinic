@@ -49,6 +49,8 @@ import SignupSuccess from './Register/SignupSuccess';
 import CheckConfirmEmail from './Register/CheckConfirmEmail';
 import Forgot_Id from './Register/Forgot_Id';
 import FindID from './Register/FindID';
+import Forgot_Password from './Register/Forgot_Password';
+import FindPassword from './Register/ChangePassword';
 import openHours from './resources/openHours.png';
 import servicePic from './resources/SerivcePic.png';
 import ViewSchedulesList from './StaffSchedule/ViewSchedulesList';
@@ -81,7 +83,11 @@ class RouterConfig extends React.Component {
           <Route exact path="/Appointment/Appointments" render={() => <Appointments />} />
           <Route exact path="/Appointment/Create" render={() => <SelectCreateAppointment />} />
           {/* <Route exact path="/Appointment/Create" render={() => <CreateAppointment />} /> */}
-          <Route exact path="/Appointment/Offer/Create/:id" render={(props) => <CreateAppointmentWithOffer id={props.match.params.id}/>} />
+          <Route
+            exact
+            path="/Appointment/Offer/Create/:id"
+            render={(props) => <CreateAppointmentWithOffer id={props.match.params.id} />}
+          />
           <Route
             exact
             path="/Appointment/Appointment/:id"
@@ -106,7 +112,11 @@ class RouterConfig extends React.Component {
             path="/Appointment/Admin/Edit/:id"
             render={(props) => <EditAppointmentAdmin id={props.match.params.id} />}
           />
-          <Route exact path="/Appointment/Admin/Create" render={() => <SelectCreateAppointmentAdmin />} />
+          <Route
+            exact
+            path="/Appointment/Admin/Create"
+            render={() => <SelectCreateAppointmentAdmin />}
+          />
           <Route
             exact
             path="/Appointment/Admin/Message/:id"
@@ -186,11 +196,7 @@ class RouterConfig extends React.Component {
 
           {/* Customer URL */}
           <Route exact path="/Customer" render={() => <CustomerHome />} />
-          <Route
-            exact
-            path="/Customer/Profile"
-            render={() => <CustomerProfile />}
-          />
+          <Route exact path="/Customer/Profile" render={() => <CustomerProfile />} />
           <Route
             exact
             path="/Customer/Edit/:id"
@@ -203,25 +209,17 @@ class RouterConfig extends React.Component {
           />
 
           {/* Customer Admin URL*/}
-          <Route
-            exact
-            path="/Customer/Admin"
-            render={() => <CustomerHomeAdmin />}
-          />
+          <Route exact path="/Customer/Admin" render={() => <CustomerHomeAdmin />} />
           <Route
             exact
             path="/Customer/Admin/Profile/:id"
-            render={(props) => <CustomerProfileAdmin id={props.match.params.id}/>}
+            render={(props) => <CustomerProfileAdmin id={props.match.params.id} />}
           />
-          <Route
-            exact
-            path="/Customer/Admin/Balance"
-            render={() => <CustomerBalanceAdmin />}
-          />
+          <Route exact path="/Customer/Admin/Balance" render={() => <CustomerBalanceAdmin />} />
           <Route
             exact
             path="/Customer/Admin/Balance/:id"
-            render={(props) => <CustomerBalanceDetailAdmin id={props.match.params.id}/>}
+            render={(props) => <CustomerBalanceDetailAdmin id={props.match.params.id} />}
           />
 
           {/* Staff Admin URL */}
@@ -236,7 +234,8 @@ class RouterConfig extends React.Component {
           <Route exact path="/Register/CheckConfirmEmail" render={() => <CheckConfirmEmail />} />
           <Route exact path="/Register/ForgotID" render={() => <Forgot_Id />} />
           <Route exact path="/Register/FindID" render={() => <FindID />} />
-
+          <Route exact path="/Register/ForgotPassword" render={() => <Forgot_Password />} />
+          <Route exact path="/Register/FindPassword" render={() => <FindPassword />} />
           {/* Page Not Found */}
           <Route render={() => <PageNotFound />} />
         </Switch>
