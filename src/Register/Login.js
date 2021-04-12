@@ -196,7 +196,7 @@ class Login extends Component {
           </div>
           <div className="col-md-4" style={{ marginLeft: '290px' }}>
             <p className="forgot-password text-right">
-              <a href="./ForgotID">Forgot ID?</a>
+              <a href="./ForgotID">Forgot ID?</a> / <a href="./ForgotPassword">Forgot Password?</a>
             </p>
           </div>
           <br />

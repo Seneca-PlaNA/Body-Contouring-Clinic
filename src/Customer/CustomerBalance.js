@@ -13,7 +13,7 @@ class CustomerBalance extends React.Component {
       { url: '/Customer', title: 'Home' },
       { url: `/Customer/Profile`, title: 'Profile' },
       { url: `/Customer/Balance/${localStorage.getItem('_id')}`, title: 'Balance' },
-    ], 
+    ],
       _id: localStorage.getItem('_id'),
       balances: [],
       balanceHistory: [],
@@ -43,7 +43,7 @@ class CustomerBalance extends React.Component {
       });
     }
   }
-  
+
   handlePage(e) {
     this.setState({
       currentPage: Number(e.target.id),
@@ -57,7 +57,7 @@ class CustomerBalance extends React.Component {
         .then((data) => {
           resolve(data);
         });
-    
+
     });
   }
 
@@ -91,7 +91,12 @@ class CustomerBalance extends React.Component {
       });
     });
   }
-  
+
+  sortingByDate(a, b) {
+    let dateA = new Date(a.date).getTime();
+    let dateB = new Date(b.date).getTime();
+    return dateA > dateB ? -1 : 1;
+  }
   render() {
     if(this.state.authName == null)
     {
@@ -100,6 +105,7 @@ class CustomerBalance extends React.Component {
       );
     }
 
+    this.state.balances.sort(this.sortingByDate);
     const indexOfLast = this.state.currentPage * this.state.perPage;
     const indexOfFirst = indexOfLast - this.state.perPage;
     const currentItems = this.state.balances.slice(indexOfFirst, indexOfLast);
@@ -121,11 +127,11 @@ class CustomerBalance extends React.Component {
             <h2 className="PageTitle">Hi, {this.state.profile.firstName + ' ' + this.state.profile.lastName}</h2>
             <hr />
             <br />
-  
+
             <Container class="col-md-8">
               <Form style={{ fontSize: '20px', textAlign: 'left' }}>
               <h4>Balance Information</h4><br/>
-                  <Col sm={4}>          
+                  <Col sm={4}>
                     <Form.Label>
                       Current Balance: $ {this.state.balanceHistory == null? 0 :this.state.balanceHistory.currentBalance}
                     </Form.Label>
@@ -137,8 +143,8 @@ class CustomerBalance extends React.Component {
             <Container class="col-md-8">
               <Table>
                 <Row>
-                  <Col md={12}>   
-                  <table>   
+                  <Col md={12}>
+                  <table>
                       <tr>
                         <th>Date</th>
                         <th>info</th>

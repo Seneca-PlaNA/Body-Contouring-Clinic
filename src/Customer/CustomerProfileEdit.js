@@ -20,18 +20,23 @@ class CustomerProfileEdit extends React.Component {
       tempPwd: '',
       pwdConfirmed: false,
       _id: localStorage.getItem('_id'),
-      editProfile:{},
-      authName:{},
+      editProfile: {},
+      authName: {},
       fNameStatus: false,
       lNameStatus: false,
       emailStatus: false,
       adStatus: false,
+      passwordIsMoreThan8: true,
     };
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    
+
+    if (!this.state.passwordIsMoreThan8 || this.state.passwordConfirmedSame) {
+      event.preventDefault();
+    }
+
     fetch(`${process.env.REACT_APP_API_URL}/account/${this.state._id}`, {
       method: 'PUT',
       body: JSON.stringify(this.state.editProfile),
@@ -46,122 +51,125 @@ class CustomerProfileEdit extends React.Component {
   }
 
   onFirstNameChange(event) {
-    this.setState(()=>({
+    this.setState(() => ({
       fNameStatus: false,
-    }))
+    }));
 
-    if(event.target.value != ''){
+    if (event.target.value != '') {
       this.setState(() => ({
         profile: {
           ...this.state.profile,
           firstName: event.target.value,
         },
-        editProfile:{
+        editProfile: {
           ...this.state.editProfile,
           firstName: event.target.value,
-        }
+        },
       }));
-    }
-    else{
-      this.setState(()=>({
+    } else {
+      this.setState(() => ({
         profile: {
           ...this.state.profile,
           firstName: event.target.value,
         },
         fNameStatus: true,
-      }))
+      }));
     }
   }
 
   onLastNameChange(event) {
-    this.setState(()=>({
+    this.setState(() => ({
       lNameStatus: false,
-    }))
+    }));
 
-    if(event.target.value != ''){
+    if (event.target.value != '') {
       this.setState(() => ({
         profile: {
           ...this.state.profile,
           lastName: event.target.value,
         },
-        editProfile:{
+        editProfile: {
           ...this.state.editProfile,
           lastName: event.target.value,
-        }
+        },
       }));
-    }
-    else{
-      this.setState(()=>({
+    } else {
+      this.setState(() => ({
         profile: {
           ...this.state.profile,
           lastName: event.target.value,
         },
         lNameStatus: true,
-      }))
+      }));
     }
-
   }
 
   onEmailChange(event) {
-    this.setState(()=>({
+    this.setState(() => ({
       emailStatus: false,
-    }))
+    }));
 
-    if(event.target.value != ''){
+    if (event.target.value != '') {
       this.setState(() => ({
         profile: {
           ...this.state.profile,
           email: event.target.value,
         },
-        editProfile:{
+        editProfile: {
           ...this.state.editProfile,
           email: event.target.value,
-        }
+        },
       }));
-    }
-    else{
-      this.setState(()=>({
+    } else {
+      this.setState(() => ({
         profile: {
           ...this.state.profile,
           email: event.target.value,
         },
         emailStatus: true,
-      }))
+      }));
     }
   }
 
   onAddressChange(event) {
-    this.setState(()=>({
+    this.setState(() => ({
       adStatus: false,
-    }))
+    }));
 
-    if(event.target.value != ''){
+    if (event.target.value != '') {
       this.setState(() => ({
         profile: {
           ...this.state.profile,
           address: event.target.value,
         },
-        editProfile:{
+        editProfile: {
           ...this.state.editProfile,
           address: event.target.value,
-        }
+        },
       }));
-    }
-    else{
-      this.setState(()=>({
+    } else {
+      this.setState(() => ({
         adStatus: true,
         profile: {
           ...this.state.profile,
           address: event.target.value,
         },
-      }))
+      }));
     }
   }
 
   onPasswordChange(event) {
-    this.setState(() => ({
-      tempPwd: event.target.value,
-    }));
+    if (event.target.value.length < 8) {
+      this.setState(() => ({
+        tempPwd: event.target.value,
+        passwordIsMoreThan8: false,
+      }));
+    } else {
+      this.setState(() => ({
+        tempPwd: event.target.value,
+        passwordIsMoreThan8: true,
+      }));
+    }
     console.log(this.state.tempPwd);
   }
 
@@ -170,20 +178,18 @@ class CustomerProfileEdit extends React.Component {
       pwdConfirmed: false,
     }));
 
-    if(this.state.tempPwd == event.target.value)
-    {
+    if (this.state.tempPwd == event.target.value) {
       this.setState(() => ({
         profile: {
           ...this.state.profile,
           password: event.target.value,
         },
-        editProfile:{
+        editProfile: {
           ...this.state.editProfile,
           password: event.target.value,
-        }
+        },
       }));
-    }
-    else{
+    } else {
       this.setState(() => ({
         pwdConfirmed: true,
       }));
@@ -201,11 +207,9 @@ class CustomerProfileEdit extends React.Component {
   }
 
   render() {
-    if(this.state.authName == null)
-    {
-      return (
-        <Redirect push to={{pathname: '/', }}  refresh="true"/>
-      );
+    console.log(this.state.passwordIsMoreThan8);
+    if (this.state.authName == null) {
+      return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
     return (
       <div className="row">
@@ -221,8 +225,13 @@ class CustomerProfileEdit extends React.Component {
                   First Name:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="text" value={this.state.profile.firstName} onChange={this.onFirstNameChange.bind(this)} isInvalid={this.state.fNameStatus}/>
-                  <Form.Control.Feedback type='invalid' > 
+                  <Form.Control
+                    type="text"
+                    value={this.state.profile.firstName}
+                    onChange={this.onFirstNameChange.bind(this)}
+                    isInvalid={this.state.fNameStatus}
+                  />
+                  <Form.Control.Feedback type="invalid">
                     First Name is required
                   </Form.Control.Feedback>
                 </Col>
@@ -232,8 +241,13 @@ class CustomerProfileEdit extends React.Component {
                   Last Name:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="text" value={this.state.profile.lastName} onChange={this.onLastNameChange.bind(this)} isInvalid={this.state.lNameStatus}/>
-                  <Form.Control.Feedback type='invalid' > 
+                  <Form.Control
+                    type="text"
+                    value={this.state.profile.lastName}
+                    onChange={this.onLastNameChange.bind(this)}
+                    isInvalid={this.state.lNameStatus}
+                  />
+                  <Form.Control.Feedback type="invalid">
                     Last Name is required
                   </Form.Control.Feedback>
                 </Col>
@@ -243,7 +257,14 @@ class CustomerProfileEdit extends React.Component {
                   Password:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="password" onChange={this.onPasswordChange.bind(this)}/>
+                  <Form.Control
+                    type="password"
+                    onChange={this.onPasswordChange.bind(this)}
+                    isInvalid={!this.state.passwordIsMoreThan8}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Password length must be longer than 8
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -251,10 +272,12 @@ class CustomerProfileEdit extends React.Component {
                   Confirm Password:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="password" onChange={this.onConfirmPasswordChange.bind(this)} isInvalid={this.state.pwdConfirmed}/>
-                  <Form.Control.Feedback type='invalid' > 
-                    PASSWORD NOT MATCHED
-                  </Form.Control.Feedback>
+                  <Form.Control
+                    type="password"
+                    onChange={this.onConfirmPasswordChange.bind(this)}
+                    isInvalid={this.state.pwdConfirmed}
+                  />
+                  <Form.Control.Feedback type="invalid">PASSWORD NOT MATCHED</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -262,10 +285,13 @@ class CustomerProfileEdit extends React.Component {
                   Email Address:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="email" value={this.state.profile.email} onChange={this.onEmailChange.bind(this)} isInvalid={this.state.emailStatus}/>
-                  <Form.Control.Feedback type='invalid' > 
-                    Email is required
-                  </Form.Control.Feedback>
+                  <Form.Control
+                    type="email"
+                    value={this.state.profile.email}
+                    onChange={this.onEmailChange.bind(this)}
+                    isInvalid={this.state.emailStatus}
+                  />
+                  <Form.Control.Feedback type="invalid">Email is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -273,10 +299,13 @@ class CustomerProfileEdit extends React.Component {
                   Address:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="text" value={this.state.profile.address} onChange={this.onAddressChange.bind(this)} isInvalid={this.state.adStatus}/>
-                  <Form.Control.Feedback type='invalid' > 
-                    Address is required
-                  </Form.Control.Feedback>
+                  <Form.Control
+                    type="text"
+                    value={this.state.profile.address}
+                    onChange={this.onAddressChange.bind(this)}
+                    isInvalid={this.state.adStatus}
+                  />
+                  <Form.Control.Feedback type="invalid">Address is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>

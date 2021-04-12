@@ -44,6 +44,7 @@ class EditAppointmentAdmin extends React.Component {
       timeNull: true,
       selectedDay: null,
       availableDays: [],
+      confirmDay: null,
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
@@ -128,6 +129,7 @@ class EditAppointmentAdmin extends React.Component {
     this.setState({
       printDate: day,
       selectedDay: selected ? undefined : day,
+      confirmDay: day,
     });
 
     fetch(`${process.env.REACT_APP_API_URL}/workSchedule?date=${moment(day).format("MM/DD/YYYY")}`)
@@ -269,6 +271,7 @@ class EditAppointmentAdmin extends React.Component {
                         Date
                       </Form.Label>
                       <Col sm="8">
+                        <Form.Control as="input" value={this.state.confirmDay != null ? this.state.confirmDay.toLocaleDateString() : 'Please select a day'} />
                         <DayPicker 
                               showOutsideDays 
                               selectedDays={this.state.availableDays} 

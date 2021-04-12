@@ -191,6 +191,12 @@ class CustomerBalanceDetailAdmin extends React.Component {
     });
   }
 
+  sortingByDate(a, b) {
+    let dateA = new Date(a.date).getTime();
+    let dateB = new Date(b.date).getTime();
+    return dateA > dateB ? -1 : 1;
+  }
+
   render() {
     if (
       this.state.authName == null ||
@@ -200,6 +206,7 @@ class CustomerBalanceDetailAdmin extends React.Component {
       return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
 
+    this.state.balances.sort(this.sortingByDate);
     const indexOfLast = this.state.currentPage * this.state.perPage;
     const indexOfFirst = indexOfLast - this.state.perPage;
     const currentItems = this.state.balances.slice(indexOfFirst, indexOfLast);

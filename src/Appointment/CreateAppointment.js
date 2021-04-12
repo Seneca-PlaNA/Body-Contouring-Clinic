@@ -37,6 +37,7 @@ class CreateAppointment extends React.Component {
       contactNumNull: false,
       selectedDay: null,
       availableDays: [],
+      confirmDay : null,
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
@@ -106,6 +107,7 @@ class CreateAppointment extends React.Component {
 
     this.setState({
       selectedDay: selected ? undefined : day,
+      confirmDay: day,
     });
 
     fetch(`${process.env.REACT_APP_API_URL}/workSchedule?date=${moment(day).format("MM/DD/YYYY")}`)
@@ -224,6 +226,7 @@ class CreateAppointment extends React.Component {
                         Date
                       </Form.Label>
                       <Col sm="8">
+                        <Form.Control as="input" value={this.state.confirmDay != null ? this.state.confirmDay.toLocaleDateString() : 'Please select a day'} />
                         <DayPicker 
                           showOutsideDays 
                           selectedDays={this.state.availableDays} 
