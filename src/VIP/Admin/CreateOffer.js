@@ -29,8 +29,6 @@ class CreateOffer extends React.Component {
       completed: false,
       file: null,
       imageSuccess : false,
-      tempStartDate: null,
-      tempEndDate: null,
       dateStatus: false,
       _id: localStorage.getItem('_id'),
       authName: {},
@@ -70,8 +68,7 @@ class CreateOffer extends React.Component {
     this.state.offer.description == '' ? this.setState({ descNull: true }) : this.setState({descNull: false})
     this.state.offer.price == '' ? this.setState({ priceNull: true }) : this.setState({priceNull: false})
     this.state.offer.startDate == '' ? this.setState({ sDateNull: true }) : this.setState({sDateNull: false})
-    (this.state.offer.endDate != '') && moment(this.state.tempStartDate).isBefore(event.target.value) ? 
-    this.setState({ dateStatus: false }) : this.setState({dateStatus: true})
+    this.state.offer.endDate == '' ? this.setState({ eDateNull: true }) : this.setState({eDateNull: false})
 
     fetch(`${process.env.REACT_APP_API_URL}/create-offer`,{
       method: "POST",
@@ -174,41 +171,28 @@ class CreateOffer extends React.Component {
       priceNull: false,
     }));
   }
-
+  
+  validateDate = () => {  
+    const { endDate, startDate} = this.state.offer;
+    let dateStatus = false;
+    if(!moment(startDate).isBefore(endDate) && startDate && endDate){
+        dateStatus = true
+    } 
+    this.setState({dateStatus})
+  }
   onStartDateChange(event) {
     this.setState(() => ({
       sDateNull: false,
-      tempStartDate : event.target.value,
-    }));
+      offer: {...this.state.offer, startDate: event.target.value}
+    }), this.validateDate);
   }
 
   onEndDateChange(event) {
-    this.setState({
-      dateStatus: false,
-    });
-  //   if(this.state.endDate != '') { 
-        if(moment(this.state.tempStartDate).isBefore(event.target.value))
-        {
-          this.setState(() => ({
-            offer: {
-              ...this.state.offer,
-              startDate: this.state.tempStartDate,
-              endDate: event.target.value,
-            },
-          }));
-        } 
-        else {
-            this.setState(()=>({
-              dateStatus : true,
-            }));
-        }
-    } /* else {
-      this.setState(()=>({
-        dateStatus : false,
-      }));
-  } */
-
- // }
+    this.setState(() => ({
+      eDateNull: false,
+      offer: {...this.state.offer, endDate: event.target.value}
+    }), this.validateDate);
+  } 
 
   getCustomerProfile() {
     return new Promise((resolve) => {
@@ -312,50 +296,13 @@ class CreateOffer extends React.Component {
                   />
                   <Form.Control.Feedback type="invalid">Start date is required</Form.Control.Feedback>
                 </Col>
-{/*                 { this.state.endDate != '' ?
-                  <Col sm={3}>
-                    <Form.Control 
-                      controlId="endDate" 
-                      type="date" 
-                      placeholder="end date" 
-                      onChange={this.onEndDateChange.bind(this)} 
-                      isInvalid={this.state.dateStatus}
-                    />
-                    <Form.Control.Feedback type='invalid'> 
-                      start-date should be before end-date
-                    </Form.Control.Feedback>
-                  </Col>
-                  :
                   <Col sm={3}>                  
                     <Form.Control 
                       controlId="endDate" 
                       type="date" 
                       placeholder="end date" 
                       onChange={this.onEndDateChange.bind(this)} 
-                      isInvalid={this.state.eDateNull}
-                    />
-                    <Form.Control.Feedback type="invalid">End date is required</Form.Control.Feedback>
-                  </Col>
-              } */}
-{/*                 { this.state.endDate == '' ?
-                  <Col sm={3}>
-                    <Form.Control 
-                      controlId="endDate" 
-                      type="date" 
-                      placeholder="end date" 
-                      onChange={this.onEndDateChange.bind(this)} 
-                      isInvalid={this.state.eDateNull}
-                      />
-                      <Form.Control.Feedback type="invalid">End date is required</Form.Control.Feedback>
-                    </Col>
-                  : */}
-                  <Col sm={3}>                  
-                    <Form.Control 
-                      controlId="endDate" 
-                      type="date" 
-                      placeholder="end date" 
-                      onChange={this.onEndDateChange.bind(this)} 
-                      isInvalid={this.state.dateStatus}
+                      isInvalid={this.state.eDateNull || this.state.dateStatus}
                     />
                     <Form.Control.Feedback type='invalid'> 
                       End date is required. Start-date should be before end-date
