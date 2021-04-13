@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../App.css';
-import { Form, Row, Col, Container, Button } from 'react-bootstrap';
+import { Form, Row, Col, Container, Button, Alert } from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
 import { Redirect } from 'react-router';
 // import { Link } from 'react-router-dom'
 import axios from 'axios';
@@ -8,125 +9,76 @@ import axios from 'axios';
 class Login extends Component {
   constructor(props) {
     super(props);
+    const loggedIn = localStorage.getItem('isLogin');
     this.state = {
       account: {
-        userID: String,
-        password: String,
+        userID: '',
+        password: '',
       },
-      loggedIn: false,
+      loggedIn,
+      showError: false,
+      errorObject: { isError: true }
     };
   }
-
-  onUserIdChange(event) {
-    this.setState(() => ({
+  
+  onAccountInputChange = (evt) => {
+    this.setState({
+      ...this.state,
       account: {
         ...this.state.account,
-        userID: event.target.value,
-      },
-    }));
+        [evt.target.name]: evt.target.value
+      }
+    }, this.isValid)
   }
 
-  onPasswordChange(event) {
-    this.setState(() => ({
-      account: {
-        ...this.state.account,
-        password: event.target.value,
-      },
-    }));
-  }
+  isValid = () => {
+    const { userID, password } = this.state.account;
+    const errorObject={ isError: false, userID: '', passowrd: '' }
+    if(!userID) {
+      errorObject.isError= true;
+      errorObject.userID = 'User ID is required';
+    }
 
+    if(!password) {
+      errorObject.isError= true;
+      errorObject.password = 'Password is required';
+    }
+    
+    this.setState({
+      errorObject
+    })
+  }
   refreshPage = () => {
     window.location.reload();
-  };
-
-  handleSubmit(event) {
+  }
+  handleSubmit = (event) => {
     event.preventDefault();
-    if (this.state.account.userID.length > 5 && this.state.account.password.length > 3) {
+    const { errorObject } = this.state;
+    this.setState({ showError: true })
+    if(errorObject.isError) {
+      return ;
+    }
+
       axios
         .post(`${process.env.REACT_APP_API_URL}/login`, this.state.account)
         .then((res) => {
-          localStorage.setItem('token', res.data.token);
-          localStorage.setItem('_id', res.data._id); //temporary login method
-          localStorage.setItem('isLogin', res.data.loginSuccess);
-          if (res.data.loginSuccess) {
-            this.setState({ loggedIn: true });
+          if(res.data.loginSuccess) {
+            localStorage.setItem('token', res.data.token);
+            localStorage.setItem('_id', res.data._id); //temporary login method
+            localStorage.setItem('isLogin', res.data.loginSuccess);
+            this.refreshPage()
+            this.props.history.push('/')
+          } else {
+            this.setState({ errorObject: {...errorObject, login: res.data.message }})
           }
-        })
-        .then(() => {
-          this.refreshPage();
         })
         .catch((err) => {
           console.log(err);
         });
-    }
-
-    // this.localstorage.setItem('token',res.data.user);
-    // var token = this.localstorage.getItem('token')
-    // axios.post("ROUTE",data,{header:{}})
-    // const login_info = {
-    //   method: "POST",
-    //   body: JSON.stringify(this.state),
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   }
-
-    //};
   }
 
-  // componentDidMount() {
-  //   let token = localStorage.getItem('token');
-  //   console.log(token);
-  //   if (token === null) {
-  //     throw 'Not Login';
-  //   }
-
-  //   axios.post(
-  //     'http://localhost:3001/login',
-  //     {},
-  //     { headers: { Authorization: `Bearer ${token}` } }
-  //   );
-  // }
-  // handleChange(event) {
-  //   let input = this.state.input;
-  //   input[event.target.name] = event.target.value;
-
-  //   this.setState({
-  //     input,
-  //   });
-  // }
-
-  // handleSubmit(event) {
-  //   event.preventDefault();
-
-  //   if (this.validate()) {
-  //     console.log(this.state);
-
-  //     let input = {};
-  //     input['id'] = '';
-  //     input['password'] = '';
-
-  //     this.setState({ input: input });
-
-  //     alert('You are logged in!');
-  //   }
-  // }
-
-  // validate() {
-  //   let input = this.state.input;
-  //   let errors = {};
-
-  //   if (!input['id']) {
-  //     //isValid = false;
-  //     errors['id'] = 'Please enter your user id.';
-  //   }
-
-  //   if (!input['password']) {
-  //     //isValid = false;
-  //     errors['password'] = 'Please enter your password.';
-  //   }
-  // }
-
   render() {
+    const { errorObject, showError } = this.state; 
     if (this.state.loggedIn) {
       return (
         <Redirect
@@ -139,15 +91,16 @@ class Login extends Component {
       );
     }
     return (
+      <>
       <div className="row">
-        <div className="col-md-8" style={{ 'margin-left': '420px' }}>
-          <h2 className="PageTitle" style={{ 'margin-left': '380px' }}>
+        <div className="col-md-8" style={{ 'margin': '0 auto' }}>
+          <h2 className="PageTitle" style={{  textAlign: 'center' }}>
             Log In
           </h2>
           <br />
-          <Container style={{ 'margin-left': '90px' }}>
-            <Form onSubmit={this.handleSubmit.bind(this)} method="POST">
-              <Form.Group as={Row}>
+          <Container>
+            <Form onSubmit={this.handleSubmit} method="POST">
+              <Form.Group as={Row} style={{ justifyContent: 'center'}}>
                 <Form.Label column sm={2}>
                   ID:
                 </Form.Label>
@@ -155,23 +108,32 @@ class Login extends Component {
                   <Form.Control
                     type="text"
                     placeholder="Enter ID"
-                    onChange={this.onUserIdChange.bind(this)}
+                    name='userID'
+                    onChange={this.onAccountInputChange}
+                    isInvalid={showError && errorObject.userID}
                   ></Form.Control>
+                <Form.Control.Feedback type="invalid">{errorObject.userID}</Form.Control.Feedback>
                 </Col>
               </Form.Group>
-              <Form.Group as={Row}>
+          
+              <Form.Group as={Row} style={{ justifyContent: 'center'}}>
                 <Form.Label column sm={2}>
                   Password:
                 </Form.Label>
                 <Col sm={4}>
                   <Form.Control
                     type="password"
+                    name='password'
                     placeholder="Enter Password"
-                    onChange={this.onPasswordChange.bind(this)}
+                    onChange={this.onAccountInputChange}
+                    isInvalid={showError && errorObject.password}
                   ></Form.Control>
+                <Form.Control.Feedback type="invalid">{errorObject.password}</Form.Control.Feedback>
+
                 </Col>
               </Form.Group>
-              <Form.Group style={{ marginLeft: '350px' }} as={Row}>
+       
+              <Form.Group as={Row} style={{ justifyContent: 'center'}} >
                 <Row>
                   <Col>
                     <Button variant="outline-secondary" href="/VIP/Admin/Manage">
@@ -179,10 +141,11 @@ class Login extends Component {
                     </Button>
                   </Col>
                   <Col md="auto">
-                    <Button variant="outline-info" type="submit">
+                    <Button variant="outline-info" type="submit" disabled={errorObject.isError}>
                       Log in
                     </Button>
                   </Col>
+
                 </Row>
               </Form.Group>
             </Form>
@@ -199,6 +162,7 @@ class Login extends Component {
               <a href="./ForgotID">Forgot ID?</a>
             </p>
           </div>
+           {showError && errorObject.login && <Alert variant={'danger'}>{errorObject.login}</Alert>}
           <br />
           <br /> <br />
           <br />
@@ -206,7 +170,8 @@ class Login extends Component {
         <br />
         <br />
       </div>
+</>
     );
   }
 }
-export default Login;
+export default withRouter(Login);

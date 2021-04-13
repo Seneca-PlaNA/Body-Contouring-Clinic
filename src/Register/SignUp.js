@@ -1,135 +1,138 @@
 import React, { Component } from 'react';
 import '../App.css';
-import { Form, Row, Col, Container, Button } from 'react-bootstrap';
-import { Redirect } from 'react-router';
+import { Form, Row, Col, Container, Button, Alert } from 'react-bootstrap';
+import { Redirect, withRouter } from 'react-router';
 import axios from 'axios';
+
+const ACCOUNT_LEVEL_ID = '60371ad3fda1af6510e75e3a'
+//eslint-disable-next-line 
+const EMAIL_REGEX = /\S+@\S+\.\S+/;
+// const PHONE_NUMBER_REGEX = /^\s*(?:\+?(\d{1,3}))?[- (]*(\d{3})[- )]*(\d{3})[- ]*(\d{4})(?: *[x/#]{1}(\d+))?\s*$/;
+const PHONE_NUMBER_REGEX = /^[1-9]\d{2}-\d{3}-\d{4}$/ //000-000-0000
 
 class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
       account: {
-        userID: String,
-        password: String,
-        firstName: String,
-        lastName: String,
-        phone: String,
-        email: String,
-        address: String,
-        accountLevelId: '60371ad3fda1af6510e75e3a',
+        userID: '',
+        password: '',
+        confirmPassword: '',
+        firstName: '',
+        lastName: '',
+        phone: '',
+        email: '',
+        address: '',
+        accountLevelId: ACCOUNT_LEVEL_ID,
         balanceHistory: String,
       },
-      // balance: {},
+      showError: false,
+      errorObject: { isError: true },
       completed: false,
     };
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    // axios.post('http://localhost:3001/create-balance-history', this.state.balance).then((res) => {
-    //   console.log(res.data._id);
-    //   console.log(res.data);
-    //   this.setState({
-    //     account: {
-    //       balanceHistory: res.data._id,
-    //     },
-    //   });
-    // });
+  isValid = () => {
+    const {userID, password, confirmPassword,  firstName, lastName, phone, email, address} = this.state.account;
+    const errorObject = { isError: false, userID: '', password: '', confirmPassword: '', firstName: '', lastName: '', phone: '', email: '', address: '' };
 
-    // fetch('http://localhost:3001/create-balance-history', {
-    //   method: 'POST',
-    //   body: JSON.stringify(this.state.balance),
-    //   headers: {
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json',
-    //   },
-    // })
-    //   .then((response) => response.json())
-    //   .then((response) => {
-    //     console.log(response);
-    //     console.log(response.json);
-    //   })
-    //   .catch((err) => console.log(err));
+    // - error message should displayed if user id is null
+    if(!userID) {
+      errorObject.isError = true;
+      errorObject.userID = 'User ID is required';
+    }
+    // - error message should displayed if user id is less than 6 character
+    if(userID.length < 6) {
+      errorObject.isError = true;
+      errorObject.userID = 'User ID should be more than 6 characters';
+    }
+    // - error message should displayed if password is null
+    if(!password) { 
+      errorObject.isError = true;
+      errorObject.password = 'Password is required';
+    }
+    // - error message should displayed if password is less than 8 character
+    if(password.length < 8) { 
+      errorObject.isError = true;
+      errorObject.password = 'Password should be more than 8 characters';
+    }
+
+    if(confirmPassword && password != confirmPassword) {
+      errorObject.isError = true;
+      errorObject.confirmPassword = "Password doesn't matach";
+    }
+    // - error message should displayed if first name is null
+    if(!firstName) { 
+      errorObject.isError = true;
+      errorObject.firstName = 'First mame is required';
+    }
+    // - error message should displayed if last name is null
+    if(!lastName) { 
+      errorObject.isError = true;
+      errorObject.lastName = 'Last name is required';
+    }
+    // - error message should displayed if phone number is null
+    if(!phone) { 
+      errorObject.isError = true;
+      errorObject.phone = 'Phone number is required';
+    }
+
+    // - error message should displayed if phone number is in invalid format(000-000-0000), no more than 12 character
+    console.log(PHONE_NUMBER_REGEX.test(phone))
+    if(phone.length > 12 || !PHONE_NUMBER_REGEX.test(phone)) {
+      errorObject.isError = true;
+      errorObject.phone = 'Please check your phone number';
+    }
+
+    // - error message should displayed if email is null
+    if(!email) { 
+      errorObject.isError = true;
+      errorObject.email = 'Email is required';
+    }
+
+    // - error message should displayed if email is in invalid format
+    if(email && !EMAIL_REGEX.test(email) ) {
+      errorObject.isError = true;
+      errorObject.email = 'Email format is incorrect';
+    }
+    // - error message should displayed if address is null
+    if(!address) {
+      errorObject.isError = true;
+      errorObject.address = 'Address is required';
+    }
+
+    this.setState({ errorObject })
+  }
+
+  onAccountInputChange = (evt) => {
+     this.setState({
+      ...this.state,
+      account: {
+        ...this.state.account,
+        [evt.target.name]: evt.target.value
+      }
+    }, this.isValid)
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const {errorObject} = this.state;
+    this.setState({showError: true});
 
     axios
       .post(`${process.env.REACT_APP_API_URL}/create-account`, this.state.account)
-      .then(() => this.setState({ completed: true }))
-      .catch((err) => console.log(err));
-  }
-
-  onUserIdChange(event) {
-    this.setState(() => ({
-      account: {
-        ...this.state.account,
-        userID: event.target.value,
-      },
-    }));
-  }
-
-  onPasswordChange(event) {
-    this.setState(() => ({
-      account: {
-        ...this.state.account,
-        password: event.target.value,
-      },
-    }));
-  }
-
-  onFirstNameChange(event) {
-    this.setState(() => ({
-      account: {
-        ...this.state.account,
-        firstName: event.target.value,
-      },
-    }));
-  }
-
-  onLastNameChange(event) {
-    this.setState(() => ({
-      account: {
-        ...this.state.account,
-        lastName: event.target.value,
-      },
-    }));
-  }
-
-  onNumberChange(event) {
-    this.setState(() => ({
-      account: {
-        ...this.state.account,
-        phone: event.target.value,
-      },
-    }));
-  }
-
-  onEmailChange(event) {
-    this.setState(() => ({
-      account: {
-        ...this.state.account,
-        email: event.target.value,
-      },
-    }));
-  }
-
-  onAddressChange(event) {
-    this.setState(() => ({
-      account: {
-        ...this.state.account,
-        address: event.target.value,
-      },
-    }));
-  }
-
-  onCreateBalanceHistory(event) {
-    this.setState(() => ({
-      account: {
-        ...this.state.account,
-        balanceHistory: event.target.value,
-      },
-    }));
+      .then((res) => {
+        if(!res.data.success) {
+          this.setState({ errorObject: {...errorObject, signup: res.data.message}})
+          return;
+        }
+        this.setState({ completed: true })
+    
+    }).catch((err) => console.log(err));
   }
 
   render() {
+    const { showError, errorObject } = this.state;
     if (this.state.completed) {
       return (
         <Redirect
@@ -142,27 +145,30 @@ class SignUp extends Component {
     }
     return (
       <div className="row">
-        <div className="col-md-8" style={{ 'margin-left': '340px' }}>
-          <h2 className="PageTitle" style={{ 'margin-left': '390px' }}>
+        <div className="col-md-8" style={{ margin: '0 auto' }}>
+          <h2 className="PageTitle" style={{ textAlign: 'center' }}>
             Sign-up Form
           </h2>
           <br />
-          <Container style={{ 'margin-left': '190px' }}>
-            <Form onSubmit={this.handleSubmit.bind(this)} method="POST">
-              <Form.Group as={Row} controlId="userID">
+          <Container>
+            <Form onSubmit={this.handleSubmit} method="POST"> 
+              <Form.Group as={Row} controlId="userID" style={{ justifyContent: 'center'}}>
                 <Form.Label column sm={2}>
                   User ID:
                 </Form.Label>
                 <Col sm={4}>
                   <Form.Control
                     type="text"
-                    name="id"
+                    name="userID"
+                    minLength="6"
                     placeholder="Enter user ID"
-                    onChange={this.onUserIdChange.bind(this)}
+                    onChange={this.onAccountInputChange}
+                    isInvalid={showError && errorObject.userID}
                   ></Form.Control>
+                <Form.Control.Feedback type="invalid">{errorObject.userID}</Form.Control.Feedback>
                 </Col>
               </Form.Group>
-              <Form.Group as={Row} controlId="password">
+              <Form.Group as={Row} controlId="password" style={{ justifyContent: 'center'}}>
                 <Form.Label column sm={2}>
                   Password:
                 </Form.Label>
@@ -170,12 +176,15 @@ class SignUp extends Component {
                   <Form.Control
                     type="password"
                     name="password"
+                    minLength="8"
                     placeholder="Enter Password"
-                    onChange={this.onPasswordChange.bind(this)}
+                    onChange={this.onAccountInputChange}
+                    isInvalid={showError && errorObject.password}
                   ></Form.Control>
+                <Form.Control.Feedback type="invalid">{errorObject.password}</Form.Control.Feedback>
                 </Col>
               </Form.Group>
-              <Form.Group as={Row}>
+              <Form.Group as={Row} style={{ justifyContent: 'center'}}>
                 <Form.Label column sm={2}>
                   Confirm Password:
                 </Form.Label>
@@ -184,10 +193,13 @@ class SignUp extends Component {
                     type="password"
                     name="confirmPassword"
                     placeholder="Re-enter the Password"
+                    onChange={this.onAccountInputChange}
+                    isInvalid={errorObject.confirmPassword}
                   ></Form.Control>
+                <Form.Control.Feedback type={"invalid"}>{errorObject.confirmPassword}</Form.Control.Feedback>
                 </Col>
               </Form.Group>
-              <Form.Group as={Row} controlId="firstName">
+              <Form.Group as={Row} controlId="firstName" style={{ justifyContent: 'center'}}>
                 <Form.Label column sm={2}>
                   First Name:
                 </Form.Label>
@@ -196,11 +208,13 @@ class SignUp extends Component {
                     type="text"
                     name="firstName"
                     placeholder="Enter First name"
-                    onChange={this.onFirstNameChange.bind(this)}
+                    onChange={this.onAccountInputChange}
+                    isInvalid={showError && errorObject.firstName}
                   ></Form.Control>
                 </Col>
+                <Form.Control.Feedback type="invalid">{errorObject.firstName}</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group as={Row} controlId="lastName">
+              <Form.Group as={Row} controlId="lastName" style={{ justifyContent: 'center'}}>
                 <Form.Label column sm={2}>
                   Last Name:
                 </Form.Label>
@@ -209,24 +223,29 @@ class SignUp extends Component {
                     type="text"
                     name="lastName"
                     placeholder="Enter Last name"
-                    onChange={this.onLastNameChange.bind(this)}
+                    onChange={this.onAccountInputChange}
+                    isInvalid={showError && errorObject.lastName}
                   />
+                <Form.Control.Feedback type="invalid">{errorObject.lastName}</Form.Control.Feedback>
                 </Col>
               </Form.Group>
-              <Form.Group as={Row} controlId="phone">
+              <Form.Group as={Row} controlId="phone" style={{ justifyContent: 'center'}}>
                 <Form.Label column sm={2}>
                   Phone Number:
                 </Form.Label>
                 <Col sm={4}>
                   <Form.Control
-                    type="text"
+                    type="tel"
                     name="phone"
+                    maxLength="12"
                     placeholder="000-000-0000"
-                    onChange={this.onNumberChange.bind(this)}
+                    onChange={this.onAccountInputChange}
+                    isInvalid={showError && errorObject.phone}
                   ></Form.Control>
+                <Form.Control.Feedback type="invalid">{errorObject.phone}</Form.Control.Feedback>
                 </Col>
               </Form.Group>
-              <Form.Group as={Row} controlId="email">
+              <Form.Group as={Row} controlId="email" style={{ justifyContent: 'center'}}>
                 <Form.Label column sm={2}>
                   Email address:
                 </Form.Label>
@@ -235,11 +254,13 @@ class SignUp extends Component {
                     type="email"
                     name="email"
                     placeholder="Enter E-mail address"
-                    onChange={this.onEmailChange.bind(this)}
+                    onChange={this.onAccountInputChange}
+                    isInvalid={showError && errorObject.email}
                   ></Form.Control>
+                <Form.Control.Feedback type="invalid">{errorObject.email}</Form.Control.Feedback>
                 </Col>
               </Form.Group>
-              <Form.Group as={Row} controlId="address">
+              <Form.Group as={Row} controlId="address" style={{ justifyContent: 'center'}}>
                 <Form.Label column sm={2}>
                   Address:
                 </Form.Label>
@@ -248,11 +269,13 @@ class SignUp extends Component {
                     type="text"
                     name="address"
                     placeholder="Enter Address"
-                    onChange={this.onAddressChange.bind(this)}
+                    onChange={this.onAccountInputChange}
+                    isInvalid={showError && errorObject.address}
                   ></Form.Control>
+                <Form.Control.Feedback type="invalid">{errorObject.address}</Form.Control.Feedback>
                 </Col>
               </Form.Group>
-              <Form.Group style={{ marginLeft: '350px' }} as={Row}>
+              <Form.Group as={Row} style={{ justifyContent: 'center'}}>
                 <Row>
                   <Col>
                     <Button variant="outline-secondary" href="/VIP/Admin/Manage">
@@ -260,7 +283,7 @@ class SignUp extends Component {
                     </Button>
                   </Col>
                   <Col md="auto">
-                    <Button variant="outline-info" type="submit">
+                    <Button variant="outline-info" type="submit" disabled={errorObject.isError}>
                       Save
                     </Button>
                   </Col>
@@ -269,18 +292,17 @@ class SignUp extends Component {
             </Form>
           </Container>
 
-          <span style={{ marginLeft: '180px' }}>
+          <span>
             Already registered?
             <a href="./Login"> sign in</a>
           </span>
           <br></br>
           <br></br>
           <div style={{ marginLeft: '10px' }}>
-            <div className="pagination" style={{ marginRight: '130px' }}>
+            <div className="pagination" style={{ justifyContent: 'space-evenly' }}>
               <a className="page-link btn btn-outline-info" href="./TermsAndConditions">
                 ❮ Previous
               </a>
-              <a style={{ marginLeft: '720px' }}></a>
               <a
                 className="page-link btn btn-outline-info"
                 color="btn-outline-info"
@@ -290,7 +312,7 @@ class SignUp extends Component {
               </a>
             </div>
           </div>
-
+           {showError && errorObject.signup && <Alert variant={'danger'}>{errorObject.signup}</Alert>}
           <br />
           <br />
           <br />
@@ -302,4 +324,4 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp;
+export default withRouter(SignUp);

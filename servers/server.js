@@ -26,6 +26,7 @@ const faqCategoryHandler = require('./handlers/faqCategoryHandler');
 const Account = require('../models/account');
 // const auth = require('./middleware/auth');
 const cookieParser = require('cookie-parser');
+const termsAndConditionsHandler = require('./handlers/termsAndConditionsHandler');
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -36,8 +37,23 @@ db();
 mongoose.set('useFindAndModify', false);
 
 //Account
-app.post('/create-account', (req, res) => {
-  accountHandler.addNewAccount(req.body).then((msg) => res.json(msg));
+app.post('/create-account', async (req, res) => {
+    try {
+
+    const userNameValidation =  await Account.findOne({ userID: req.body.userID }).exec();
+    if(userNameValidation) {
+       throw Error(`Username ${req.body.userID} has been taken. Please try another username.`);
+    }
+
+    const emailValidation = await Account.findOne({ email: req.body.email }).exec()
+    if(emailValidation) {
+      throw Error(`Email ${req.body.email} has been taken. Please try another username.`);
+    }
+
+    accountHandler.addNewAccount(req.body).then(body => res.json(body)).catch(err=>res.json(err))
+    }catch(err) {
+      res.json({success:false, message:err.message})
+    }
 });
 
 app.get('/accounts', (req, res) => {
@@ -800,6 +816,38 @@ app.post('/forgot', (req, res) => {
 //   });
 // });
 
+// Terms And Conditions
+app.post('/create-terms-and-conditions', (req, res) => {
+  termsAndConditionsHandler.addNewTAC(req.body).then((msg) => res.json(msg));
+});
+
+app.get('/terms-and-conditions', (req, res) => {
+  termsAndConditionsHandler
+    .viewAllTACs()
+    .then((termsAndConditons) => res.json(termsAndConditons))
+    .catch((err) => res.json(err));
+});
+
+app.get('/terms-and-conditions/:id', (req, res) => {
+  termsAndConditionsHandler
+    .viewTACById(req.params.id)
+    .then((termsAndConditons) => res.json(termsAndConditons))
+    .catch((err) => res.json(err));
+});
+
+app.put('/terms-and-conditions/:id', (req, res) => {
+  termsAndConditionsHandler
+    .editTACById(req.body, req.params.id)
+    .then((msg) => res.json(msg))
+    .catch((err) => res.json(err));
+});
+
+app.delete('/terms-and-conditions/:id', (req, res) => {
+  termsAndConditionsHandler
+    .deleteTACById(req.params.id)
+    .then((termsAndConditons) => res.json(termsAndConditons))
+    .catch((err) => res.json(err));
+});
 app.use('/api', (req, res) => res.json({ backServer: 'true' }));
 
 app.listen(port, () => {
