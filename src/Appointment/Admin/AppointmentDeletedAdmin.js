@@ -8,7 +8,6 @@ class AppointmentDeletedAdmin extends React.Component {
     super(props);
     this.state = {
       items: [
-        { url: '/Appointment', title: 'Appointment Home' },
         { url: '/Appointment/Admin', title: 'View All Appointments' },
         { url: '/Appointment/Admin/Create', title: 'Create Appointment' },
       ],

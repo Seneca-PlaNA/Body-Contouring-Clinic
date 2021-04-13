@@ -11,7 +11,6 @@ class AppointmentsAdmin extends React.Component {
     super(props);
     this.state = {
       items: [
-        { url: '/Appointment', title: 'Appointment Home' },
         { url: '/Appointment/Admin', title: 'View All Appointments' },
         { url: '/Appointment/Admin/Create', title: 'Create Appointment' },
       ],
@@ -231,7 +230,7 @@ class AppointmentsAdmin extends React.Component {
                   </td>
                   <td>{result.schedule == null ? '' : result.schedule.time.time}</td>
                   <td>{result.service.name}</td>
-                  <td>${result.service.price}</td>
+                  <td>$ {result.isOffer ? result.offerPrice : result.service.price}</td>
                   <td>{result.confirmation == 'false' ? 'Wait' : 'Confirmed'}</td>
                   <td>
                     <Link to={`/Appointment/Admin/Appointment/${result._id}`}>

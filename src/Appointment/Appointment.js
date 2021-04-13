@@ -132,7 +132,7 @@ class Appointment extends React.Component {
                     </tr>
                     <tr>
                       <td>price:</td>
-                      <td> {this.state.appointment.isOffer == true ? this.state.appointment.offerPrice : this.state.service.price}</td>
+                      <td>$ {this.state.appointment.isOffer == true ? this.state.appointment.offerPrice : this.state.service.price}</td>
                     </tr>
                     <tr>
                       <td>Contact #:</td>

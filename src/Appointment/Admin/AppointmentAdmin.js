@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Button, Dropdown, Form, Modal } from 'react-bootstrap';
+import { Container, Row, Col, Button, Dropdown, Form, Modal, Badge } from 'react-bootstrap';
 import '../../App.css';
 import styles from '../../app.module.css';
 import SideBar from '../../SideBar/SideBar';
@@ -14,7 +14,6 @@ class AppointmentAdmin extends React.Component {
     super(props);
     this.state = {
       items: [
-        { url: '/Appointment', title: 'Appointment Home' },
         { url: '/Appointment/Admin/', title: 'View All Appointments' },
         { url: '/Appointment/Admin/Create', title: 'New Appointment' },
       ],
@@ -158,7 +157,7 @@ class AppointmentAdmin extends React.Component {
           <div className="col-md-1"></div>
           <SideBar items={this.state.items} />
           <div className="col-md-6" style={{ 'margin-left': '80px' }}>
-            <h2>Appointment Details</h2>
+            <h2>Appointment Details {this.state.appointment.isOffer? <Badge pill variant="info">Promotion</Badge>: ''}</h2>
             <br/>
             <Container>
             <Form onSubmit={this.updateConfirmation.bind(this)}>
@@ -202,7 +201,7 @@ class AppointmentAdmin extends React.Component {
                     </tr>
                     <tr>
                       <td>Price:</td>
-                      <td>${this.state.service.price}</td>
+                      <td>${this.state.appointment.isOffer == true ? this.state.appointment.offerPrice : this.state.service.price}</td>
                     </tr>
                     <tr>
                       <td>Contact #:</td>
