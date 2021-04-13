@@ -57,7 +57,7 @@ class EditOffer extends React.Component {
     })
   }
 
-  handlSubmit(event) {
+  handleSubmit(event) {
     event.preventDefault();
     this.setState({
       nameNull: false,
