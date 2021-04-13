@@ -123,6 +123,8 @@ class CreateAppointmentWithOffer extends React.Component {
         customer: this.state.customer._id,
         service: this.state.offer.services[0]._id,
         schedule: event.target.value,
+        isOffer: true,
+        offerPrice: this.state.offer.price,
       }
     });
   }

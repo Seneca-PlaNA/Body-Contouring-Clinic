@@ -31,6 +31,12 @@ const AppointmentSchema = new Schema(
     message: {
       type: String,
     },
+    isOffer: {
+      type: Boolean,
+    },
+    offerPrice: {
+      type: Number,
+    }
   },
   { timestamps: true }
 );
