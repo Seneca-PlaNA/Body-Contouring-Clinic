@@ -26,19 +26,24 @@ class CreateAppointmentWithOffer extends React.Component {
       _id: localStorage.getItem('_id'),
       appointment: {
         customer: String,
-        contactNumber: String,
+        contactNumber: '',
         specialRequest: String,
-        service: String,
-        schedule: String,
-        confirmation: "false",
+        service: '',
+        schedule: '',
+        confirmation: 'false',
       },
       offer: [],
       customer: {},
       filterData: [],
       technician:[],
+      timeNull: false,
+      dateNull: false,
+      technicianNull: false,
+      contactNumNull: false,
       selectedDay: null,
       availableDays: [],
       confirmDay: null,
+      tempTime: ''
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
@@ -55,6 +60,12 @@ class CreateAppointmentWithOffer extends React.Component {
 
   handlSubmit(event) {
     event.preventDefault();
+
+    this.state.appointment.schedule == ''? this.setState({technicianNull: true}):this.setState({technicianNull: false}); 
+    this.state.filterData == ''? this.setState({dateNull: true}):this.setState({dateNull: false}); 
+    this.state.tempTime == '' ? this.setState({timeNull: true}):this.setState({timeNull: false}); 
+    this.state.appointment.contactNumber == ''? this.setState({contactNumNull: true}):this.setState({contactNumNull: false});
+
     fetch(`${process.env.REACT_APP_API_URL}/create-appointment`,{
       method: "POST",
       body: JSON.stringify(this.state.appointment),
@@ -72,7 +83,8 @@ class CreateAppointmentWithOffer extends React.Component {
       appointment:{
         ...this.state.appointment,
         contactNumber: event.target.value,
-      }
+      },
+      contactNumNull: false
     }));
   }
 
@@ -97,6 +109,8 @@ class CreateAppointmentWithOffer extends React.Component {
       console.log(data);
       this.setState({
         filterData: data,
+        dateNull: false,
+        timeNull: true,
       })
     });
   }
@@ -112,6 +126,8 @@ class CreateAppointmentWithOffer extends React.Component {
     })
     this.setState({
       technician: technicianData,
+      timeNull: false,
+      tempTime: event.target.value,
   }); 
   }
 
@@ -125,7 +141,8 @@ class CreateAppointmentWithOffer extends React.Component {
         schedule: event.target.value,
         isOffer: true,
         offerPrice: this.state.offer.price,
-      }
+      },
+      technicianNull: false,
     });
   }
 
@@ -224,13 +241,14 @@ class CreateAppointmentWithOffer extends React.Component {
                         Time
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)}>
+                        <Form.Control inline as="select" onChange={this.onTimeChange.bind(this)} isInvalid={this.state.timeNull}>
                           <option value="">-- select time --</option>
                           {this.state.filterData.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
                               <option value={result.time._id}>{result.time.time}</option>
                           ))}
                           </Form.Control>
+                          <Form.Control.Feedback type="invalid">Time is required</Form.Control.Feedback>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
@@ -238,13 +256,14 @@ class CreateAppointmentWithOffer extends React.Component {
                         Technician:
                       </Form.Label>
                       <Col sm="8">
-                      <Form.Control as="select" onChange={this.onScheduleChange.bind(this)}>
+                      <Form.Control as="select" onChange={this.onScheduleChange.bind(this)} isInvalid={this.state.technicianNull}>
                           <option value="">-- select technician --</option>
                           {this.state.technician.map((result)=>(
                             // eslint-disable-next-line react/jsx-key
                             <option value={result._id}>{result.staff.account.firstName} {result.staff.account.lastName}</option>
                           ))}
                         </Form.Control>
+                        <Form.Control.Feedback type="invalid">Technician is required</Form.Control.Feedback>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
@@ -252,7 +271,8 @@ class CreateAppointmentWithOffer extends React.Component {
                         Contact Number:
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control placeholder="647-596-9521" value={this.state.appointment.contactNumber} onChange={this.onContactNumChange.bind(this)}/>
+                        <Form.Control placeholder="647-596-9521" value={this.state.appointment.contactNumber} onChange={this.onContactNumChange.bind(this)} isInvalid={this.state.contactNumNull}/>
+                        <Form.Control.Feedback type="invalid">Contact Number is required</Form.Control.Feedback>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
