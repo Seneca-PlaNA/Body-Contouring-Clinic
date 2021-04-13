@@ -45,6 +45,10 @@ class EditAppointmentAdmin extends React.Component {
       selectedDay: null,
       availableDays: [],
       confirmDay: null,
+      year: '',
+      month: '',
+      day: '',
+      
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
@@ -208,6 +212,9 @@ class EditAppointmentAdmin extends React.Component {
         staff: data.schedule.staff,
         service: data.service,
         printDate: result,
+        year: data.schedule.date.date.split('/')[2],
+        month: data.schedule.date.date.split('/')[0],
+        day: data.schedule.date.date.split('/')[1],
       });
 
       fetch(`${process.env.REACT_APP_API_URL}/services`)
@@ -237,6 +244,14 @@ class EditAppointmentAdmin extends React.Component {
         pathname: '/Appointment/Admin'
       }}/>
     }
+
+    if(moment(this.state.year+'-'+this.state.month+'-'+this.state.day).isBefore(new Date()))
+    {
+      return <Redirect push to={{
+        pathname: `/Appointment/Admin/Appointment/${this.props.id}`
+      }}/>
+    }
+
     return (
       <>
         <br />

@@ -162,11 +162,14 @@ class Appointment extends React.Component {
                   <Button variant="outline-danger" onClick={this.showModal}>
                     Delete
                   </Button>{' '}
-                  <Link to={`/Appointment/Edit/${this.state.appointment._id}`}>
-                      <Button variant="outline-secondary">
-                        Edit
-                      </Button>
-                  </Link>
+                  {
+                    moment(this.state.year+'-'+this.state.month+'-'+this.state.day).isBefore(new Date())? '':
+                    <Link to={`/Appointment/Edit/${this.state.appointment._id}`}>
+                        <Button variant="outline-secondary">
+                          Edit
+                        </Button>
+                    </Link>
+                  }
                 </Col>
                 <PopUp
                   show={this.state.show}

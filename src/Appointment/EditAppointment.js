@@ -2,7 +2,6 @@ import React from 'react';
 import '../App.css';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 import SideBar from '../SideBar/SideBar';
-import styles from '../app.module.css';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
 import DayPicker from 'react-day-picker';
@@ -45,6 +44,9 @@ class EditAppointment extends React.Component {
       selectedDay: null,
       availableDays: [],
       confirmDay: null,
+      year: '',
+      month: '',
+      day: '',
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
@@ -207,6 +209,9 @@ class EditAppointment extends React.Component {
         staff: data.schedule.staff,
         service: data.service,
         printDate: result,
+        year: data.schedule.date.date.split('/')[2],
+        month: data.schedule.date.date.split('/')[0],
+        day: data.schedule.date.date.split('/')[1],
       });
 
       fetch(`${process.env.REACT_APP_API_URL}/services`)
@@ -235,6 +240,12 @@ class EditAppointment extends React.Component {
         pathname: `/Appointment/Appointment/${this.props.id}`
       }}/>
     }
+    if(moment(this.state.year+'-'+this.state.month+'-'+this.state.day).isBefore(new Date()))
+    {
+      return <Redirect push to={{
+        pathname: `/Appointment/Appointment/${this.props.id}`
+      }}/>
+    }
     return (
       <>
         <br />
@@ -243,7 +254,8 @@ class EditAppointment extends React.Component {
           <div className="col-md-1"></div>
           <SideBar items={this.state.items} />
           <div className="col-md-6">
-            <h2 className={styles.appointmentTitle}>Edit Appointment</h2>
+            <h2>Edit Appointment</h2>
+            <br/>
             <Container>
               <Row>
                 <Col></Col>

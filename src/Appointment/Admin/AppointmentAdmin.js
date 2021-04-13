@@ -233,11 +233,13 @@ class AppointmentAdmin extends React.Component {
                   <Button variant="outline-danger" onClick={this.showModal}>
                     Delete
                   </Button>{' '}
-                  <Link to={`/Appointment/Admin/Edit/${this.props.id}`}>
-                      <Button variant="outline-secondary">
-                        Edit
-                      </Button>
-                  </Link>
+                  {moment(this.state.year+'-'+this.state.month+'-'+this.state.day).isBefore(new Date())? '':
+                    <Link to={`/Appointment/Admin/Edit/${this.props.id}`}>
+                        <Button variant="outline-secondary">
+                          Edit
+                        </Button>
+                    </Link>
+                  }
                 </Col>
                 <PopUp
                   show={this.state.show}
