@@ -175,7 +175,7 @@ class CreateOffer extends React.Component {
   validateDate = () => {  
     const { endDate, startDate} = this.state.offer;
     let dateStatus = false;
-    if(!moment(startDate).isBefore(endDate) && startDate && endDate){
+    if(!moment(startDate).isSameOrBefore(endDate) && startDate && endDate){
         dateStatus = true
     } 
     this.setState({dateStatus})
@@ -305,7 +305,7 @@ class CreateOffer extends React.Component {
                       isInvalid={this.state.eDateNull || this.state.dateStatus}
                     />
                     <Form.Control.Feedback type='invalid'> 
-                      End date is required. Start-date should be before end-date
+                      Start-date should be before end-date
                     </Form.Control.Feedback>
                   </Col>
              {/*  } */}
