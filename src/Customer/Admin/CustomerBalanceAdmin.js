@@ -55,7 +55,7 @@ class CustomerBalanceAdmin extends React.Component {
 
   handleSearchCustomer(){
       const newCustomers = this.state.profile.filter((req) => {
-        let name = req.firstName + req.lastName;
+        let name = req.account.firstName + req.lastName;
         return name.toLowerCase().includes(this.state.seachCustomer.toLowerCase());
       });
       console.log(newCustomers);
@@ -74,7 +74,7 @@ class CustomerBalanceAdmin extends React.Component {
 
   getAllCustomer() {
     return new Promise((resolve) => {
-      fetch(`${process.env.REACT_APP_API_URL}/accounts`)
+      fetch(`${process.env.REACT_APP_API_URL}/customers`)
         .then((response) => response.json())
         .then((results) => {
           resolve(results);
@@ -162,14 +162,14 @@ class CustomerBalanceAdmin extends React.Component {
               {currentItems.map((result, index) => (
                 <tr key={index}>
                   <td>
-                    {result.userID}
+                    {result.account.userID}
                   </td>
                   <td>
-                    {result.firstName} {result.lastName}
+                    {result.account.firstName} {result.account.lastName}
                   </td>
-                  <td>{result.balanceHistory == null? "": result.balanceHistory.currentBalance}</td>
+                  <td>{result.account.balanceHistory == null? "": result.account.balanceHistory.currentBalance}</td>
                   <td>
-                    <Link to={`/Customer/Admin/Balance/${result.balanceHistory._id}`}>Detail</Link>
+                    <Link to={`/Customer/Admin/Balance/${result.account.balanceHistory._id}`}>Detail</Link>
                   </td>
                 </tr>
                 ))}

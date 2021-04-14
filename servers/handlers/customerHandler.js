@@ -18,7 +18,10 @@ exports.addNewCustomer = function (data) {
 exports.viewAllCustomer = function () {
   return new Promise((resolve, reject) => {
     Customer.find()
-      .populate('account')
+      .populate({
+        path: 'account',
+        populate: { path: 'balanceHistory', populate: { path: 'balances' }}
+      })
       .exec()
       .then((customer) => {
         resolve(customer);
