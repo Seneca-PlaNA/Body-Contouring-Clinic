@@ -1,5 +1,6 @@
 const Staff = require('../../models/staff');
 const Account = require('../../models/account');
+const Customer = require('../../models/customer');
 
 // create new
 exports.addNewStaff = function (data) {
@@ -105,6 +106,9 @@ exports.activeStaffById = function (id) {
     Account.updateOne({ _id: id }, { accountLevelId: '603719d1ec07da8afc6ff378' })
     .exec()
     .then(()=>{
+
+        Customer.deleteOne({ account: id }).exec();
+
         let newStaff = new Staff({
           account: id,
           isActive: "true",
@@ -132,6 +136,14 @@ exports.inactiveStaffById = function (id) {
         Staff.deleteOne({ account: id })
         .exec()
         .then(() => {
+
+          let newCustomer = new Customer({
+            account: id,
+            lastLoginTime: new Date(),
+          });
+    
+          newCustomer.save();
+
           resolve(`Staff (id: ${id}) is deleted`);
         })
         .catch((err) => {
