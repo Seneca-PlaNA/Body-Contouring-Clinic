@@ -19,13 +19,9 @@ class EditOffer extends React.Component {
       ],
       children: 'Offer',
       offer: {},
-      startDate : String,
-      endDate: String,
       completed : false,
       file: null,
       imageSuccess : false,
-      tempStartDate: null,
-      tempEndDate: null,
       dateStatus: false,
       _id: localStorage.getItem('_id'),
       authName: {},
@@ -33,6 +29,8 @@ class EditOffer extends React.Component {
       descNull: false,
       priceNull: false,
       fileFormat: false,
+      sDateNull: false,
+      eDateNull: false
     };
     this.imageShow = this.imageShow.bind(this);
     this.imageHide = this.imageHide.bind(this);
@@ -57,14 +55,14 @@ class EditOffer extends React.Component {
     })
   }
 
-  handleSubmit(event) {
+  handleSubmit = (event) => {
     event.preventDefault();
     this.setState({
       nameNull: false,
       descNull: false,
       priceNull: false,
     });
-    if(this.state.offer.name == '' || this.state.offer.description == '' || this.state.offer.price == '')
+    if(this.state.offer.name == '' || this.state.offer.description == '' || this.state.offer.price == '' || this.state.eDateNull || this.state.sDateNull || this.state.dateStatus)
     {
     this.state.offer.name == '' ? this.setState({ nameNull: true }) : this.setState({nameNull: false})
     this.state.offer.description == '' ? this.setState({ descNull: true }) : this.setState({descNull: false})
@@ -212,34 +210,41 @@ class EditOffer extends React.Component {
     }
   }
 
+  validateDate = () => {  
+    const { endDate, startDate} = this.state.offer;
+    let dateStatus = false, sDateNull = false, eDateNull = false;
+    if(!moment(startDate).isSameOrBefore(endDate) && startDate && endDate){
+        dateStatus = true
+    } 
+
+    if(!startDate) {
+      sDateNull = true;
+    }
+
+    if(!endDate) {
+      eDateNull = true;
+    }
+    this.setState({ dateStatus, sDateNull, eDateNull })
+  }
+
   onStartDateChange(event) {
     this.setState(() => ({
-      startDate: event.target.value,
-      tempStartDate : event.target.value,
-    }));
+      ...this.state,
+      offer: {
+        ...this.state.offer,
+        startDate: event.target.value
+      }
+    }), this.validateDate);
   }
 
   onEndDateChange(event) {
-    this.setState({
-      dateStatus : false,
-    });
-    if(moment(this.state.tempStartDate).isBefore(event.target.value))
-    {
-      this.setState(() => ({
-        endDate: event.target.value,
-        offer: {
-          ...this.state.offer,
-          startDate: this.state.tempStartDate,
-          endDate: event.target.value,
-        },
-      }));
-    }
-    else
-    {
-      this.setState(()=>({
-        dateStatus : true,
-      }));
-    }
+    this.setState(() => ({
+      ...this.state,
+      offer: {
+        ...this.state.offer,
+        endDate: event.target.value
+      }
+    }), this.validateDate);
   }
 
   getCustomerProfile() {
@@ -262,13 +267,14 @@ class EditOffer extends React.Component {
     fetch(`${process.env.REACT_APP_API_URL}/offer/${this.props.id}`)
       .then(response => response.json())
       .then((data) => {
-        var sDate = data.startDate.split("T");
-        var eDate = data.endDate.split("T");
-        console.log(sDate);
+        const startDate = data.startDate.split("T")[0];
+        const endDate = data.endDate.split("T")[0];
         this.setState({
-          offer: data,
-          startDate : sDate[0],
-          endDate : eDate[0],
+          offer: {
+            ...data,
+            startDate,
+            endDate
+          }
         });
     });
   }
@@ -294,7 +300,7 @@ class EditOffer extends React.Component {
           <h2 className="PageTitle">Edit Offer</h2>
           <br />
           <Container>
-            <Form onSubmit={this.handleSubmit.bind(this)} method="PUT">
+            <Form onSubmit={this.handleSubmit} method="PUT">
               <Form.Group as={Row}>
                 <Form.Label column sm={2}>
                   Title:
@@ -333,10 +339,11 @@ class EditOffer extends React.Component {
                   Active Date
                 </Form.Label>
                 <Col sm={3}>
-                  <Form.Control controlId="startDate" type="date" value={this.state.startDate} onChange={this.onStartDateChange.bind(this)}/>
+                  <Form.Control controlId="startDate" type="date" value={this.state.offer.startDate} onChange={this.onStartDateChange.bind(this)} isInvalid={this.state.sDateNull} />
+                  <Form.Control.Feedback type="invalid">Start date is required</Form.Control.Feedback>
                 </Col>
                 <Col sm={3}>
-                  <Form.Control controlId="endDate" type="date" value={this.state.endDate} onChange={this.onEndDateChange.bind(this)} isInvalid={this.state.dateStatus} />
+                  <Form.Control controlId="endDate" type="date" value={this.state.offer.endDate} onChange={this.onEndDateChange.bind(this)} isInvalid={ this.state.eDateNull || this.state.dateStatus} />
                   <Form.Control.Feedback type='invalid'>
                     start-date should be before end-date
                   </Form.Control.Feedback>
