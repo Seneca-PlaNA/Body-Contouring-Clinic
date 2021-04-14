@@ -39,6 +39,7 @@ class Home extends React.Component {
     //     console.log(err);
     //   }
     // );
+    if(this.state._id != null){
     this.getCustomerProfile(this.state._id).then((data) => {
       this.setState({
         profile: data,
@@ -46,6 +47,7 @@ class Home extends React.Component {
       });
       console.log(this.state.authName);
     });
+  }
   }
 
   render() {
