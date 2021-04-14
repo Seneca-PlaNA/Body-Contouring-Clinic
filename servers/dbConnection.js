@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
-const dbkey = require('../dbConnectionStr.json');
+require('dotenv').config();
 
-// const mongodbConnectionStr = process.env.MONGODB_URI;
-const mongodbConnectionStr = dbkey.connectionStr;
+const mongodbConnectionStr = process.env.MONGODB_URI;
 
 module.exports = () => {
   function connect() {
