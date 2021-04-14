@@ -167,7 +167,7 @@ class AppointmentAdmin extends React.Component {
                   <table className={styles.appointmentTable}>
                     <tr>
                       <td>Customer Name: </td>
-                      <td>{this.state.customer.firstName} {this.state.customer.lastName}</td>
+                      <td>{this.state.customer == null? '' :this.state.customer.firstName} {this.state.customer == null? '' :this.state.customer.lastName}</td>
                     </tr>
                     <tr>
                       <td>Date:</td>

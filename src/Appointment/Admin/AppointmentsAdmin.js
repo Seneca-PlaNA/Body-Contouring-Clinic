@@ -224,7 +224,7 @@ class AppointmentsAdmin extends React.Component {
                 // eslint-disable-next-line react/jsx-key
                 <tr key={index}>
                   <td>
-                    {result.customer.account.firstName} {result.customer.account.lastName}
+                    {result.customer.account == null? '' : result.customer.account.firstName} {result.customer.account == null? '' : result.customer.account.lastName}
                   </td>
                   <td>
                     {result.schedule == null ? '' : moment(result.schedule.date.date).format('ll')}
