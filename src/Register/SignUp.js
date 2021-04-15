@@ -57,6 +57,10 @@ class SignUp extends Component {
       errorObject.password = 'Password should be more than 8 characters';
     }
 
+    if(!confirmPassword) {
+       errorObject.isError = true;
+      errorObject.confirmPassword = "Confirm password is required";
+    }
     if(confirmPassword && password != confirmPassword) {
       errorObject.isError = true;
       errorObject.confirmPassword = "Password doesn't matach";
@@ -81,7 +85,7 @@ class SignUp extends Component {
     console.log(PHONE_NUMBER_REGEX.test(phone))
     if(phone.length > 12 || !PHONE_NUMBER_REGEX.test(phone)) {
       errorObject.isError = true;
-      errorObject.phone = 'Please check your phone number';
+      errorObject.phone = 'Phone number should be like 000-000-0000.';
     }
 
     // - error message should displayed if email is null
@@ -118,6 +122,10 @@ class SignUp extends Component {
     event.preventDefault();
     const {errorObject} = this.state;
     this.setState({showError: true});
+    if(errorObject.isError) {
+      this.isValid();
+      return true;
+    }
 
     axios
       .post(`${process.env.REACT_APP_API_URL}/create-account`, this.state.account)
@@ -283,7 +291,7 @@ class SignUp extends Component {
                     </Button>
                   </Col>
                   <Col md="auto">
-                    <Button variant="outline-info" type="submit" disabled={errorObject.isError}>
+                    <Button variant="outline-info" type="submit" >
                       Save
                     </Button>
                   </Col>
@@ -298,17 +306,10 @@ class SignUp extends Component {
           </span>
           <br></br>
           <br></br>
-          <div style={{ marginLeft: '10px' }}>
+          <div style={{ marginRight: '400px' }}>
             <div className="pagination" style={{ justifyContent: 'space-evenly' }}>
               <a className="page-link btn btn-outline-info" href="./TermsAndConditions">
                 ❮ Previous
-              </a>
-              <a
-                className="page-link btn btn-outline-info"
-                color="btn-outline-info"
-                href="./CheckConfirmEmail"
-              >
-                Next ❯
               </a>
             </div>
           </div>
