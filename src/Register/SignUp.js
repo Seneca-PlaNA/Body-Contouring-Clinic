@@ -34,7 +34,7 @@ class SignUp extends Component {
 
   isValid = () => {
     const {userID, password, confirmPassword,  firstName, lastName, phone, email, address} = this.state.account;
-    const errorObject = { isError: false, userID: '', password: '', confirmPassword: '', firstName: '', lastName: '', phone: '', email: '', address: '' };
+    const errorObject = { isError: false, userID: '', password: '', confirmPassword: '', passwordInvalid: '', firstName: '', lastName: '', phone: '', email: '', address: '' };
 
     // - error message should displayed if user id is null
     if(!userID) {
@@ -57,13 +57,14 @@ class SignUp extends Component {
       errorObject.password = 'Password should be more than 8 characters';
     }
 
+
+    if((confirmPassword && password != confirmPassword)) {
+      errorObject.isError = true;
+      errorObject.passwordInvalid = "Password doesn't matach";
+    }
     if(!confirmPassword) {
        errorObject.isError = true;
       errorObject.confirmPassword = "Confirm password is required";
-    }
-    if(confirmPassword && password != confirmPassword) {
-      errorObject.isError = true;
-      errorObject.confirmPassword = "Password doesn't matach";
     }
     // - error message should displayed if first name is null
     if(!firstName) { 
@@ -75,17 +76,17 @@ class SignUp extends Component {
       errorObject.isError = true;
       errorObject.lastName = 'Last name is required';
     }
+
+    // - error message should displayed if phone number is in invalid format(000-000-0000), no more than 12 character
+    if(phone.length > 12 || !PHONE_NUMBER_REGEX.test(phone)) {
+      errorObject.isError = true;
+      errorObject.phone = 'Phone number format is incorrect (000-000-0000)';
+    }
+
     // - error message should displayed if phone number is null
     if(!phone) { 
       errorObject.isError = true;
       errorObject.phone = 'Phone number is required';
-    }
-
-    // - error message should displayed if phone number is in invalid format(000-000-0000), no more than 12 character
-    console.log(PHONE_NUMBER_REGEX.test(phone))
-    if(phone.length > 12 || !PHONE_NUMBER_REGEX.test(phone)) {
-      errorObject.isError = true;
-      errorObject.phone = 'Phone number should be like 000-000-0000.';
     }
 
     // - error message should displayed if email is null
@@ -202,9 +203,9 @@ class SignUp extends Component {
                     name="confirmPassword"
                     placeholder="Re-enter the Password"
                     onChange={this.onAccountInputChange}
-                    isInvalid={errorObject.confirmPassword}
+                    isInvalid={errorObject.passwordInvalid || showError && errorObject.confirmPassword}
                   ></Form.Control>
-                <Form.Control.Feedback type={"invalid"}>{errorObject.confirmPassword}</Form.Control.Feedback>
+                <Form.Control.Feedback type={"invalid"}>{ errorObject.confirmPassword || errorObject.passwordInvalid}</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row} controlId="firstName" style={{ justifyContent: 'center'}}>
@@ -219,8 +220,8 @@ class SignUp extends Component {
                     onChange={this.onAccountInputChange}
                     isInvalid={showError && errorObject.firstName}
                   ></Form.Control>
+                  <Form.Control.Feedback type="invalid">{errorObject.firstName}</Form.Control.Feedback>
                 </Col>
-                <Form.Control.Feedback type="invalid">{errorObject.firstName}</Form.Control.Feedback>
               </Form.Group>
               <Form.Group as={Row} controlId="lastName" style={{ justifyContent: 'center'}}>
                 <Form.Label column sm={2}>
@@ -306,7 +307,7 @@ class SignUp extends Component {
           </span>
           <br></br>
           <br></br>
-          <div style={{ marginRight: '400px' }}>
+          <div style={{ marginRight: '450px' }}>
             <div className="pagination" style={{ justifyContent: 'space-evenly' }}>
               <a className="page-link btn btn-outline-info" href="./TermsAndConditions">
                 ❮ Previous
