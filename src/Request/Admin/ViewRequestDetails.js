@@ -97,7 +97,7 @@ class ViewRequestAdmin extends React.Component {
                   <Form.Label style={reqTitle}>
                     Request Contents
                   </Form.Label>
-                  <Form.Control type="text" plaintext readOnly value={this.state.request.contents} />
+                  <Form.Control as="textarea" rows={3} plaintext readOnly value={this.state.request.contents} />
                 </Form.Group>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
                   <Form.Label style={reqTitle}>
@@ -138,9 +138,9 @@ class ViewRequestAdmin extends React.Component {
                 </Form.Group>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
                   <Form.Label style={reqTitle}>
-                    Attached File {this.state.serviceCategory.name}
+                    Attached File
                   </Form.Label><br/>
-                  <Image src={process.env.REACT_APP_IMAGE_URL + "/file/" + this.state.request.attachedFile} alt=" No Attachment"/> 
+                  <Image src={process.env.REACT_APP_IMAGE_URL + "/file/" + this.state.request.attachedFile} alt=" No Attachment"/>
                 </Form.Group>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
                   <Form.Label style={reqTitle}>

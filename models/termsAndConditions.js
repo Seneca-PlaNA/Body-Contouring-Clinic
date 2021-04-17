@@ -1,15 +1,16 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const TermsAndConditionsSchema = new Schema({
+const TermsAndConditionsSchema = new Schema(
+  {
     contents: {
-        type: String,
-        required: true
-    }
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
 
-}, { timestamps: true });
-
-
-const TermsAndConditions = mongoose.model('termsAndConditons', TermsAndConditionsSchema);
+const TermsAndConditions = mongoose.model('termsAndConditions', TermsAndConditionsSchema);
 
 module.exports = TermsAndConditions;

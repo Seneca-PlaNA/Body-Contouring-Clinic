@@ -181,11 +181,11 @@ class AppointmentAdmin extends React.Component {
                       <td>
                           <Dropdown>
                             <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
-                              {this.state.appointment.confirmation == "false"? "Wait":"Confirmed"}
+                              {this.state.appointment.confirmation == "false"? "Await":"Confirmed"}
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                              <Dropdown.Item eventKey="false" variant="outline-secondary" onSelect={this.onConfirmChange.bind(this)}>Wait</Dropdown.Item>
+                              <Dropdown.Item eventKey="false" variant="outline-secondary" onSelect={this.onConfirmChange.bind(this)}>Await</Dropdown.Item>
                               <Dropdown.Item eventKey="true" variant="outline-success" onSelect={this.onConfirmChange.bind(this)}>Confirmed</Dropdown.Item>
                             </Dropdown.Menu>
                           </Dropdown>
@@ -254,7 +254,7 @@ class AppointmentAdmin extends React.Component {
                     <Modal.Title>Appointment Status</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <p>{this.state.appointment.confirmation == 'true'? 'This Appointment is confirmed': 'This appointment is in wait'}</p>
+                    <p>{this.state.appointment.confirmation == 'true'? 'This Appointment is confirmed': 'This appointment is still waiting for customer'}</p>
                   </Modal.Body>
                 </Modal>
               </Row>

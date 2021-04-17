@@ -13,7 +13,7 @@ const offerSchema = new Schema(
         ref: 'services',
       },
     ],
-    price:{
+    price: {
       type: Number,
     },
     startDate: {

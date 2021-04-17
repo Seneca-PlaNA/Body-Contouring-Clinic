@@ -36,7 +36,7 @@ const AppointmentSchema = new Schema(
     },
     offerPrice: {
       type: Number,
-    }
+    },
   },
   { timestamps: true }
 );

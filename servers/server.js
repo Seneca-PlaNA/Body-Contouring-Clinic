@@ -855,14 +855,14 @@ app.post('/create-terms-and-conditions', (req, res) => {
 app.get('/terms-and-conditions', (req, res) => {
   termsAndConditionsHandler
     .viewAllTACs()
-    .then((termsAndConditons) => res.json(termsAndConditons))
+    .then((termsAndConditions) => res.json(termsAndConditions))
     .catch((err) => res.json(err));
 });
 
 app.get('/terms-and-conditions/:id', (req, res) => {
   termsAndConditionsHandler
     .viewTACById(req.params.id)
-    .then((termsAndConditons) => res.json(termsAndConditons))
+    .then((termsAndConditions) => res.json(termsAndConditions))
     .catch((err) => res.json(err));
 });
 
@@ -876,7 +876,7 @@ app.put('/terms-and-conditions/:id', (req, res) => {
 app.delete('/terms-and-conditions/:id', (req, res) => {
   termsAndConditionsHandler
     .deleteTACById(req.params.id)
-    .then((termsAndConditons) => res.json(termsAndConditons))
+    .then((termsAndConditions) => res.json(termsAndConditions))
     .catch((err) => res.json(err));
 });
 app.use('/api', (req, res) => res.json({ backServer: 'true' }));

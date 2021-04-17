@@ -99,7 +99,7 @@ class RequestHomebyAdmin extends React.Component {
     })
 
     if(moment(e.target.value).isBefore(this.state.endDate)){
-      this.setState({ 
+      this.setState({
         eDateStatus: false,
         sDateStatus: false,
     });
@@ -120,7 +120,7 @@ class RequestHomebyAdmin extends React.Component {
     })
 
     if(moment(this.state.startDate).isBefore(e.target.value)){
-      this.setState({ 
+      this.setState({
         eDateStatus: false,
         sDateStatus: false,
       });
@@ -252,7 +252,7 @@ class RequestHomebyAdmin extends React.Component {
         <SideBar items={this.state.items} />
         <div className="col-md-8" style={{ 'margin-left': '80px' }}>
           <h2 className="PageTitle">View All Request
-          </h2> 
+          </h2>
           <br />
           <div className="contents">
             <Form inline>
@@ -354,7 +354,7 @@ class RequestHomebyAdmin extends React.Component {
                         </Link>
                       </td>
                       <td>{request.requestCategory.name}</td>
-                      <td>{!request.serviceCategory ? ' ' : request.serviceCategory.name}</td>
+                      <td>{!request.serviceCategory ? 'no service involved' : request.serviceCategory.name}</td>
                       <td>{!request.customer ? ' ' : request.customer.account.userID}</td>
                       <td>
                         {!request.customer

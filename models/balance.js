@@ -7,15 +7,13 @@ const balanceSchema = new Schema(
       type: Number,
       required: true,
     },
-
-    info:{
-        type: String,
-        required: true,
+    info: {
+      type: String,
+      required: true,
     },
-    
     date: {
       type: Date,
-      required: true,   
+      required: true,
     },
   },
   { timestamps: true }

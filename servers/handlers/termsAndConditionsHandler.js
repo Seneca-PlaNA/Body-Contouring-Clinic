@@ -18,8 +18,8 @@ exports.addNewTAC = function (data) {
 exports.viewAllTACs = function () {
   return new Promise((resolve, reject) => {
     TermsAndConditions.find()
-      .then((termsAndConditons) => {
-        resolve(termsAndConditons);
+      .then((termsAndConditions) => {
+        resolve(termsAndConditions);
       })
       .catch((err) => {
         reject(err);
@@ -32,8 +32,8 @@ exports.viewTACById = function (id) {
   return new Promise((resolve, reject) => {
     TermsAndConditions.findOne({ _id: id })
       .exec()
-      .then((termsAndConditons) => {
-        resolve(termsAndConditons);
+      .then((termsAndConditions) => {
+        resolve(termsAndConditions);
       })
       .catch((err) => {
         reject(err);

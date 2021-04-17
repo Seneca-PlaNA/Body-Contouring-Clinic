@@ -22,7 +22,7 @@ const WorkScheduleSchema = new Schema(
     },
     booked: {
       type: Boolean,
-      default: false
+      default: false,
     },
   },
   { timestamps: true }
