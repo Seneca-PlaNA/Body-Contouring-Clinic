@@ -3,6 +3,8 @@ import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 import '../App.css';
 import SideBar from '../SideBar/SideBar';
+import DayPicker from 'react-day-picker';
+import 'react-day-picker/lib/style.css';
 import moment from 'moment';
 
 class EditStaffSchedule extends React.Component {
@@ -25,6 +27,8 @@ class EditStaffSchedule extends React.Component {
       time: [],
       dates: [],
       times: [],
+      confirmDay: '',
+      selectedDay: null,
 
       // for calendar
       todaySchedules: {},
@@ -61,31 +65,32 @@ class EditStaffSchedule extends React.Component {
       .catch((err) => console.log(err));
   }
 
-  onDateChange(e) {
-    this.setState(() => ({
-      dateIsSelected: false,
-    }));
-    if (e.target.value === '') {
-      this.setState(() => ({
-        date: {
-          ...this.state.date,
-          _id: e.target.value,
-        },
-        dateIsSelected: true,
-      }));
-    } else {
-      this.setState(() => ({
-        date: {
-          ...this.state.date,
-          _id: e.target.value,
-        },
+  getEachDateId(day){
+
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/date?date=${moment(day).format('MM/DD/YYYY')}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data[0]);
+        });
+    });
+  }
+
+  onDateChange(day, {selected}) {
+    this.setState({
+      selectedDay: selected ? undefined : day,
+      confirmDay: day,
+    });
+
+    this.getEachDateId(day)
+    .then((data)=>{
+      this.setState({
         workSchedule: {
           ...this.state.workSchedule,
-          date: e.target.value,
-        },
-        dateIsSelected: false,
-      }));
-    }
+          date: data._id,
+        }
+      })
+    })
   }
 
   onTimeChange(e) {
@@ -200,20 +205,12 @@ class EditStaffSchedule extends React.Component {
                   <Form.Label column sm={2}>
                     Date:
                   </Form.Label>
-                  <Col sm={6}>
-                    <Form.Control
-                      as="select"
-                      onChange={this.onDateChange.bind(this)}
-                      value={this.state.date._id}
-                      isInvalid={!!this.state.dateIsSelected}
-                    >
-                      <option value="">--Choose--</option>
-                      {this.state.dates.map((date) => (
-                        <option key={date._id} value={date._id}>
-                          {moment(date.date).format('ll')}
-                        </option>
-                      ))}
-                    </Form.Control>
+                  <Col sm={2}>
+                      <DayPicker 
+                          showOutsideDays 
+                          selectedDays={this.state.selectedDay} 
+                          disabledDays={[{before: new Date()}]} 
+                          onDayClick={this.onDateChange.bind(this)} />
                     <Form.Control.Feedback type="invalid">date is required</Form.Control.Feedback>
                   </Col>
                 </Form.Group>
