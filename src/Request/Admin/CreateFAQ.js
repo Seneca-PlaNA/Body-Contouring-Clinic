@@ -12,7 +12,7 @@ class CreateFAQ extends React.Component {
     this.state = {
       show: false,
       items: [
-        { url: '/Request/Admin', title: 'View All Request' },
+        { url: '/Request/Admin', title: 'View All Requests' },
         { url: '/Request/FAQ/Admin', title: 'FAQ' },
       ],
       // create faq data

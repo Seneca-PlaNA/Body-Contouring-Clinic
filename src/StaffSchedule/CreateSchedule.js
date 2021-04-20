@@ -3,6 +3,8 @@ import '../App.css';
 import SideBar from '../SideBar/SideBar';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 import { Redirect } from 'react-router';
+import DayPicker, { DateUtils } from 'react-day-picker';
+import 'react-day-picker/lib/style.css';
 import moment from 'moment';
 
 class CreateSchedule extends React.Component {
@@ -21,6 +23,7 @@ class CreateSchedule extends React.Component {
         time: String,
         description: String,
       },
+      staff: '',
       dates: [],
       times: [],
       completed: false,
@@ -30,6 +33,9 @@ class CreateSchedule extends React.Component {
       form: [],
       date: '',
       time: '',
+      selectedDays: [],
+      dayIds: [],
+      description: '',
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -56,43 +62,75 @@ class CreateSchedule extends React.Component {
         errors: errList,
       }));
     }
-    fetch(`${process.env.REACT_APP_API_URL}/create-workSchedule`, {
-      method: 'POST',
-      body: JSON.stringify(this.state.workSchedule),
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then(() => this.setState({ completed: true }))
+    console.log(this.state.dayIds);
+
+    this.state.dayIds.map((day)=>{
+
+      var tempSchedule = {
+        staff: this.state.staff._id,
+        date: day,
+        time: this.state.time,
+        description: this.state.description,
+      };
+      console.log(tempSchedule);
+
+      this.createWorkSchedule(tempSchedule)
+      .then((response)=>{
+        console.log(response.json());
+      })
       .catch((err) => console.log(err));
+    });
+
+    this.setState({ completed: true });
   }
 
-  onDateChange(e) {
-    console.log(e.target.value);
-    if (e.target.value.length < 6) {
-      console.log('hey');
-      this.setState(() => ({
-        workSchedule: {
-          ...this.state.workSchedule,
-          date: e.target.value,
+  createWorkSchedule(schedule){
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/create-workSchedule`, {
+        method: 'POST',
+        body: JSON.stringify(schedule),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
-        dateIsSelected: false,
-        date: e.target.value,
-      }));
+      })
+      .then((data)=>{
+        resolve(data);
+      })
+    });
+  }
+
+  onDateChange(day, {selected}) {
+    console.log(this.state.staff._id);
+    const selectedDays = this.state.selectedDays.concat();
+    if (selected) {
+      const selectedIndex = selectedDays.findIndex(selectedDay =>
+        DateUtils.isSameDay(selectedDay, day)
+      );
+      selectedDays.splice(selectedIndex, 1);
     } else {
-      console.log('valid');
-      this.setState(() => ({
-        workSchedule: {
-          ...this.state.workSchedule,
-          date: e.target.value,
-        },
-        dateIsSelected: true,
-        date: e.target.value,
-      }));
+      selectedDays.push(day);
     }
-    console.log(this.state.date);
+    this.setState({ selectedDays });
+
+    this.getEachDateId(day)
+    .then((data)=>{
+        this.setState({
+          dayIds: this.state.dayIds.concat(data._id),
+        })
+        console.log(this.state.dayIds);
+    });
+  }
+
+  getEachDateId(day){
+
+    return new Promise((resolve) => {
+      fetch(`${process.env.REACT_APP_API_URL}/date?date=${moment(day).format('MM/DD/YYYY')}`)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data[0]);
+        });
+    });
   }
 
   onTimeChange(e) {
@@ -125,6 +163,7 @@ class CreateSchedule extends React.Component {
         ...this.state.workSchedule,
         description: e.target.value,
       },
+      description: e.target.value,
     }));
   }
 
@@ -192,19 +231,12 @@ class CreateSchedule extends React.Component {
                 <Form.Label column sm={2}>
                   Date:
                 </Form.Label>
-                <Col sm={6}>
-                  <Form.Control
-                    as="select"
-                    onChange={this.onDateChange.bind(this)}
-                    isInvalid={!this.state.dateIsSelected}
-                  >
-                    <option value="">--Choose--</option>
-                    {this.state.dates.map((date) => (
-                      <option key={date._id} value={date._id}>
-                        {moment(date.date).format('ll')}
-                      </option>
-                    ))}
-                  </Form.Control>
+                <Col sm='2'> 
+                  <DayPicker 
+                    showOutsideDays 
+                    selectedDays={this.state.selectedDays} 
+                    disabledDays={[{before: new Date()}]} 
+                    onDayClick={this.onDateChange.bind(this)} />
                   <Form.Control.Feedback type="invalid">{this.state.errors.date}</Form.Control.Feedback>
                 </Col>
               </Form.Group>

@@ -13,7 +13,7 @@ class ViewRequest extends React.Component {
     this.state = {
       show: false,
       items: [
-        { url: '/Request/', title: 'View All Request' },
+        { url: '/Request/', title: 'View All Requests' },
         { url: '/Request/Create', title: 'Create Request' },
         { url: '/Request/FAQ', title: 'FAQ' },
       ],
@@ -137,12 +137,12 @@ class ViewRequest extends React.Component {
             <Container>
               <Form style={{ 'padding-bottom': '80px' }}>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
-                  <Form.Label style={reqTitle}>Request Title</Form.Label>
+                  <Form.Label style={reqTitle}>Request Title</Form.Label> 
                   <Form.Control type="text" readOnly value={this.state.request.title} />
                 </Form.Group>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
                   <Form.Label style={reqTitle}>Request Contents</Form.Label>
-                  <Form.Control type="text" readOnly value={this.state.request.contents} />
+                  <Form.Control as="textarea" readOnly value={this.state.request.contents} />
                 </Form.Group>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
                   <Form.Label style={reqTitle}>Request Category</Form.Label>

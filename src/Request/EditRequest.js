@@ -12,7 +12,7 @@ class EditRequest extends React.Component {
     super();
     this.state = {
       items: [
-        { url: '/Request/', title: 'View All Request' },
+        { url: '/Request/', title: 'View All Requests' },
         { url: '/Request/Create', title: 'Create Request' },
         { url: '/Request/FAQ', title: 'FAQ' },
       ],

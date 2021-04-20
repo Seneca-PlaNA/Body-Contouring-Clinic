@@ -10,7 +10,7 @@ class AnswerRequest extends React.Component {
     super(props);
     this.state = {
       items: [
-        { url: '/Request/Admin', title: 'View All Request' },
+        { url: '/Request/Admin', title: 'View All Requests' },
         { url: '/Request/FAQ/Admin', title: 'FAQ' },
       ],
       request: {},
@@ -149,7 +149,7 @@ class AnswerRequest extends React.Component {
                     Q: {this.state.request.title}{' '}
                     {' (' + moment(this.state.request.date).format('ll') + ')'}
                   </Form.Label>
-                  <Form.Control type="text" readOnly value={this.state.request.contents} />
+                  <Form.Control as="textarea" readOnly value={this.state.request.contents} />
                 </Form.Group>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
                   <Form.Label style={reqTitle}>

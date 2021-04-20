@@ -10,7 +10,7 @@ class ViewAllFAQbyGeneral extends React.Component {
     this.state = {
       show: false,
       items: [
-        { url: '/Request/', title: 'View All Request' },
+        { url: '/Request/', title: 'View All Requests' },
         { url: '/Request/Create', title: 'Create Request' },
         { url: '/Request/FAQ', title: 'FAQ' },
       ],

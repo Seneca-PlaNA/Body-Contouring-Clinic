@@ -10,7 +10,7 @@ class CreateRequest extends React.Component {
     super(props);
     this.state = {
       items: [
-        { url: '/Request/', title: 'View All Request' },
+        { url: '/Request/', title: 'View All Requests' },
         { url: '/Request/Create', title: 'Create Request' },
         { url: '/Request/FAQ', title: 'FAQ' },
       ],

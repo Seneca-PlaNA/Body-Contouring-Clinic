@@ -10,7 +10,7 @@ class ViewRequestAdmin extends React.Component {
     super(props);
     this.state = {
       items: [
-        { url: '/Request/Admin', title: 'View All Request' },
+        { url: '/Request/Admin', title: 'View All Requests' },
         { url: '/Request/FAQ/Admin', title: 'FAQ' },
       ],
       request: [],

@@ -115,7 +115,7 @@ class ChangePassword extends Component {
               </Form.Group>
               <Form.Group as={Row} style={{ 'margin-right': '350px' }}>
                 <Col>
-                  <Link to={`/login`}>
+                  <Link to={`./login`}>
                     <Button variant="outline-info">Cancel</Button>
                   </Link>
                   &nbsp;
