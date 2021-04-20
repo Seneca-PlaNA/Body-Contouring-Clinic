@@ -137,7 +137,7 @@ class CreateAppointmentWithOffer extends React.Component {
       appointment:{
         ...this.state.appointment,
         customer: this.state.customer._id,
-        service: this.state.offer.services[0]._id,
+        service: this.state.offer.service,
         schedule: event.target.value,
         isOffer: true,
         offerPrice: this.state.offer.price,

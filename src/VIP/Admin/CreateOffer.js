@@ -19,16 +19,17 @@ class CreateOffer extends React.Component {
       // create offer data
       offer: {
         name: '',
-        services: [],
+        service: '',
         price: '',
         startDate: '',
         endDate: '',
         description: '',
         imageURL: String,
       },
+      services: [],
       completed: false,
       file: null,
-      imageSuccess : false,
+      imageSuccess: false,
       dateStatus: false,
       _id: localStorage.getItem('_id'),
       authName: {},
@@ -36,8 +37,11 @@ class CreateOffer extends React.Component {
       nameNull: false,
       descNull: false,
       priceNull: false,
+      priceIsDigit: false,
       sDateNull: false,
       eDateNull: false,
+      serviceNull: false,
+      priceValidation: '',
     };
     this.imageShow = this.imageShow.bind(this);
     this.imageHide = this.imageHide.bind(this);
@@ -46,99 +50,132 @@ class CreateOffer extends React.Component {
 
   imageShow = () => {
     this.setState({
-      imageSuccess : true
-    })
-  }
+      imageSuccess: true,
+    });
+  };
 
   imageHide = () => {
     this.setState({
-      imageSuccess : false
-    })
-  }
+      imageSuccess: false,
+    });
+  };
 
-  fileCheck = () =>{
+  fileCheck = () => {
     this.setState({
-      fileFormat: false
-    })
-  }
+      fileFormat: false,
+    });
+  };
 
   handlSubmit(event) {
     event.preventDefault();
-    this.state.offer.name == '' ? this.setState({ nameNull: true }) : this.setState({nameNull: false})
-    this.state.offer.description == '' ? this.setState({ descNull: true }) : this.setState({descNull: false})
-    this.state.offer.price == '' ? this.setState({ priceNull: true }) : this.setState({priceNull: false})
-    this.state.offer.startDate == '' ? this.setState({ sDateNull: true }) : this.setState({sDateNull: false})
-    this.state.offer.endDate == '' ? this.setState({ eDateNull: true }) : this.setState({eDateNull: false})
-
-    fetch(`${process.env.REACT_APP_API_URL}/create-offer`,{
-      method: "POST",
-      body: JSON.stringify(this.state.offer),
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then(() => this.setState({ completed: true }))
-      .catch((err) => console.log(err));
+    this.state.offer.name == ''
+      ? this.setState({ nameNull: true })
+      : this.setState({ nameNull: false });
+    this.state.offer.description == ''
+      ? this.setState({ descNull: true })
+      : this.setState({ descNull: false });
+    if (this.state.offer.price == '') {
+      this.setState({ priceNull: true });
+      this.setState({ priceValidation: 'Price is required' });
+    } else {
+      if (isNaN(this.state.offer.price)) {
+        this.setState({ priceNull: true });
+        this.setState({ priceValidation: 'Price should be digit' });
+      } else {
+        this.setState({ priceNull: false });
+      }
+    }
+    this.state.offer.startDate == ''
+      ? this.setState({ sDateNull: true })
+      : this.setState({ sDateNull: false });
+    this.state.offer.endDate == ''
+      ? this.setState({ eDateNull: true })
+      : this.setState({ eDateNull: false });
+    this.state.offer.service == ''
+      ? this.setState({ serviceNull: true })
+      : this.setState({ serviceNull: false });
+    event.preventDefault();
+    if (
+      this.state.nameNull &&
+      this.state.descNull &&
+      this.state.priceNull &&
+      this.state.priceIsDigit &&
+      this.state.sDateNull &&
+      this.state.eDateNull &&
+      this.state.serviceNull
+    ) {
+      event.preventDefault();
+    } else {
+      fetch(`${process.env.REACT_APP_API_URL}/create-offer`, {
+        method: 'POST',
+        body: JSON.stringify(this.state.offer),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then(() => this.setState({ completed: true }))
+        .catch((err) => console.log(err));
+    }
   }
 
-  onFormSubmit(event){
+  onFormSubmit(event) {
     var fileValue = event.target.files[0].name;
-    console.log("File name: "+ fileValue);
     var extension = fileValue.split('.').pop();
-    console.log("File extension: "+ extension);
 
-    if(extension == 'jpg' || extension == 'png' || extension == 'gif' || extension == 'pdf' || extension == 'txt')
-    {
+    if (
+      extension == 'jpg' ||
+      extension == 'png' ||
+      extension == 'gif' ||
+      extension == 'pdf' ||
+      extension == 'txt'
+    ) {
       this.setState({
         file: event.target.files[0],
       });
-    }
-    else{
+    } else {
       this.setState({
         fileFormat: true,
-      })
+      });
     }
   }
 
-  fileUpload(){
-    if(!this.state.fileFormat){
-    const url = process.env.REACT_APP_IMAGE_URL + "/upload";
-    const formData = new FormData();
-    formData.append('file', this.state.file)
-    const config = {
+  fileUpload() {
+    if (!this.state.fileFormat) {
+      const url = process.env.REACT_APP_IMAGE_URL + '/upload';
+      const formData = new FormData();
+      formData.append('file', this.state.file);
+      const config = {
         headers: {
-            'content-type': 'multipart/form-data'
-        }
-    }
-    post(url, formData,config)
-    .then((data)=>{
-      var tempData = JSON.stringify(data.data.fileName).replace('"','').replace('"','');
-      console.log("ResultData: " + tempData );
-      this.setState(()=>({
-        offer: {
-          ...this.state.offer,
-          imageURL: tempData,
-        }
-      }));
-    })
-    .then(()=>{
-      this.setState({
-        imageSuccess: true
-      })
-    })
-    .catch(()=>{
-      this.setState({
-        imageSuccess: false,
-        fileFormat: true,
-      })
-    });
-    }
-    else{
+          'content-type': 'multipart/form-data',
+        },
+      };
+      post(url, formData, config)
+        .then((data) => {
+          var tempData = JSON.stringify(data.data.fileName).replace('"', '').replace('"', '');
+          this.setState(() => ({
+            offer: {
+              ...this.state.offer,
+              imageURL: tempData,
+            },
+          }));
+        })
+        .then(() => {
+          this.setState({
+            imageSuccess: true,
+          });
+        })
+        .catch(() => {
+          this.setState({
+            imageSuccess: false,
+            fileFormat: true,
+          });
+        });
+    } else {
       this.setState({
         fileFormat: true,
-      })
+      });
     }
   }
 
@@ -146,7 +183,7 @@ class CreateOffer extends React.Component {
     this.setState(() => ({
       offer: {
         ...this.state.offer,
-        name: event.target.value
+        name: event.target.value,
       },
       nameNull: false,
     }));
@@ -169,30 +206,47 @@ class CreateOffer extends React.Component {
         price: event.target.value,
       },
       priceNull: false,
+      priceIsDigit: false,
     }));
   }
-  
-  validateDate = () => {  
-    const { endDate, startDate} = this.state.offer;
+
+  validateDate = () => {
+    const { endDate, startDate } = this.state.offer;
     let dateStatus = false;
-    if(!moment(startDate).isSameOrBefore(endDate) && startDate && endDate){
-        dateStatus = true
-    } 
-    this.setState({dateStatus})
-  }
+    if (!moment(startDate).isSameOrBefore(endDate) && startDate && endDate) {
+      dateStatus = true;
+    }
+    this.setState({ dateStatus });
+  };
   onStartDateChange(event) {
-    this.setState(() => ({
-      sDateNull: false,
-      offer: {...this.state.offer, startDate: event.target.value}
-    }), this.validateDate);
+    this.setState(
+      () => ({
+        sDateNull: false,
+        offer: { ...this.state.offer, startDate: event.target.value },
+      }),
+      this.validateDate
+    );
   }
 
   onEndDateChange(event) {
+    this.setState(
+      () => ({
+        eDateNull: false,
+        offer: { ...this.state.offer, endDate: event.target.value },
+      }),
+      this.validateDate
+    );
+  }
+
+  onServiceChange(event) {
     this.setState(() => ({
-      eDateNull: false,
-      offer: {...this.state.offer, endDate: event.target.value}
-    }), this.validateDate);
-  } 
+      offer: {
+        ...this.state.offer,
+        service: event.target.value,
+      },
+      serviceNull: false,
+    }));
+  }
 
   getCustomerProfile() {
     return new Promise((resolve) => {
@@ -204,23 +258,34 @@ class CreateOffer extends React.Component {
     });
   }
 
+  getServices() {
+    fetch(`${process.env.REACT_APP_API_URL}/services`)
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          services: data,
+        });
+      });
+  }
+
   componentDidMount() {
-    this.getCustomerProfile(this.state._id)
-    .then((data)=>{
+    this.getCustomerProfile(this.state._id).then((data) => {
       this.setState({
         authName: data.accountLevelId,
       });
+      this.getServices();
     });
   }
 
   render() {
-    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
-    {
-      return (
-        <Redirect push to={{pathname: '/', }}  refresh="true"/>
-      );
+    if (
+      this.state.authName == null ||
+      this.state.authName._id == '60371ad3fda1af6510e75e3a' ||
+      this.state.authName._id == '60371ae9fda1af6510e75e3b'
+    ) {
+      return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
-    
+
     if (this.state.completed) {
       return (
         <Redirect
@@ -239,7 +304,7 @@ class CreateOffer extends React.Component {
           <h2 className="PageTitle">Create New Offer</h2>
           <br />
           <Container>
-            <Form onSubmit={this.handlSubmit.bind(this)} method="POST"> 
+            <Form onSubmit={this.handlSubmit.bind(this)} method="POST">
               <Form.Group as={Row} controlId="name">
                 <Form.Label column sm={2}>
                   Title:
@@ -248,10 +313,32 @@ class CreateOffer extends React.Component {
                   <Form.Control
                     type="text"
                     placeholder="Offer Title"
-                    onChange={this.onNameChange.bind(this) }
+                    onChange={this.onNameChange.bind(this)}
                     isInvalid={this.state.nameNull}
                   />
                   <Form.Control.Feedback type="invalid">Title is required</Form.Control.Feedback>
+                </Col>
+              </Form.Group>
+              <Form.Group as={Row}>
+                <Form.Label column sm={2}>
+                  Service:
+                </Form.Label>
+                <Col sm={6}>
+                  <Form.Control
+                    inline
+                    as="select"
+                    onChange={this.onServiceChange.bind(this)}
+                    isInvalid={this.state.serviceNull}
+                  >
+                    <option>-- select service --</option>
+                    {this.state.services.map((result) => (
+                      // eslint-disable-next-line react/jsx-key
+                      <option key={result._id} value={result._id}>
+                        {result.name}
+                      </option>
+                    ))}
+                  </Form.Control>
+                  <Form.Control.Feedback type="invalid">Service is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row} controlId="description">
@@ -273,13 +360,15 @@ class CreateOffer extends React.Component {
                   Price:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control 
-                    rows={3} 
-                    placeholder="120" 
-                    onChange={this.onPriceChange.bind(this)}                   
+                  <Form.Control
+                    rows={3}
+                    placeholder="120"
+                    onChange={this.onPriceChange.bind(this)}
                     isInvalid={this.state.priceNull}
                   />
-                  <Form.Control.Feedback type="invalid">Price is required</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">
+                    {this.state.priceValidation}
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row} inline>
@@ -294,63 +383,67 @@ class CreateOffer extends React.Component {
                     onChange={this.onStartDateChange.bind(this)}
                     isInvalid={this.state.sDateNull}
                   />
-                  <Form.Control.Feedback type="invalid">Start date is required</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">
+                    Start date is required
+                  </Form.Control.Feedback>
                 </Col>
-                  <Col sm={3}>                  
-                    <Form.Control 
-                      controlId="endDate" 
-                      type="date" 
-                      placeholder="end date" 
-                      onChange={this.onEndDateChange.bind(this)} 
-                      isInvalid={this.state.eDateNull || this.state.dateStatus}
-                    />
-                    <Form.Control.Feedback type='invalid'> 
-                      Start-date should be before end-date
-                    </Form.Control.Feedback>
-                  </Col>
-             {/*  } */}
+                <Col sm={3}>
+                  <Form.Control
+                    controlId="endDate"
+                    type="date"
+                    placeholder="end date"
+                    onChange={this.onEndDateChange.bind(this)}
+                    isInvalid={this.state.eDateNull || this.state.dateStatus}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Start-date should be before end-date
+                  </Form.Control.Feedback>
+                </Col>
+                {/*  } */}
               </Form.Group>
               <Form.Group as={Row}>
                 <Form.Label column sm={2}>
                   Attach File:
                 </Form.Label>
-                <Form.File type="file" onChange={this.onFormSubmit.bind(this)}/>
-                  <Modal show={this.state.fileFormat} onHide={this.fileCheck}>
-                    <Modal.Header closeButton>
-                      <Modal.Title>Image Upload Result</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <p>Only .jpg .png .gif .pdf .txt file type is allowed</p>
-                    </Modal.Body>
-                  </Modal>
+                <Form.File type="file" onChange={this.onFormSubmit.bind(this)} />
+                <Modal show={this.state.fileFormat} onHide={this.fileCheck}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Image Upload Result</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <p>Only .jpg .png .gif .pdf .txt file type is allowed</p>
+                  </Modal.Body>
+                </Modal>
                 <Button variant="outline-secondary" onClick={this.fileUpload.bind(this)}>
-                      Upload
+                  Upload
                 </Button>
                 <Modal show={this.state.imageSuccess} onHide={this.imageHide}>
-                    <Modal.Header closeButton>
-                      <Modal.Title>Image Upload Result</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <p>Image Upload Success</p>
-                    </Modal.Body>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Image Upload Result</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <p>Image Upload Success</p>
+                  </Modal.Body>
                 </Modal>
               </Form.Group>
               <br />
               <br />
-              <Form.Group as={Row}>
+              <Container>
                 <Row>
-                  <Col>
+                  <Col xs={6}></Col>
+                  <Col xs={1}>
                     <Button variant="outline-secondary" href="/VIP/Admin/Manage">
                       Cancel
                     </Button>
                   </Col>
-                  <Col md="auto">
-                    <Button variant="outline-info" type="submit">
+                  <Col xs={1}>
+                    <Button type="submit" variant="outline-info">
                       Save
                     </Button>
                   </Col>
                 </Row>
-              </Form.Group>
+                <br />
+              </Container>
             </Form>
           </Container>
           <br />
