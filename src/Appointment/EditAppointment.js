@@ -137,8 +137,14 @@ class EditAppointment extends React.Component {
     .then(response => response.json())  
     .then((data)=>{
       console.log(data);
+      var allDays = [];
+      data.map((schedule)=>{
+        if(schedule.booked == false){
+          allDays = allDays.concat(schedule);
+        }
+      })
       this.setState({
-        filterData: data,
+        filterData: allDays,
         timeNull: true,
       })
     });

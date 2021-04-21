@@ -13,6 +13,7 @@ class CreateAppointmentWithOffer extends React.Component {
     super(props);
     this.state = {
       items: [
+        { url: '/VIP', title: 'Special Offer' },
         { url: '/Appointment', title: 'Appointment Home' },
         { url: '/Appointment/Appointments', title: 'View All Appointments' },
         { url: `/Appointment/Create`, title: 'Create Appointment' },
@@ -43,7 +44,8 @@ class CreateAppointmentWithOffer extends React.Component {
       selectedDay: null,
       availableDays: [],
       confirmDay: null,
-      tempTime: ''
+      tempTime: '',
+      offerService: [],
     };
     this.showSave = this.showSave.bind(this);
     this.hideSave = this.hideSave.bind(this);
@@ -61,9 +63,9 @@ class CreateAppointmentWithOffer extends React.Component {
   handlSubmit(event) {
     event.preventDefault();
 
-    this.state.appointment.schedule == ''? this.setState({technicianNull: true}):this.setState({technicianNull: false}); 
-    this.state.filterData == ''? this.setState({dateNull: true}):this.setState({dateNull: false}); 
-    this.state.tempTime == '' ? this.setState({timeNull: true}):this.setState({timeNull: false}); 
+    this.state.appointment.schedule == ''? this.setState({technicianNull: true}):this.setState({technicianNull: false});
+    this.state.filterData == ''? this.setState({dateNull: true}):this.setState({dateNull: false});
+    this.state.tempTime == '' ? this.setState({timeNull: true}):this.setState({timeNull: false});
     this.state.appointment.contactNumber == ''? this.setState({contactNumNull: true}):this.setState({contactNumNull: false});
 
     fetch(`${process.env.REACT_APP_API_URL}/create-appointment`,{
@@ -104,11 +106,16 @@ class CreateAppointmentWithOffer extends React.Component {
     });
 
     fetch(`${process.env.REACT_APP_API_URL}/workSchedule?date=${moment(day).format("MM/DD/YYYY")}`)
-    .then(response => response.json())  
+    .then(response => response.json())
     .then((data)=>{
-      console.log(data);
+      var allDays = [];
+      data.map((schedule)=>{
+        if(schedule.booked == false){
+          allDays = allDays.concat(schedule);
+        }
+      })
       this.setState({
-        filterData: data,
+        filterData: allDays,
         dateNull: false,
         timeNull: true,
       })
@@ -128,7 +135,7 @@ class CreateAppointmentWithOffer extends React.Component {
       technician: technicianData,
       timeNull: false,
       tempTime: event.target.value,
-  }); 
+  });
   }
 
   onScheduleChange(event){
@@ -137,7 +144,7 @@ class CreateAppointmentWithOffer extends React.Component {
       appointment:{
         ...this.state.appointment,
         customer: this.state.customer._id,
-        service: this.state.offer.services[0]._id,
+        service: this.state.offer.service,
         schedule: event.target.value,
         isOffer: true,
         offerPrice: this.state.offer.price,
@@ -148,15 +155,16 @@ class CreateAppointmentWithOffer extends React.Component {
 
   getOffer(){
     fetch(`${process.env.REACT_APP_API_URL}/offer/${this.props.id}`)
-    .then(response => response.json())  
+    .then(response => response.json())
     .then((data)=>{
       this.setState({
         offer: data,
+        offerService: data.service,
       })
     });
     console.log(this.state.offer);
   }
-  
+
   getAvailableDays(){
     fetch(`${process.env.REACT_APP_API_URL}/workSchedules`)
     .then(response => response.json())
@@ -168,14 +176,14 @@ class CreateAppointmentWithOffer extends React.Component {
             allDays = allDays.concat(moment(schedule.date.date, "MM/DD/YYYY").toDate());
         }
       });
- 
+
       console.log(allDays);
       this.setState({
         availableDays: allDays,
       });
     });
   }
-  
+
   componentDidMount() {
     document.title = 'Create New Offer Appointment | Body Contouring Clinic';
 
@@ -192,6 +200,7 @@ class CreateAppointmentWithOffer extends React.Component {
   }
 
   render() {
+    console.log(this.state.offerService);
     if(this.state.completed)
     {
       return <Redirect push to={{
@@ -213,13 +222,23 @@ class CreateAppointmentWithOffer extends React.Component {
                 <Col></Col>
                 <Col xs={8}>
                   <Form onSubmit={this.handlSubmit.bind(this)}>
-                    <Form.Group as={Row}>
+                  <Form.Group as={Row}>
                       <Form.Label column sm="4">
-                        Service(s):
+                        Offer Name:
                       </Form.Label>
                       <Col sm="8">
-                        <Form.Control inline as="select" >
+                        <Form.Control inline as="text" disabled>
                         <option>{this.state.offer.name}</option>
+                        </Form.Control>
+                      </Col>
+                    </Form.Group>
+                    <Form.Group as={Row}>
+                      <Form.Label column sm="4">
+                        Service:
+                      </Form.Label>
+                      <Col sm="8">
+                        <Form.Control inline as="select" disabled>
+                        <option>{this.state.offerService.name}</option>
                         </Form.Control>
                       </Col>
                     </Form.Group>
@@ -229,10 +248,10 @@ class CreateAppointmentWithOffer extends React.Component {
                       </Form.Label>
                       <Col sm="8">
                         <Form.Control as="input" value={this.state.confirmDay != null ? this.state.confirmDay.toLocaleDateString() : 'Please select a day'} />
-                        <DayPicker 
-                            showOutsideDays 
-                            selectedDays={this.state.availableDays} 
-                            disabledDays={[{before: new Date()}]} 
+                        <DayPicker
+                            showOutsideDays
+                            selectedDays={this.state.availableDays}
+                            disabledDays={[{before: new Date()}]}
                             onDayClick={this.onDateChange.bind(this)} />
                       </Col>
                     </Form.Group>
@@ -286,7 +305,7 @@ class CreateAppointmentWithOffer extends React.Component {
                     <Row>
                       <Col></Col>
                       <Col md="auto">
-                        <Button variant="outline-secondary" href="/Appointment/">
+                        <Button variant="outline-secondary" href="/VIP/">
                           Cancel
                         </Button>
                       </Col>

@@ -7,14 +7,14 @@ const offerSchema = new Schema(
       type: String,
       required: true,
     },
-    services: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'services',
-      },
-    ],
+    service: {
+      type: Schema.Types.ObjectId,
+      ref: 'services',
+      required: true,
+    },
     price: {
       type: Number,
+      required: true,
     },
     startDate: {
       type: Date,

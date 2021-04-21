@@ -12,7 +12,7 @@ class PopUp extends React.Component {
         </Modal.Header>
 
         <Modal.Body>
-          <p>Are you sure to delete {this.props.text}</p>
+          <p>Are you sure to delete this {this.props.text.toLowerCase()}?</p>
         </Modal.Body>
 
         <Modal.Footer>
