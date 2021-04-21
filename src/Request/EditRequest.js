@@ -391,21 +391,17 @@ class EditRequest extends React.Component {
                     </Modal.Body>
                 </Modal>
               </Form.Group>
-              <br />
-              <br />
               <Container>
-                <Row>
+              <Row>
                   <Col xs={6}></Col>
-                  <Col xs={1}>
+                  <Col md="auto">
                     <Button variant="outline-secondary" href="/Request/">
                       Cancel
                     </Button>
                   </Col>
-                  <Col xs={1}>
-                    <Button type="submit" variant="outline-info">
+                    <Button variant="outline-info" type="submit">
                       Save
                     </Button>
-                  </Col>
                 </Row>
               </Container>
             </Form>

@@ -248,20 +248,17 @@ class EditStaffSchedule extends React.Component {
                     />
                   </Col>
                 </Form.Group>
-                <br />
                 <Container>
                   <Row>
                     <Col xs={6}></Col>
-                    <Col xs={1}>
+                    <Col md='auto'>
                       <Button variant="outline-secondary" href="/Staff/Schedules">
                         Cancel
                       </Button>
                     </Col>
-                    <Col xs={1}>
                       <Button type="submit" variant="outline-info">
                         Save
                       </Button>
-                    </Col>
                   </Row>
                 </Container>
               </Form>

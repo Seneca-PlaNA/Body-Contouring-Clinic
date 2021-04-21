@@ -186,14 +186,13 @@ class ViewRequest extends React.Component {
                 </Form.Group>
                 <Container>
                   <Row>
-                    <Col xs={10}></Col>
-                    <Col xs={1}>
+                    <Col xs={9}></Col>
+                    <Col style={{ display: "flex", justifyContent: 'flex-end'}}>
                       {console.log(this.state.requestId)}
                       <Button variant="outline-secondary" href={`/Request/Edit/${this.state.requestId}`}>
                         Edit
                       </Button>
                     </Col>
-                    <Col xs={1}>
                       <Button variant="outline-danger" onClick={() => {
                         this.setState({
                           show: true,
@@ -201,7 +200,6 @@ class ViewRequest extends React.Component {
                       }}>
                         Delete
                       </Button>
-                    </Col>
                     <PopUp
                       show={this.state.show}
                       handleClose={this.hideModal}

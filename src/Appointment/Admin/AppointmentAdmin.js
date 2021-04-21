@@ -222,14 +222,14 @@ class AppointmentAdmin extends React.Component {
               <br/>
               <Row>
                 <Col></Col>
-                <Col>
-                  <Button variant="outline-success" action type="submit" style={{'margin-right': '5px' }}>Confirm Status</Button>
+                <Col md='auto'>
+                  <Button variant="outline-success" action type="submit" style={{'margin-right': '5px' }} >Confirm Status</Button>
                   <Link to={`/Appointment/Admin/Message/${this.props.id}`}>
                       <Button variant="outline-secondary">
                         Leave Message
                       </Button>
                   </Link>{' '}
-                  <Button variant="outline-danger" onClick={this.showModal}>
+                  <Button style={{'margin-left': '5px' }} variant="outline-danger" onClick={this.showModal}>
                     Delete
                   </Button>{' '}
                   {moment(this.state.year+'-'+this.state.month+'-'+this.state.day).isBefore(new Date())? '':
