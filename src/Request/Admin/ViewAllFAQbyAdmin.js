@@ -191,13 +191,13 @@ class ViewAllFAQbyAdmin extends React.Component {
           <Container>
             <br />
             <Row>
-              <Col xs={10}></Col>
-              <Col xs={2}>
+              <Col xs={9}></Col>
+              <Col style={{ display: "flex", justifyContent: 'flex-end'}}>
                 <Button variant="outline-info"  href="/Request/FAQ/Admin/Create">
                   Create
                 </Button>
               </Col>
-              <br/><br/><br/><br/><br/><br/>
+              
               <PopUp
                 show={this.state.show}
                 handleClose={this.hideFAQ}
