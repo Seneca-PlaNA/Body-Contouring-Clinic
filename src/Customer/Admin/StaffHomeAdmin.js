@@ -2,7 +2,7 @@ import React from 'react';
 import SideBar from '../../SideBar/SideBar';
 import '../../App.css';
 import searchIcon from '../../resources/searchIcon.png';
-import { Form, Button, Table, Pagination } from 'react-bootstrap';
+import { Form, Button, Table, Pagination, Container } from 'react-bootstrap';
 import { Redirect } from 'react-router';
 
 class StaffHomeAdmin extends React.Component {
@@ -150,20 +150,21 @@ class StaffHomeAdmin extends React.Component {
               <Button href="/Staff/Admin/Active" action variant="outline-info" style={{ 'margin-left': '30px' }}>
                Active Staff
               </Button>
+              <Container style={{ display: 'flex', justifyContent: 'flex-end', flexWrap: 'wrap'}}>
               <Form.Control
                 type="text"
                 placeholder="Search staff"
                 value={this.state.seachStaff}
-                style={{'margin-left': '800px' }}
                 onChange={this.handleSearchStaffChange.bind(this)}
               ></Form.Control>
               <Button
                 variant="outline-*"
-                style={{ background: 'none', 'margin-left': '5px' }}
+                style={{ background: 'none' }}
                 onClick={this.handleSearchStaff.bind(this)}
               >
                 <img src={searchIcon} alt="Search" />
               </Button>
+              </Container>
             </Form>
             <br/>
           <Table striped bordered hover>
