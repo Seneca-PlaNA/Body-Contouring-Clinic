@@ -150,8 +150,8 @@ class ViewRequestAdmin extends React.Component {
                 </Form.Group>
                 <Container>
                   <Row>
-                    <Col xs={11}></Col>
-                    <Col xs={1}>
+                    <Col xs={10}></Col>
+                    <Col style={{ display: "flex", justifyContent: 'flex-end'}}>
                       <Button type="submit" variant="outline-info" href={`/Request/Admin/Answer/${this.state.requestId}`}>
                         Answer
                       </Button>

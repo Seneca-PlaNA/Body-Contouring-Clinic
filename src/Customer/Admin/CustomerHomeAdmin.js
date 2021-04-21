@@ -2,7 +2,7 @@ import React from 'react';
 import SideBar from '../../SideBar/SideBar';
 import '../../App.css';
 import searchIcon from '../../resources/searchIcon.png';
-import { Form, Button, Table, Pagination } from 'react-bootstrap';
+import { Form, Button, Table, Pagination, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
 
@@ -139,20 +139,21 @@ class CustomerHomeAdmin extends React.Component {
           <div className="contents">
             <Form inline>
               <h4 className="PageTitle">Customer List</h4>
+              <Container style={{ display: 'flex', justifyContent: 'flex-end', flexWrap: 'wrap'}}>
               <Form.Control
                 type="text"
                 placeholder="Search customer"
-                style={{ 'margin-left': '880px' }}
                 value={this.state.seachCustomer}
                 onChange={this.handleSearchCustomerChange.bind(this)}
               ></Form.Control>
               <Button
                 variant="outline-*"
-                style={{ background: 'none', 'margin-left': '5px' }}
+                style={{ background: 'none'}}
                 onClick={this.handleSearchCustomer.bind(this)}
               >
                 <img src={searchIcon} alt="Search" />
               </Button>
+              </Container>
             </Form>
             <br />
           </div>

@@ -164,11 +164,12 @@ class ViewAllFAQbyAdmin extends React.Component {
                          <Accordion.Collapse eventKey="0">
                            <Card.Body>
                              {oneFaq.contents}
-                             <ButtonToolbar>
+                             <p></p>
+                             <ButtonToolbar style={{ display: "flex", justifyContent: 'flex-end'}} >
                               <Link to={`/Request/FAQ/Admin/Edit/${oneFaq._id}`}>
-                                  <Button variant="outline-secondary" style={{ marginLeft: '780px' }}>Edit</Button>
+                                  <Button variant="outline-secondary"   style={{ marginRight: '5px' }}  >Edit</Button>
                                 </Link>
-                                <Button variant="outline-danger" style={{ marginLeft: '15px' }} onClick={()=> {
+                                <Button variant="outline-danger" style={{ marginRight: '1px' }} onClick={()=> {
                                     this.setState({
                                     show: true,
                                     selectedFAQ: oneFaq, })}}>
@@ -190,13 +191,13 @@ class ViewAllFAQbyAdmin extends React.Component {
           <Container>
             <br />
             <Row>
-              <Col xs={10}></Col>
-              <Col xs={2}>
+              <Col xs={9}></Col>
+              <Col style={{ display: "flex", justifyContent: 'flex-end'}}>
                 <Button variant="outline-info"  href="/Request/FAQ/Admin/Create">
                   Create
                 </Button>
               </Col>
-              <br/><br/><br/><br/><br/><br/>
+              
               <PopUp
                 show={this.state.show}
                 handleClose={this.hideFAQ}

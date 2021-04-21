@@ -399,7 +399,6 @@ class CreateOffer extends React.Component {
                     Start-date should be before end-date
                   </Form.Control.Feedback>
                 </Col>
-                {/*  } */}
               </Form.Group>
               <Form.Group as={Row}>
                 <Form.Label column sm={2}>
@@ -426,21 +425,17 @@ class CreateOffer extends React.Component {
                   </Modal.Body>
                 </Modal>
               </Form.Group>
-              <br />
-              <br />
               <Container>
                 <Row>
                   <Col xs={6}></Col>
-                  <Col xs={1}>
+                  <Col md="auto">
                     <Button variant="outline-secondary" href="/VIP/Admin/Manage">
                       Cancel
                     </Button>
-                  </Col>
-                  <Col xs={1}>
+                    </Col>
                     <Button type="submit" variant="outline-info">
                       Save
                     </Button>
-                  </Col>
                 </Row>
                 <br />
               </Container>

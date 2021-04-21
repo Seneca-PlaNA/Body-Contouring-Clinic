@@ -114,8 +114,14 @@ class CreateAppointment extends React.Component {
     .then(response => response.json())  
     .then((data)=>{
       console.log(data);
+      var allDays = [];
+      data.map((schedule)=>{
+        if(schedule.booked == false){
+          allDays = allDays.concat(schedule);
+        }
+      })
       this.setState({
-        filterData: data,
+        filterData: allDays,
         dateNull: false,
         timeNull: true,
       })
@@ -124,13 +130,13 @@ class CreateAppointment extends React.Component {
 
   onTimeChange(event){
     var technicianData = [];
-    this.state.filterData.forEach(function(data){
+    this.state.filterData.map((data) => {
 
         if(data.time._id == event.target.value)
         {
           technicianData = technicianData.concat(data);
         }
-    })
+    });
     this.setState({
       technician: technicianData,
       timeNull: false,

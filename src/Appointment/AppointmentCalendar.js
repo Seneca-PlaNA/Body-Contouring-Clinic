@@ -93,10 +93,13 @@ class AppointmentCalendar extends React.Component {
 
   handleMonthText = (month) =>{
     var tempText = "";
+    console.log(month);
 
-    switch (month){
+    var editMonth = month >= 0 ? month%12 : 12 - Math.abs(month)%12;
+    console.log(editMonth);
+    switch (editMonth){
       case 0:
-        tempText= "This Month";
+        tempText= "December";
         break;
       case 1:
         tempText = "January";

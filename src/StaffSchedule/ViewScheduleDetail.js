@@ -149,17 +149,16 @@ class ViewScheduleDetail extends React.Component {
               <Container>
                 <Row>
                   <Col xs={6}></Col>
-                  <Col xs={1}>
+                  <Col md='auto'>
                     {!this.state.beforeToday && (
                       <Button
                         variant="outline-info"
+                        style={{'margin-right': '5px' }}
                         href={`/Staff/Schedule/Edit/${this.state.workScheduleId}`}
                       >
                         Edit
                       </Button>
                     )}
-                  </Col>
-                  <Col xs={1}>
                     <Button
                       variant="outline-danger"
                       onClick={() => {
@@ -178,9 +177,9 @@ class ViewScheduleDetail extends React.Component {
                       btn1="Cancel"
                       btn2="Delete"
                     />
-                  </Col>
-                  <Col xs={2}>
-                    <Button variant="outline-secondary" href="/Staff/Schedules">
+                    <Button 
+                      variant="outline-secondary"                       
+                      style={{'margin-left': '5px' }} href="/Staff/Schedules">
                       Back to List
                     </Button>
                   </Col>
