@@ -173,17 +173,15 @@ class AnswerRequest extends React.Component {
                 </Form.Group>
                 <Container>
                   <Row>
-                    <Col xs={10}></Col>
-                    <Col xs={1}>
+                    <Col xs={9}></Col>
+                    <Col style={{ display: "flex", justifyContent: 'flex-end'}}>
                       <Button variant="outline-secondary" href="/Request/Admin/">
                         Cancel
                       </Button>
                     </Col>
-                    <Col xs={1}>
                       <Button type="submit" variant="outline-info">
                         Save
                       </Button>
-                    </Col>
                   </Row>
                 </Container>
               </Form>

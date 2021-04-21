@@ -276,16 +276,14 @@ class CreateSchedule extends React.Component {
               <Container>
                 <Row>
                   <Col xs={6}></Col>
-                  <Col xs={1}>
+                  <Col md='auto'>
                     <Button variant="outline-secondary" href="/Staff/Schedules">
                       Cancel
                     </Button>
                   </Col>
-                  <Col xs={1}>
                     <Button variant="outline-info" type="submit">
                       Save
                     </Button>
-                  </Col>
                 </Row>
               </Container>
             </Form>

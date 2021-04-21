@@ -149,8 +149,8 @@ class Appointment extends React.Component {
               <br/>
               <Row>
                 <Col></Col>
-                <Col>
-                  <Button onClick={this.showMessage} variant="outline-info">
+                <Col md='auto'>
+                  <Button onClick={this.showMessage} variant="outline-info" style={{'margin-right': '5px' }} >
                     View Message
                   </Button>{' '}
                   <ViewAppointmentMessage
@@ -165,7 +165,7 @@ class Appointment extends React.Component {
                   {
                     moment(this.state.year+'-'+this.state.month+'-'+this.state.day).isBefore(new Date())? '':
                     <Link to={`/Appointment/Edit/${this.state.appointment._id}`}>
-                        <Button variant="outline-secondary">
+                        <Button style={{'margin-left': '5px' }} variant="outline-secondary">
                           Edit
                         </Button>
                     </Link>

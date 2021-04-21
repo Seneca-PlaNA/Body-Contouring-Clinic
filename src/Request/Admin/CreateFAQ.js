@@ -171,22 +171,17 @@ class CreateFAQ extends React.Component {
                   <Form.Control.Feedback type="invalid">Content is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
-              
-              <br />
-              <br />
               <Container>
                 <Row>
                   <Col xs={6}></Col>
-                  <Col xs={1}>
-                    <Button variant="outline-secondary" href="/Request/FAQ/Admin/">
+                  <Col md="auto">
+                    <Button variant="outline-secondary"href="/Request/FAQ/Admin/">
                       Cancel
                     </Button>
-                  </Col>
-                  <Col xs={1}>
+                    </Col>
                     <Button type="submit" variant="outline-info">
                       Save
-                    </Button>
-                  </Col>
+                    </Button>    
                 </Row>
               </Container>
             </Form>

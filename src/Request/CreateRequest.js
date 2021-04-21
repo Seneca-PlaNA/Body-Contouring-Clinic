@@ -340,20 +340,17 @@ class CreateRequest extends React.Component {
                     </Modal.Body>
                   </Modal>
               </Form.Group>
-              <br />
               <Container>
                 <Row>
                   <Col xs={6}></Col>
-                  <Col xs={1}>
+                  <Col md="auto">
                     <Button variant="outline-secondary" href="/Request/">
                       Cancel
                     </Button>
                   </Col>
-                  <Col xs={1}>
                     <Button variant="outline-info" type="submit">
                       Save
                     </Button>
-                  </Col>
                 </Row>
               </Container>
             </Form>
