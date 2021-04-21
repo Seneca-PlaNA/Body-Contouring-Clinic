@@ -121,7 +121,14 @@ class ViewSchedulesList extends React.Component {
       });
   }
 
+  sortingByDate(a, b) {
+    let dateA = new Date(a.date.date).getTime();
+    let dateB = new Date(b.date.date).getTime();
+    return dateA < dateB ? -1 : 1;
+  }
+
   render() {
+    this.state.filteredSchedules.sort(this.sortingByDate);
     if (this.state.loaded) {
       return (
         <div className="row">
@@ -195,6 +202,7 @@ class ViewSchedulesList extends React.Component {
                   </tr>
                 ))}
               </table>
+              <br /> <br />
               <Container>
                 <Row>
                   <Col xs={10}></Col>

@@ -133,16 +133,21 @@ class EditAppointment extends React.Component {
       selectedDay: selected ? undefined : day,
       confirmDay: day,
     });
-
-    fetch(`${process.env.REACT_APP_API_URL}/workSchedule?date=${moment(day).format('MM/DD/YYYY')}`)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        this.setState({
-          filterData: data,
-          timeNull: true,
-        });
-      });
+    fetch(`${process.env.REACT_APP_API_URL}/workSchedule?date=${moment(day).format("MM/DD/YYYY")}`)
+    .then(response => response.json())  
+    .then((data)=>{
+      console.log(data);
+      var allDays = [];
+      data.map((schedule)=>{
+        if(schedule.booked == false){
+          allDays = allDays.concat(schedule);
+        }
+      })
+      this.setState({
+        filterData: allDays,
+        timeNull: true,
+      })
+    });
   }
 
   onTimeChange(event) {

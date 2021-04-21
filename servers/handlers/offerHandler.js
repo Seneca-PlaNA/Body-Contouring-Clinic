@@ -18,7 +18,7 @@ exports.addNewOffer = function (data) {
 exports.viewAllOffers = function () {
   return new Promise((resolve, reject) => {
     Offer.find()
-      .populate('services')
+      .populate('service')
       .then((offers) => {
         resolve(offers);
       })
@@ -32,7 +32,7 @@ exports.viewAllOffers = function () {
 exports.viewOneOfferById = function (id) {
   return new Promise((resolve, reject) => {
     Offer.findOne({ _id: id })
-      .populate('services')
+      .populate('service')
       .exec()
       .then((offer) => {
         resolve(offer);
