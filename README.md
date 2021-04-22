@@ -10,6 +10,8 @@ Account Login information:
 | 56Vauseman   | 00000000      |   staff |
 | Yuan86 | 12345678      | VIP customer |
 | pipe04 | pipes4444 | Regular customer |
+| kmt1011 | 12341234 | Regular customer |
+| test1234 | 12341234 | Regular customer |
 
 
 ### Modify the repo
