@@ -21,6 +21,9 @@
 - nodejs
 - npm
 
+#### databast connection string:
+Please copy the `dbConnectionStr.json` file to your root for connecting to database.
+
 #### steps:
 - `git clone`
 - `cd` to `Body-Contouring-Clinic/body-contouring-clinic` directory
