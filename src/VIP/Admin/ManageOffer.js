@@ -59,19 +59,18 @@ class ManageOffer extends React.Component {
   };
 
   handleDelete = () => {
-    this.deleteOffer()
-    .then(() => {
-      this.getOffers()
-      .then((data) => {
+    this.deleteOffer().then(() => {
+      this.getOffers().then((data) => {
         this.setState({
           offers: data,
-            });
         });
+      });
     });
 
-    this.setState({ 
+    this.setState({
       show: false,
-      selectedOffer: null })
+      selectedOffer: null,
+    });
   };
 
   getOffers() {
@@ -84,9 +83,11 @@ class ManageOffer extends React.Component {
     });
   }
 
-  deleteOffer(){
+  deleteOffer() {
     return new Promise((resolve) => {
-      fetch(`${process.env.REACT_APP_API_URL}/offer/`+ this.state.selectedOffer._id, {method: 'DELETE'})
+      fetch(`${process.env.REACT_APP_API_URL}/offer/` + this.state.selectedOffer._id, {
+        method: 'DELETE',
+      })
         .then((response) => response.json())
         .then((results) => {
           resolve(results);
@@ -105,27 +106,25 @@ class ManageOffer extends React.Component {
   }
 
   componentDidMount() {
-    this.getOffers()
-      .then((data) => {
-        this.setState({
-          offers: data,
-        });
+    this.getOffers().then((data) => {
+      this.setState({
+        offers: data,
+      });
     });
 
     this.getCustomerProfile(this.state._id).then((data) => {
       this.setState({
         authName: data.accountLevelId,
       });
-      console.log(this.state.authName);
     });
-
   }
   render() {
-    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
-    {
-      return (
-        <Redirect push to={{pathname: '/', }}  refresh="true"/>
-      );
+    if (
+      this.state.authName == null ||
+      this.state.authName._id == '60371ad3fda1af6510e75e3a' ||
+      this.state.authName._id == '60371ae9fda1af6510e75e3b'
+    ) {
+      return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
 
     const indexOfLast = this.state.currentPage * this.state.perPage;
@@ -158,27 +157,30 @@ class ManageOffer extends React.Component {
                 <td></td>
                 <td></td>
               </tr>
-              { currentItems.map((result) => (
-                  // eslint-disable-next-line react/jsx-key
-                  <tr key={result._id}>
-                  <td>{moment(result.startDate).format('ll')} ~ {moment(result.endDate).format('ll')}</td>
+              {currentItems.map((result) => (
+                // eslint-disable-next-line react/jsx-key
+                <tr key={result._id}>
+                  <td>
+                    {moment(result.startDate).format('ll')} ~ {moment(result.endDate).format('ll')}
+                  </td>
                   <td>${result.price}</td>
                   <td>{result.name}</td>
                   <td>{result.description}</td>
                   <td>
                     <Link to={`/VIP/Admin/Manage/Edit/${result._id}`}>
-                      <Button variant="outline-secondary">
-                        Edit
-                      </Button>
+                      <Button variant="outline-secondary">Edit</Button>
                     </Link>
                   </td>
                   <td>
-                    <Button variant="outline-danger" onClick={()=>{
-                      this.setState({
-                        show: true,
-                        selectedOffer: result,
-                      });
-                    }}>
+                    <Button
+                      variant="outline-danger"
+                      onClick={() => {
+                        this.setState({
+                          show: true,
+                          selectedOffer: result,
+                        });
+                      }}
+                    >
                       Delete
                     </Button>
                   </td>
@@ -195,9 +197,9 @@ class ManageOffer extends React.Component {
             </table>
             <br />
             <Pagination style={{ display: 'flex', justifyContent: 'center' }}>
-                <Pagination.Prev onClick={this.prevPage.bind(this)} />
-                <Pagination>{pageNums}</Pagination>
-                <Pagination.Next onClick={this.nextPage.bind(this)} />
+              <Pagination.Prev onClick={this.prevPage.bind(this)} />
+              <Pagination>{pageNums}</Pagination>
+              <Pagination.Next onClick={this.nextPage.bind(this)} />
             </Pagination>
             <br />
             <br />

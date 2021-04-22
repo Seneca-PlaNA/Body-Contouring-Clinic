@@ -139,7 +139,6 @@ class EditAppointmentAdmin extends React.Component {
     fetch(`${process.env.REACT_APP_API_URL}/workSchedule?date=${moment(day).format('MM/DD/YYYY')}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         this.setState({
           filterData: data,
           timeNull: true,
@@ -161,7 +160,6 @@ class EditAppointmentAdmin extends React.Component {
   }
 
   onScheduleChange(event) {
-    console.log('id: ' + event.target.value);
     this.setState({
       appointment: {
         ...this.state.appointment,
@@ -185,7 +183,6 @@ class EditAppointmentAdmin extends React.Component {
           }
         });
 
-        console.log(allDays);
         this.setState({
           availableDays: allDays,
         });

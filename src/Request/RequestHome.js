@@ -33,7 +33,7 @@ class RequestHome extends React.Component {
 
       currentPage: 1,
       perPage: 4,
-      authName:{},
+      authName: {},
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -93,19 +93,18 @@ class RequestHome extends React.Component {
       eDateStatus: false,
       sDateStatus: false,
       startDate: e.target.value,
-    })
+    });
 
-    if(moment(e.target.value).isBefore(this.state.endDate)){
-      this.setState({ 
+    if (moment(e.target.value).isBefore(this.state.endDate)) {
+      this.setState({
         eDateStatus: false,
         sDateStatus: false,
-    });
-    }
-    else{
+      });
+    } else {
       this.setState({
         sDateStatus: true,
         eDateStatus: true,
-      })
+      });
     }
   };
 
@@ -114,22 +113,21 @@ class RequestHome extends React.Component {
       eDateStatus: false,
       sDateStatus: false,
       endDate: e.target.value,
-    })
+    });
 
-    if(moment(this.state.startDate).isBefore(e.target.value)){
-      this.setState({ 
+    if (moment(this.state.startDate).isBefore(e.target.value)) {
+      this.setState({
         eDateStatus: false,
         sDateStatus: false,
       });
-    }
-    else{
+    } else {
       this.setState({
         sDateStatus: true,
         eDateStatus: true,
-      })
+      });
     }
-  }
-  
+  };
+
   handleChange = (event) => {
     this.setState({ filter: event.target.value });
   };
@@ -205,18 +203,15 @@ class RequestHome extends React.Component {
         this.setState({
           user: data.account,
           account: data,
-          authName: data.account != null? data.account.accountLevelId: null,
+          authName: data.account != null ? data.account.accountLevelId : null,
         });
         this.getRequests(this.state.account._id);
       });
   }
 
   render() {
-    if(this.state.authName == null)
-    {
-      return (
-        <Redirect push to={{pathname: '/', }}  refresh="true"/>
-      );
+    if (this.state.authName == null) {
+      return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
 
     const indexOfLast = this.state.currentPage * this.state.perPage;

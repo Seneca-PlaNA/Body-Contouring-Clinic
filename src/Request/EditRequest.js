@@ -26,7 +26,7 @@ class EditRequest extends React.Component {
       requestCategories: [],
       serviceCategories: [],
       file: null,
-      imageSuccess : false,
+      imageSuccess: false,
       _id: localStorage.getItem('_id'),
       authName: {},
       fileFormat: false,
@@ -41,21 +41,21 @@ class EditRequest extends React.Component {
   }
   imageShow = () => {
     this.setState({
-      imageSuccess : true
-    })
-  }
+      imageSuccess: true,
+    });
+  };
 
   imageHide = () => {
     this.setState({
-      imageSuccess : false
-    })
-  }
+      imageSuccess: false,
+    });
+  };
 
-  fileCheck = () =>{
+  fileCheck = () => {
     this.setState({
-      fileFormat: false
-    })
-  }
+      fileFormat: false,
+    });
+  };
 
   handleSubmit(e) {
     e.preventDefault();
@@ -65,98 +65,106 @@ class EditRequest extends React.Component {
       contentNull: false,
     });
 
-    if(this.state.request.title == '' || this.state.request.requestCategory == '' || this.state.request.contents == '')
-    {
-      this.state.request.title == '' ? this.setState({ titleNull: true }) : this.setState({ titleNull: false });
-      this.state.request.requestCategory == '' ? this.setState({ requestCategoryNull: true }) : this.setState({ requestCategoryNull: false });
-      this.state.request.contents == '' ? this.setState({ contentNull: true }) : this.setState({ contentNull: false });
+    if (
+      this.state.request.title == '' ||
+      this.state.request.requestCategory == '' ||
+      this.state.request.contents == ''
+    ) {
+      this.state.request.title == ''
+        ? this.setState({ titleNull: true })
+        : this.setState({ titleNull: false });
+      this.state.request.requestCategory == ''
+        ? this.setState({ requestCategoryNull: true })
+        : this.setState({ requestCategoryNull: false });
+      this.state.request.contents == ''
+        ? this.setState({ contentNull: true })
+        : this.setState({ contentNull: false });
+    } else {
+      fetch(`${process.env.REACT_APP_API_URL}/request/${this.props.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(this.state.editRequest),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then(() => this.setState({ completed: true }))
+        .catch((err) => console.log(err));
     }
-    else{
-    fetch(`${process.env.REACT_APP_API_URL}/request/${this.props.id}`, {
-      method: 'PUT',
-      body: JSON.stringify(this.state.editRequest),
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then(() => this.setState({ completed: true }))
-      .catch((err) => console.log(err));
-  }
   }
 
-  onFormSubmit(event){
+  onFormSubmit(event) {
     var fileValue = event.target.files[0].name;
-    console.log("File name: "+ fileValue);
     var extension = fileValue.split('.').pop();
-    console.log("File extension: "+ extension);
 
-    if(extension == 'jpg' || extension == 'png' || extension == 'gif' || extension == 'pdf' || extension == 'txt')
-    {
+    if (
+      extension == 'jpg' ||
+      extension == 'png' ||
+      extension == 'gif' ||
+      extension == 'pdf' ||
+      extension == 'txt'
+    ) {
       this.setState({
         file: event.target.files[0],
       });
-    }
-    else{
+    } else {
       this.setState({
         fileFormat: true,
-      })
+      });
     }
   }
 
-  fileUpload(){
-    if(!this.state.fileFormat){
-    const url = process.env.REACT_APP_IMAGE_URL + "/upload";
-    const formData = new FormData();
-    formData.append('file', this.state.file)
-    const config = {
+  fileUpload() {
+    if (!this.state.fileFormat) {
+      const url = process.env.REACT_APP_IMAGE_URL + '/upload';
+      const formData = new FormData();
+      formData.append('file', this.state.file);
+      const config = {
         headers: {
-            'content-type': 'multipart/form-data'
-        }
-    }
-    post(url, formData,config)
-    .then((data)=>{
-      var tempData = JSON.stringify(data.data.fileName).replace('"','').replace('"','');
-      console.log("ResultData: " + tempData );
-      this.setState(()=>({
-        request: {
-          ...this.state.request,
-          attachedFile: tempData,
-        }
-      }));
-    })
-    .then(()=>{
+          'content-type': 'multipart/form-data',
+        },
+      };
+      post(url, formData, config)
+        .then((data) => {
+          var tempData = JSON.stringify(data.data.fileName).replace('"', '').replace('"', '');
+          this.setState(() => ({
+            request: {
+              ...this.state.request,
+              attachedFile: tempData,
+            },
+          }));
+        })
+        .then(() => {
+          this.setState({
+            imageSuccess: true,
+          });
+        })
+        .catch(() => {
+          this.setState({
+            imageSuccess: false,
+            fileFormat: true,
+          });
+        });
+    } else {
       this.setState({
-        imageSuccess: true
-      })
-    })
-    .catch(()=>{
-      this.setState({
-        imageSuccess: false,
         fileFormat: true,
-      })
-    });
-  }
-  else{
-    this.setState({
-      fileFormat: true,
-    })
-  }
+      });
+    }
   }
 
   onTitleChange(e) {
-      this.setState(() => ({
-        request: {
-          ...this.state.request,
-          title: e.target.value,
-        },
-        editRequest: {
-          ...this.state.editRequest,
-          title: e.target.value,
-        },
-        titleNull: false,
-      }));
+    this.setState(() => ({
+      request: {
+        ...this.state.request,
+        title: e.target.value,
+      },
+      editRequest: {
+        ...this.state.editRequest,
+        title: e.target.value,
+      },
+      titleNull: false,
+    }));
   }
 
   onContentChange(e) {
@@ -174,7 +182,6 @@ class EditRequest extends React.Component {
   }
 
   onRequestCategoryChange(e) {
-
     this.setState(() => ({
       requestCategory: {
         ...this.state.requestCategory,
@@ -193,7 +200,6 @@ class EditRequest extends React.Component {
   }
 
   onServiceCategoryChange(e) {
-    console.log('ser ' + e.target.value);
     this.setState(() => ({
       serviceCategory: {
         ...this.state.serviceCategory,
@@ -252,8 +258,7 @@ class EditRequest extends React.Component {
   }
 
   componentDidMount() {
-    this.getCustomerProfile(this.state._id)
-    .then((data)=>{
+    this.getCustomerProfile(this.state._id).then((data) => {
       this.setState({
         authName: data.accountLevelId,
       });
@@ -280,17 +285,12 @@ class EditRequest extends React.Component {
   }
 
   render() {
-    if(this.state.authName == null)
-    {
-      return (
-        <Redirect push to={{pathname: '/', }}  refresh="true"/>
-      );
+    if (this.state.authName == null) {
+      return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
 
     if (this.state.completed) {
-      return (
-        <Redirect push to={{pathname: '/Request',}} />
-      );
+      return <Redirect push to={{ pathname: '/Request' }} />;
     }
     return (
       <div className="row">
@@ -306,7 +306,12 @@ class EditRequest extends React.Component {
                   Title:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="text"  value={this.state.request.title} onChange={this.onTitleChange.bind(this)} isInvalid={this.state.titleNull}/>
+                  <Form.Control
+                    type="text"
+                    value={this.state.request.title}
+                    onChange={this.onTitleChange.bind(this)}
+                    isInvalid={this.state.titleNull}
+                  />
                   <Form.Control.Feedback type="invalid">Title is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
@@ -328,7 +333,9 @@ class EditRequest extends React.Component {
                       </option>
                     ))}
                   </Form.Control>
-                  <Form.Control.Feedback type="invalid">Request Category is required</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">
+                    Request Category is required
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -370,38 +377,42 @@ class EditRequest extends React.Component {
                 <Form.Label column sm={2}>
                   Attach File:
                 </Form.Label>
-                <Form.File type="file" onChange={this.onFormSubmit.bind(this)}/>
-                  <Modal show={this.state.fileFormat} onHide={this.fileCheck}>
-                    <Modal.Header closeButton>
-                      <Modal.Title>Image Upload Result</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <p>Only .jpg .png .gif .pdf .txt file type is allowed</p>
-                    </Modal.Body>
-                  </Modal>
-                <Button variant="outline-secondary" id="fileSuccessBlock" onClick={this.fileUpload.bind(this)}>
-                      Upload
+                <Form.File type="file" onChange={this.onFormSubmit.bind(this)} />
+                <Modal show={this.state.fileFormat} onHide={this.fileCheck}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Image Upload Result</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <p>Only .jpg .png .gif .pdf .txt file type is allowed</p>
+                  </Modal.Body>
+                </Modal>
+                <Button
+                  variant="outline-secondary"
+                  id="fileSuccessBlock"
+                  onClick={this.fileUpload.bind(this)}
+                >
+                  Upload
                 </Button>
                 <Modal show={this.state.imageSuccess} onHide={this.imageHide}>
-                    <Modal.Header closeButton>
-                      <Modal.Title>Image Upload Result</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <p>Image Upload Success</p>
-                    </Modal.Body>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Image Upload Result</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <p>Image Upload Success</p>
+                  </Modal.Body>
                 </Modal>
               </Form.Group>
               <Container>
-              <Row>
+                <Row>
                   <Col xs={6}></Col>
                   <Col md="auto">
                     <Button variant="outline-secondary" href="/Request/">
                       Cancel
                     </Button>
                   </Col>
-                    <Button variant="outline-info" type="submit">
-                      Save
-                    </Button>
+                  <Button variant="outline-info" type="submit">
+                    Save
+                  </Button>
                 </Row>
               </Container>
             </Form>

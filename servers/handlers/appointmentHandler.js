@@ -117,7 +117,6 @@ exports.deleteAppointmentById = function (id) {
     Appointment.findOne({ _id: id })
       .exec()
       .then((appointment) => {
-        console.log(appointment.schedule);
         WorkSchedule.updateOne(
           { _id: appointment.schedule },
           {

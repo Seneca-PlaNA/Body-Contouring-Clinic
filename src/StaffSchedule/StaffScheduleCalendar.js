@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint react/prop-types: 0 */
 import React from 'react';
 import Calendar from '@toast-ui/react-calendar';
@@ -42,7 +43,6 @@ class StaffScheduleCalendar extends React.Component {
     calendarInstance.prev();
   };
 
-  // 한 주 스케줄 보기    ( defaultView = month 로 수정해놓았습니다 )
   weekChangeButton = () => {
     const calendarInstance = this.calendarRef.current.getInstance();
 
@@ -51,16 +51,13 @@ class StaffScheduleCalendar extends React.Component {
 
   // ---------- Event ---------- //
 
-  // week 상태에서 요일 클릭
   handleClickDayname = (ev) => {
     console.group('onClickDayname');
-    console.log(ev.date);
     console.groupEnd();
   };
 
   beforeCreateSchedule = (ev) => {
     console.group('onbeforeCreateSchedule');
-    console.log(ev.date);
     console.groupEnd();
   };
 
@@ -71,10 +68,9 @@ class StaffScheduleCalendar extends React.Component {
   }
 
   render() {
-    const selectedView = this.props.view; // default view
+    const selectedView = this.props.view;
     return (
       <>
-        {/* <button onClick={this.weekChangeButton}>Week</button> */}
         <Button variant="outline-*" onClick={this.handleClickPrevButton}>
           {' '}
           &laquo;{' '}
@@ -111,7 +107,7 @@ class StaffScheduleCalendar extends React.Component {
               return 'All Day';
             },
           }}
-          theme="" // 어두운 테마 사용가능
+          theme=""
           timezones={[
             {
               timezoneName: 'America/New_York',
@@ -120,10 +116,9 @@ class StaffScheduleCalendar extends React.Component {
             },
           ]}
           useDetailPopup
-          view={selectedView} // You can also set the `defaultView` option.
+          view={selectedView}
           month={{
             daynames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-            //narrowWeekend: true // 토, 일은 사이즈 작게
           }}
         />
       </>

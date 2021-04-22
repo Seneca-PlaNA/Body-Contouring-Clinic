@@ -198,9 +198,6 @@ app.delete('/balance-history/:id', (req, res) => {
 });
 
 app.post('/add-balance/:id', (req, res) => {
-  console.log('Server');
-  console.log(req.body);
-  console.log(req.params.id);
   balanceHistoryHandler
     .addBalanceInHistoryById(req.body, req.params.id)
     .then((msg) => res.json(msg))

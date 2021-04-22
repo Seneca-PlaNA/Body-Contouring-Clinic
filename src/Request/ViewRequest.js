@@ -24,7 +24,7 @@ class ViewRequest extends React.Component {
       serviceCategory: [],
       completed: false,
       _id: localStorage.getItem('_id'),
-      authName:{},
+      authName: {},
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -50,7 +50,7 @@ class ViewRequest extends React.Component {
     this.setState({
       show: false,
       request: null,
-      completed:true,
+      completed: true,
     });
   };
 
@@ -75,7 +75,7 @@ class ViewRequest extends React.Component {
         });
     });
   }
-  
+
   getCustomerProfile(id) {
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/account/${id}`)
@@ -87,8 +87,7 @@ class ViewRequest extends React.Component {
   }
 
   componentDidMount() {
-    this.getCustomerProfile(this.state._id)
-    .then((data)=>{
+    this.getCustomerProfile(this.state._id).then((data) => {
       this.setState({
         authName: data.accountLevelId,
       });
@@ -103,11 +102,8 @@ class ViewRequest extends React.Component {
     });
   }
   render() {
-    if(this.state.authName == null)
-    {
-      return (
-        <Redirect push to={{pathname: '/', }}  refresh="true"/>
-      );
+    if (this.state.authName == null) {
+      return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
 
     if (this.state.completed) {
@@ -125,7 +121,7 @@ class ViewRequest extends React.Component {
       'font-weight': 'bold',
       color: 'black',
     };
-    
+
     return (
       <div className="row">
         <div className="col-md-1"></div>
@@ -137,7 +133,7 @@ class ViewRequest extends React.Component {
             <Container>
               <Form style={{ 'padding-bottom': '80px' }}>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
-                  <Form.Label style={reqTitle}>Request Title</Form.Label> 
+                  <Form.Label style={reqTitle}>Request Title</Form.Label>
                   <Form.Control type="text" readOnly value={this.state.request.title} />
                 </Form.Group>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
@@ -150,7 +146,13 @@ class ViewRequest extends React.Component {
                 </Form.Group>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
                   <Form.Label style={reqTitle}>Involved Service</Form.Label>
-                  <Form.Control type="text" readOnly value={this.state.serviceCategory == null ? '' : this.state.serviceCategory.name} />
+                  <Form.Control
+                    type="text"
+                    readOnly
+                    value={
+                      this.state.serviceCategory == null ? '' : this.state.serviceCategory.name
+                    }
+                  />
                 </Form.Group>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
                   <Form.Label style={reqTitle}>Request Sent Date</Form.Label>
@@ -173,8 +175,13 @@ class ViewRequest extends React.Component {
                   <Form.Control type="text" readOnly value={this.state.request.status} />
                 </Form.Group>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
-                  <Form.Label style={reqTitle}>Attachment</Form.Label> <br/>
-                  <Image src={process.env.REACT_APP_IMAGE_URL + "/file/" + this.state.request.attachedFile} alt=" No Attachment"/> 
+                  <Form.Label style={reqTitle}>Attachment</Form.Label> <br />
+                  <Image
+                    src={
+                      process.env.REACT_APP_IMAGE_URL + '/file/' + this.state.request.attachedFile
+                    }
+                    alt=" No Attachment"
+                  />
                 </Form.Group>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
                   <Form.Label style={reqTitle}>Answer</Form.Label>
@@ -187,19 +194,24 @@ class ViewRequest extends React.Component {
                 <Container>
                   <Row>
                     <Col xs={9}></Col>
-                    <Col style={{ display: "flex", justifyContent: 'flex-end'}}>
-                      {console.log(this.state.requestId)}
-                      <Button variant="outline-secondary" href={`/Request/Edit/${this.state.requestId}`}>
+                    <Col style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                      <Button
+                        variant="outline-secondary"
+                        href={`/Request/Edit/${this.state.requestId}`}
+                      >
                         Edit
                       </Button>
                     </Col>
-                      <Button variant="outline-danger" onClick={() => {
+                    <Button
+                      variant="outline-danger"
+                      onClick={() => {
                         this.setState({
                           show: true,
-                        })
-                      }}>
-                        Delete
-                      </Button>
+                        });
+                      }}
+                    >
+                      Delete
+                    </Button>
                     <PopUp
                       show={this.state.show}
                       handleClose={this.hideModal}

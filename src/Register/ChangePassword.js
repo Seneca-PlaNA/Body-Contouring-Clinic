@@ -35,15 +35,12 @@ class ChangePassword extends Component {
       })
       .then(() => window.location.reload())
       .catch((err) => console.log(err));
-
-    console.log(this.state.isChanged);
   }
 
   onPasswordChange(event) {
     this.setState(() => ({
       tempPwd: event.target.value,
     }));
-    console.log(this.state.tempPwd);
   }
 
   onConfirmPasswordChange(event) {

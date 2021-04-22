@@ -20,7 +20,6 @@ class EditStaffSchedule extends React.Component {
       title: 'Schedule Updated!',
       button: 'Back to schedule',
       saveModal: false,
-      tmpStaffId: '602b54964bff0f4ab039060d', // Chloe // change this after login authorization
 
       workSchedule: [],
       date: [],
@@ -47,7 +46,6 @@ class EditStaffSchedule extends React.Component {
 
   hideSave = () => {
     this.setState({ saveModal: false });
-    console.log('hey');
   };
 
   handleSubmit(e) {
@@ -65,8 +63,7 @@ class EditStaffSchedule extends React.Component {
       .catch((err) => console.log(err));
   }
 
-  getEachDateId(day){
-
+  getEachDateId(day) {
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/date?date=${moment(day).format('MM/DD/YYYY')}`)
         .then((response) => response.json())
@@ -76,21 +73,20 @@ class EditStaffSchedule extends React.Component {
     });
   }
 
-  onDateChange(day, {selected}) {
+  onDateChange(day, { selected }) {
     this.setState({
       selectedDay: selected ? undefined : day,
       confirmDay: day,
     });
 
-    this.getEachDateId(day)
-    .then((data)=>{
+    this.getEachDateId(day).then((data) => {
       this.setState({
         workSchedule: {
           ...this.state.workSchedule,
           date: data._id,
-        }
-      })
-    })
+        },
+      });
+    });
   }
 
   onTimeChange(e) {
@@ -206,11 +202,12 @@ class EditStaffSchedule extends React.Component {
                     Date:
                   </Form.Label>
                   <Col sm={2}>
-                      <DayPicker 
-                          showOutsideDays 
-                          selectedDays={this.state.selectedDay} 
-                          disabledDays={[{before: new Date()}]} 
-                          onDayClick={this.onDateChange.bind(this)} />
+                    <DayPicker
+                      showOutsideDays
+                      selectedDays={this.state.selectedDay}
+                      disabledDays={[{ before: new Date() }]}
+                      onDayClick={this.onDateChange.bind(this)}
+                    />
                     <Form.Control.Feedback type="invalid">date is required</Form.Control.Feedback>
                   </Col>
                 </Form.Group>
@@ -251,14 +248,14 @@ class EditStaffSchedule extends React.Component {
                 <Container>
                   <Row>
                     <Col xs={6}></Col>
-                    <Col md='auto'>
+                    <Col md="auto">
                       <Button variant="outline-secondary" href="/Staff/Schedules">
                         Cancel
                       </Button>
                     </Col>
-                      <Button type="submit" variant="outline-info">
-                        Save
-                      </Button>
+                    <Button type="submit" variant="outline-info">
+                      Save
+                    </Button>
                   </Row>
                 </Container>
               </Form>

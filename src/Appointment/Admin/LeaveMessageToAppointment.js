@@ -42,9 +42,8 @@ class LeaveMessageToAppointment extends React.Component {
     this.setState({ saveModal: false });
   };
 
-  handlSubmit(event) {
+  handleSubmit(event) {
     event.preventDefault();
-    console.log(this.state.appointment.message);
     fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`, {
       method: 'PUT',
       body: JSON.stringify(this.state.appointment),
@@ -59,14 +58,12 @@ class LeaveMessageToAppointment extends React.Component {
   }
 
   onMessageChange(event) {
-    console.log(this.state.appointment.message);
     this.setState(() => ({
       appointment: {
         ...this.state.appointment,
         message: event.target.value,
       },
     }));
-    console.log(this.state.appointment.message);
   }
 
   getAppointment = () => {
@@ -119,7 +116,7 @@ class LeaveMessageToAppointment extends React.Component {
               <Row>
                 <Col></Col>
                 <Col xs={8}>
-                  <Form onSubmit={this.handlSubmit.bind(this)}>
+                  <Form onSubmit={this.handleSubmit.bind(this)}>
                     <Form.Group as={Row}>
                       <Form.Label column sm="4">
                         Services:

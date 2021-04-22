@@ -34,15 +34,15 @@ class VIPHomebyAdmin extends React.Component {
       this.setState({
         authName: data.accountLevelId,
       });
-      console.log(this.state.authName);
     });
   }
   render() {
-    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
-    {
-      return (
-        <Redirect push to={{pathname: '/', }}  refresh="true"/>
-      );
+    if (
+      this.state.authName == null ||
+      this.state.authName._id == '60371ad3fda1af6510e75e3a' ||
+      this.state.authName._id == '60371ae9fda1af6510e75e3b'
+    ) {
+      return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
 
     return (

@@ -30,8 +30,7 @@ class ViewAllFAQbyGeneral extends React.Component {
   }
 
   componentDidMount() {
-    this.getCustomerProfile(this.state._id)
-    .then((data)=>{
+    this.getCustomerProfile(this.state._id).then((data) => {
       this.setState({
         authName: data.accountLevelId,
       });
@@ -39,11 +38,8 @@ class ViewAllFAQbyGeneral extends React.Component {
   }
 
   render() {
-    if(this.state.authName == null)
-    {
-      return (
-        <Redirect push to={{pathname: '/', }}  refresh="true"/>
-      );
+    if (this.state.authName == null) {
+      return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
 
     return (

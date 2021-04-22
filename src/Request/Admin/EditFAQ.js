@@ -32,14 +32,22 @@ class EditFAQ extends React.Component {
       faqCatNull: false,
       titleNull: false,
       contentsNull: false,
-    })
-    if(this.state.faq.faqCategory == '' || this.state.faq.title == '' || this.state.faq.contents == '')
-    {
-      this.state.faq.faqCategory == '' ? this.setState({ faqCatNull: true }) : this.setState({ faqCatNull: false });
-      this.state.faq.title == '' ? this.setState({ titleNull: true }) : this.setState({ titleNull: false });
-      this.state.faq.contents == '' ? this.setState({ contentsNull: true }) : this.setState({ contentsNull: false });
-      }
-      else{
+    });
+    if (
+      this.state.faq.faqCategory == '' ||
+      this.state.faq.title == '' ||
+      this.state.faq.contents == ''
+    ) {
+      this.state.faq.faqCategory == ''
+        ? this.setState({ faqCatNull: true })
+        : this.setState({ faqCatNull: false });
+      this.state.faq.title == ''
+        ? this.setState({ titleNull: true })
+        : this.setState({ titleNull: false });
+      this.state.faq.contents == ''
+        ? this.setState({ contentsNull: true })
+        : this.setState({ contentsNull: false });
+    } else {
       fetch(`${process.env.REACT_APP_API_URL}/faq/${this.props.id}`, {
         method: 'PUT',
         body: JSON.stringify(this.state.faq),
@@ -51,65 +59,65 @@ class EditFAQ extends React.Component {
         .then((response) => response.json())
         .then(() => this.setState({ completed: true }))
         .catch((err) => console.log(err));
-      }
+    }
   }
 
   onFAQCategoryChange(event) {
     this.setState(() => ({
       faqCatNull: false,
-    }))
-    if(event.target.value != ''){
+    }));
+    if (event.target.value != '') {
       this.setState(() => ({
-      faqCategory: {
-        ...this.state.faqCategory,
-        _id: event.target.value,
-      },
-      faq: {
-        ...this.state.faq,
-        faqCategory: event.target.value,
-      },
-    }));
-  } else {
-    this.setState(() => ({
-      faqCategory: {
-        ...this.state.faqCategory,
-        _id: event.target.value,
-      },
-      faq: {
-        ...this.state.faq,
-        faqCategory: event.target.value,
-      },
-      faqCatNull: true,
-    }));
-  }
+        faqCategory: {
+          ...this.state.faqCategory,
+          _id: event.target.value,
+        },
+        faq: {
+          ...this.state.faq,
+          faqCategory: event.target.value,
+        },
+      }));
+    } else {
+      this.setState(() => ({
+        faqCategory: {
+          ...this.state.faqCategory,
+          _id: event.target.value,
+        },
+        faq: {
+          ...this.state.faq,
+          faqCategory: event.target.value,
+        },
+        faqCatNull: true,
+      }));
+    }
   }
 
   onTitleChange(event) {
     this.setState(() => ({
       titleNull: false,
-    }))
-    if(event.target.value != ''){
+    }));
+    if (event.target.value != '') {
       this.setState(() => ({
         faq: {
           ...this.state.faq,
           title: event.target.value,
         },
-    }));
-  } else {
+      }));
+    } else {
       this.setState(() => ({
         faq: {
           ...this.state.faq,
           title: event.target.value,
         },
         titleNull: true,
-      }))
+      }));
     }
   }
 
   onContentsChange(event) {
     this.setState(() => ({
       contentsNull: false,
-    }))
+    }));
     if (event.target.value == '') {
       this.setState(() => ({
         faq: {
@@ -159,8 +167,7 @@ class EditFAQ extends React.Component {
   }
 
   componentDidMount() {
-    this.getCustomerProfile(this.state._id)
-    .then((data)=>{
+    this.getCustomerProfile(this.state._id).then((data) => {
       this.setState({
         authName: data.accountLevelId,
       });
@@ -182,13 +189,14 @@ class EditFAQ extends React.Component {
   }
 
   render() {
-    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
-    {
-      return (
-        <Redirect push to={{pathname: '/', }}  refresh="true"/>
-      );
+    if (
+      this.state.authName == null ||
+      this.state.authName._id == '60371ad3fda1af6510e75e3a' ||
+      this.state.authName._id == '60371ae9fda1af6510e75e3b'
+    ) {
+      return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
-    
+
     if (this.state.completed) {
       return (
         <Redirect
@@ -226,7 +234,9 @@ class EditFAQ extends React.Component {
                       </option>
                     ))}
                   </Form.Control>
-                  <Form.Control.Feedback type="invalid">FAQ Category is required</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">
+                    FAQ Category is required
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -263,13 +273,13 @@ class EditFAQ extends React.Component {
                 <Row>
                   <Col xs={6}></Col>
                   <Col md="auto">
-                    <Button variant="outline-secondary"href="/Request/FAQ/Admin/">
+                    <Button variant="outline-secondary" href="/Request/FAQ/Admin/">
                       Cancel
                     </Button>
                   </Col>
-                    <Button type="submit" variant="outline-info">
-                      Save
-                    </Button>   
+                  <Button type="submit" variant="outline-info">
+                    Save
+                  </Button>
                 </Row>
               </Container>
             </Form>

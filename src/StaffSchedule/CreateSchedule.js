@@ -18,7 +18,7 @@ class CreateSchedule extends React.Component {
       ],
       _id: localStorage.getItem('_id'),
       workSchedule: {
-        staff: {}, // temporary till the login auth
+        staff: {},
         date: String,
         time: String,
         description: String,
@@ -54,7 +54,6 @@ class CreateSchedule extends React.Component {
   }
 
   handleSubmit(e) {
-    console.log(this.state.dateIsSelected);
     e.preventDefault();
     const errList = this.findErrors();
     if (Object.keys(errList).length > 0) {
@@ -62,29 +61,24 @@ class CreateSchedule extends React.Component {
         errors: errList,
       }));
     }
-    console.log(this.state.dayIds);
 
-    this.state.dayIds.map((day)=>{
-
+    this.state.dayIds.map((day) => {
       var tempSchedule = {
         staff: this.state.staff._id,
         date: day,
         time: this.state.time,
         description: this.state.description,
       };
-      console.log(tempSchedule);
 
       this.createWorkSchedule(tempSchedule)
-      .then((response)=>{
-        console.log(response.json());
-      })
-      .catch((err) => console.log(err));
+        .then(() => {})
+        .catch((err) => console.log(err));
     });
 
     this.setState({ completed: true });
   }
 
-  createWorkSchedule(schedule){
+  createWorkSchedule(schedule) {
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/create-workSchedule`, {
         method: 'POST',
@@ -93,18 +87,16 @@ class CreateSchedule extends React.Component {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-      })
-      .then((data)=>{
+      }).then((data) => {
         resolve(data);
-      })
+      });
     });
   }
 
-  onDateChange(day, {selected}) {
-    console.log(this.state.staff._id);
+  onDateChange(day, { selected }) {
     const selectedDays = this.state.selectedDays.concat();
     if (selected) {
-      const selectedIndex = selectedDays.findIndex(selectedDay =>
+      const selectedIndex = selectedDays.findIndex((selectedDay) =>
         DateUtils.isSameDay(selectedDay, day)
       );
       selectedDays.splice(selectedIndex, 1);
@@ -113,17 +105,14 @@ class CreateSchedule extends React.Component {
     }
     this.setState({ selectedDays });
 
-    this.getEachDateId(day)
-    .then((data)=>{
-        this.setState({
-          dayIds: this.state.dayIds.concat(data._id),
-        })
-        console.log(this.state.dayIds);
+    this.getEachDateId(day).then((data) => {
+      this.setState({
+        dayIds: this.state.dayIds.concat(data._id),
+      });
     });
   }
 
-  getEachDateId(day){
-
+  getEachDateId(day) {
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/date?date=${moment(day).format('MM/DD/YYYY')}`)
         .then((response) => response.json())
@@ -231,13 +220,16 @@ class CreateSchedule extends React.Component {
                 <Form.Label column sm={2}>
                   Date:
                 </Form.Label>
-                <Col sm='2'> 
-                  <DayPicker 
-                    showOutsideDays 
-                    selectedDays={this.state.selectedDays} 
-                    disabledDays={[{before: new Date()}]} 
-                    onDayClick={this.onDateChange.bind(this)} />
-                  <Form.Control.Feedback type="invalid">{this.state.errors.date}</Form.Control.Feedback>
+                <Col sm="2">
+                  <DayPicker
+                    showOutsideDays
+                    selectedDays={this.state.selectedDays}
+                    disabledDays={[{ before: new Date() }]}
+                    onDayClick={this.onDateChange.bind(this)}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {this.state.errors.date}
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -257,7 +249,9 @@ class CreateSchedule extends React.Component {
                       </option>
                     ))}
                   </Form.Control>
-                  <Form.Control.Feedback type="invalid">{this.state.errors.time}</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">
+                    {this.state.errors.time}
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -276,14 +270,14 @@ class CreateSchedule extends React.Component {
               <Container>
                 <Row>
                   <Col xs={6}></Col>
-                  <Col md='auto'>
+                  <Col md="auto">
                     <Button variant="outline-secondary" href="/Staff/Schedules">
                       Cancel
                     </Button>
                   </Col>
-                    <Button variant="outline-info" type="submit">
-                      Save
-                    </Button>
+                  <Button variant="outline-info" type="submit">
+                    Save
+                  </Button>
                 </Row>
               </Container>
             </Form>

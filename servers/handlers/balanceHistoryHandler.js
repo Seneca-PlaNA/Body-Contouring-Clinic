@@ -82,8 +82,6 @@ exports.deleteBalanceHistoryById = function (id) {
 exports.addBalanceInHistoryById = function (data, id) {
   return new Promise((resolve, reject) => {
     var calculate = 0;
-    console.log('Back Start');
-    console.log(data);
     let addBalance = new Balance(data);
 
     addBalance.save().then(() => {

@@ -31,7 +31,6 @@ import CreateFAQ from './Request/Admin/CreateFAQ';
 import EditFAQ from './Request/Admin/EditFAQ';
 import Login from './Register/Login';
 import SignUp from './Register/SignUp';
-// import CreateAppointment from './Appointment/CreateAppointment';
 import CreateAppointmentWithOffer from './Appointment/CreateAppointmentWithOffer';
 import SelectCreateAppointment from './Appointment/SelectCreateAppointment';
 import SelectCreateAppointmentAdmin from './Appointment/Admin/SelectCreateAppointmentAdmin';
@@ -41,7 +40,6 @@ import EditAppointment from './Appointment/EditAppointment';
 import AppointmentsAdmin from './Appointment/Admin/AppointmentsAdmin';
 import AppointmentAdmin from './Appointment/Admin/AppointmentAdmin';
 import EditAppointmentAdmin from './Appointment/Admin/EditAppointmentAdmin';
-// import CreateAppointmentAdmin from './Appointment/Admin/CreateAppointmentAdmin';
 import LeaveMessageToAppointment from './Appointment/Admin/LeaveMessageToAppointment';
 import PageNotFound from './PageNotFound';
 import TermsAndConditions from './Register/TermsAndConditions';
@@ -82,7 +80,6 @@ class RouterConfig extends React.Component {
           <Route exact path="/Appointment" render={() => <AppointmentHome />} />
           <Route exact path="/Appointment/Appointments" render={() => <Appointments />} />
           <Route exact path="/Appointment/Create" render={() => <SelectCreateAppointment />} />
-          {/* <Route exact path="/Appointment/Create" render={() => <CreateAppointment />} /> */}
           <Route
             exact
             path="/Appointment/Offer/Create/:id"

@@ -1,11 +1,11 @@
 .App {
   text-align: center;
-  background-color: #FFFFFF;
-  font-family: Calibri, sans-serif
+  background-color: #ffffff;
+  font-family: Calibri, sans-serif;
 }
 
 .nav-back {
-  background-color: #E5F0F1;
+  background-color: #e5f0f1;
 }
 
 .App-logo {
@@ -20,13 +20,13 @@
 }
 
 .App-basic {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-size: calc(10px + 2vmin);
-  color: #1D1F2A;
+  color: #1d1f2a;
   padding: 60px;
 }
 
@@ -35,7 +35,7 @@
 }
 
 .Footer-basic {
-  background-color: #393F44;
+  background-color: #393f44;
   position: absolute;
   left: 0;
   bottom: 0;
@@ -46,7 +46,7 @@
 
 .Footer-contact {
   text-align: left;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .PageTitle {
@@ -64,17 +64,17 @@
   to {
     transform: rotate(360deg);
   }
-
 }
 
 table {
   font-family: Calibri, sans-serif;
   border-collapse: collapse;
   width: 100%;
-  color: #1D1F2A;
+  color: #1d1f2a;
 }
 
-td, th {
+td,
+th {
   border: 0px;
   text-align: left !important;
   font-size: large;

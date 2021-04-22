@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, Accordion, Card } from 'react-bootstrap';
 import '../../App.css';
 import SideBar from '../../SideBar/SideBar';
-// import { Link } from 'react-router-dom';
 import CreateAppointment from './CreateAppointmentAdmin';
 import CreateAppointmentByStaff from './CreateAppointmentAdminbyStaff';
 
@@ -24,25 +23,27 @@ class SelectCreateAppointmentAdmin extends React.Component {
     document.title = 'All Appointments | Body Contouring Clinic';
 
     fetch(`${process.env.REACT_APP_API_URL}/staff?account=${this.state._id}`)
-    .then(response => response.json())
-    .then((data) => {
-      this.setState({
-        customer: data,
-        account: data.account,
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          customer: data,
+          account: data.account,
+        });
       });
-      // this.getAppointment(this.state.customer._id);
-    });
   }
 
   render() {
     return (
-        <div className="row">
-          <div className="col-md-1"></div>
-          <SideBar items={this.state.items} />
-          <div className="col-md-8" style={{ 'margin-left': '80px' }}>
-            <h2 className="PageTitle">Hello, {this.state.account.firstName} {this.state.account.lastName},</h2>
-            <br/><br/>
-            <div className="contents">
+      <div className="row">
+        <div className="col-md-1"></div>
+        <SideBar items={this.state.items} />
+        <div className="col-md-8" style={{ 'margin-left': '80px' }}>
+          <h2 className="PageTitle">
+            Hello, {this.state.account.firstName} {this.state.account.lastName},
+          </h2>
+          <br />
+          <br />
+          <div className="contents">
             <Accordion>
               <Card>
                 <Card.Header>
@@ -69,7 +70,7 @@ class SelectCreateAppointmentAdmin extends React.Component {
                 </Accordion.Collapse>
               </Card>
             </Accordion>
-            </div>
+          </div>
         </div>
       </div>
     );

@@ -10,11 +10,11 @@ class ViewAppointmentMessage extends React.Component {
         <Modal.Header closeButton onClick={this.props.handleClose}>
           <Modal.Title>Message for this Appointment</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{this.props.text == null? "No Message": this.props.text}</Modal.Body>
+        <Modal.Body>{this.props.text == null ? 'No Message' : this.props.text}</Modal.Body>
         <Modal.Footer>
-            <Button variant="outline-info" onClick={this.props.handleClose}>
-              Back to appointment
-            </Button>
+          <Button variant="outline-info" onClick={this.props.handleClose}>
+            Back to appointment
+          </Button>
         </Modal.Footer>
       </Modal>
     );
