@@ -24,7 +24,6 @@ const appointmentHandler = require('./handlers/appointmentHandler');
 const faqHandler = require('./handlers/faqHandler');
 const faqCategoryHandler = require('./handlers/faqCategoryHandler');
 const Account = require('../models/account');
-// const auth = require('./middleware/auth');
 const cookieParser = require('cookie-parser');
 const termsAndConditionsHandler = require('./handlers/termsAndConditionsHandler');
 
@@ -38,22 +37,24 @@ mongoose.set('useFindAndModify', false);
 
 //Account
 app.post('/create-account', async (req, res) => {
-    try {
-
-    const userNameValidation =  await Account.findOne({ userID: req.body.userID }).exec();
-    if(userNameValidation) {
-       throw Error(`Username ${req.body.userID} has been taken. Please try another username.`);
+  try {
+    const userNameValidation = await Account.findOne({ userID: req.body.userID }).exec();
+    if (userNameValidation) {
+      throw Error(`Username ${req.body.userID} has been taken. Please try another username.`);
     }
 
-    const emailValidation = await Account.findOne({ email: req.body.email }).exec()
-    if(emailValidation) {
+    const emailValidation = await Account.findOne({ email: req.body.email }).exec();
+    if (emailValidation) {
       throw Error(`Email ${req.body.email} has been taken. Please try another username.`);
     }
 
-    accountHandler.addNewAccount(req.body).then(body => res.json(body)).catch(err=>res.json(err))
-    }catch(err) {
-      res.json({success:false, message:err.message})
-    }
+    accountHandler
+      .addNewAccount(req.body)
+      .then((body) => res.json(body))
+      .catch((err) => res.json(err));
+  } catch (err) {
+    res.json({ success: false, message: err.message });
+  }
 });
 
 app.get('/accounts', (req, res) => {
@@ -206,9 +207,9 @@ app.post('/add-balance/:id', (req, res) => {
     .catch((err) => res.json(err));
 });
 
-app.post('/substract-balance/:id', (req, res) => {
+app.post('/subtract-balance/:id', (req, res) => {
   balanceHistoryHandler
-    .substractBalanceInHistoryById(req.body, req.params.id)
+    .subtractBalanceInHistoryById(req.body, req.params.id)
     .then((msg) => res.json(msg))
     .catch((err) => res.json(err));
 });
@@ -838,14 +839,6 @@ app.post('/forgotPassword', (req, res) => {
     });
   });
 });
-
-// app.get('/auth', auth, (req, res) => {
-//   res.status(200).json({
-//     _id: req._id,
-//     isAuth: true,
-//     email: req.user.email,
-//   });
-// });
 
 // Terms And Conditions
 app.post('/create-terms-and-conditions', (req, res) => {

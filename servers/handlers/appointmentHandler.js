@@ -1,16 +1,15 @@
 const Appointment = require('../../models/appointment');
 const WorkSchedule = require('../../models/workSchedule');
+
 // create new
 exports.addNewAppointments = function (data) {
   return new Promise((resolve, reject) => {
-
     WorkSchedule.updateOne(
       { _id: data.schedule },
       {
-        "booked" : true ,
+        booked: true,
       }
-    )
-    .exec()
+    ).exec();
 
     let newAppointment = new Appointment(data);
     newAppointment.save((err) => {
@@ -33,7 +32,7 @@ exports.viewAllAppointments = function () {
       })
       .populate({
         path: 'schedule',
-        populate: [{ path: 'date'},{ path: 'time'}]
+        populate: [{ path: 'date' }, { path: 'time' }],
       })
       .populate('service')
       .exec()
@@ -56,7 +55,11 @@ exports.viewAppointmentById = function (id) {
       })
       .populate({
         path: 'schedule',
-        populate: [{ path: 'date'},{ path: 'time'},{ path: 'staff', populate:{ path: 'account'}}]
+        populate: [
+          { path: 'date' },
+          { path: 'time' },
+          { path: 'staff', populate: { path: 'account' } },
+        ],
       })
       .populate('service')
       .exec()
@@ -72,28 +75,24 @@ exports.viewAppointmentById = function (id) {
 // update one
 exports.editAppointmentById = function (data, id) {
   return new Promise((resolve, reject) => {
-
-    Appointment.findOne({ _id : id})
-    .exec()
-    .then((appointment)=>{
-      WorkSchedule.updateOne(
-        { _id: appointment.schedule },
-        {
-          "booked" : false,
-        }
-      )
+    Appointment.findOne({ _id: id })
       .exec()
-    });
+      .then((appointment) => {
+        WorkSchedule.updateOne(
+          { _id: appointment.schedule },
+          {
+            booked: false,
+          }
+        ).exec();
+      });
 
-    if(data.schedule != null)
-    {
+    if (data.schedule != null) {
       WorkSchedule.updateOne(
         { _id: data.schedule },
         {
-          "booked" : true ,
+          booked: true,
         }
-      )
-      .exec();
+      ).exec();
     }
 
     Appointment.updateOne(
@@ -115,19 +114,17 @@ exports.editAppointmentById = function (data, id) {
 // delete one
 exports.deleteAppointmentById = function (id) {
   return new Promise((resolve, reject) => {
-
     Appointment.findOne({ _id: id })
-    .exec()
-    .then((appointment)=>{
-      console.log(appointment.schedule);
-      WorkSchedule.updateOne(
-        { _id: appointment.schedule },
-        {
-          "booked" : false,
-        }
-      )
       .exec()
-    })
+      .then((appointment) => {
+        console.log(appointment.schedule);
+        WorkSchedule.updateOne(
+          { _id: appointment.schedule },
+          {
+            booked: false,
+          }
+        ).exec();
+      });
 
     Appointment.deleteOne({ _id: id })
       .exec()
@@ -150,7 +147,11 @@ exports.viewAllAppointmentsByCustomer = function (query) {
       })
       .populate({
         path: 'schedule',
-        populate: [{ path: 'date'},{ path: 'time'},{ path: 'staff', populate: { path: 'account' }}]
+        populate: [
+          { path: 'date' },
+          { path: 'time' },
+          { path: 'staff', populate: { path: 'account' } },
+        ],
       })
       .populate('service')
       .exec()
