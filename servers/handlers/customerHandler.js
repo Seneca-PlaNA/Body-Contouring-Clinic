@@ -20,7 +20,7 @@ exports.viewAllCustomer = function () {
     Customer.find()
       .populate({
         path: 'account',
-        populate: { path: 'balanceHistory', populate: { path: 'balances' }}
+        populate: { path: 'balanceHistory', populate: { path: 'balances' } },
       })
       .exec()
       .then((customer) => {

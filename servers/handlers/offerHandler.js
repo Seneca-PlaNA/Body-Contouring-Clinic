@@ -71,18 +71,3 @@ exports.deleteOfferById = function (id) {
       });
   });
 };
-
-// // view one
-// exports.viewOfferServiceById = function (id) {
-//   return new Promise((resolve, reject) => {
-//     Offer.findOne({ _id: id })
-//       .populate('services')
-//       .exec()
-//       .then((offerService) => {
-//         resolve(offerService);
-//       })
-//       .catch((err) => {
-//         reject(err);
-//       });
-//   });
-// };
