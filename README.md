@@ -21,7 +21,7 @@
 - nodejs
 - npm
 
-#### databast connection string:
+#### database connection string:
 Please copy the `dbConnectionStr.json` file to your root for connecting to database.
 
 #### steps:
