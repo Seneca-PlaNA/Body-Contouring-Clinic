@@ -3,7 +3,7 @@ import SideBar from '../SideBar/SideBar';
 import '../App.css';
 import { Table } from 'react-bootstrap';
 import moment from 'moment';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
 
 class CustomerHome extends React.Component {
@@ -18,11 +18,11 @@ class CustomerHome extends React.Component {
       _id: localStorage.getItem('_id'),
       customer: {},
       account: {},
-      appointments:[],
-      requests:[],
-      balanceHistory:{},
-      balances:[],
-      authName:{},
+      appointments: [],
+      requests: [],
+      balanceHistory: {},
+      balances: [],
+      authName: {},
     };
   }
 
@@ -30,7 +30,6 @@ class CustomerHome extends React.Component {
     fetch(`${process.env.REACT_APP_API_URL}/balance-history/${id}`)
       .then((response) => response.json())
       .then((results) => {
-        console.log(results);
         this.setState({
           balanceHistory: results,
           balances: results.balances,
@@ -42,45 +41,40 @@ class CustomerHome extends React.Component {
     fetch(`${process.env.REACT_APP_API_URL}/request?customer=${id}`)
       .then((response) => response.json())
       .then((results) => {
-        console.log(results);
         this.setState({
           requests: results,
         });
       });
   }
 
-  getAppointments(custId){
+  getAppointments(custId) {
     fetch(`${process.env.REACT_APP_API_URL}/appointment?customer=${custId}`)
-    .then(response => response.json())
-    .then((data) => {
-      this.setState({
-        appointments: data
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          appointments: data,
+        });
       });
-    });
   }
 
   componentDidMount() {
     fetch(`${process.env.REACT_APP_API_URL}/customer?account=${this.state._id}`)
-    .then(response => response.json())
-    .then((data) => {
-      this.setState({
-        customer: data,
-        account: data.account,
-        authName: data.account != null? data.account.accountLevelId: null,
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          customer: data,
+          account: data.account,
+          authName: data.account != null ? data.account.accountLevelId : null,
+        });
+        this.getAppointments(this.state.customer._id);
+        this.getRequests(this.state.customer._id);
+        this.getBalances(this.state.account != null ? this.state.account.balanceHistory : null);
       });
-      this.getAppointments(this.state.customer._id);
-      this.getRequests(this.state.customer._id);
-      //this.getBalances(this.state.account.balanceHistory);
-      this.getBalances(this.state.account != null? this.state.account.balanceHistory: null)
-    });
   }
 
   render() {
-    if(this.state.authName == null)
-    {
-      return (
-        <Redirect push to={{pathname: '/', }}  refresh="true"/>
-      );
+    if (this.state.authName == null) {
+      return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
 
     return (
@@ -104,15 +98,27 @@ class CustomerHome extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.appointments != null && this.state.appointments.map((appointment, index)=>(
-                // eslint-disable-next-line react/jsx-key
-                <tr>
-                  <td>{index + 1}</td>
-                  <td>{appointment.service.name}</td>
-                  <td>{appointment.schedule.staff == null ? '': appointment.schedule.staff.account.firstName}{appointment.schedule.staff == null ? '': appointment.schedule.staff.account.lastName} </td>
-                  <td>{appointment.schedule == null ? '' : moment(appointment.schedule.date.date).format('ll')}</td>
-                </tr>
-              ))}
+              {this.state.appointments != null &&
+                this.state.appointments.map((appointment, index) => (
+                  // eslint-disable-next-line react/jsx-key
+                  <tr>
+                    <td>{index + 1}</td>
+                    <td>{appointment.service.name}</td>
+                    <td>
+                      {appointment.schedule.staff == null
+                        ? ''
+                        : appointment.schedule.staff.account.firstName}
+                      {appointment.schedule.staff == null
+                        ? ''
+                        : appointment.schedule.staff.account.lastName}{' '}
+                    </td>
+                    <td>
+                      {appointment.schedule == null
+                        ? ''
+                        : moment(appointment.schedule.date.date).format('ll')}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </Table>
           <a href="/Appointment/">Go to appointment</a>
@@ -129,7 +135,7 @@ class CustomerHome extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.requests.map((request, index)=>(
+              {this.state.requests.map((request, index) => (
                 // eslint-disable-next-line react/jsx-key
                 <tr>
                   <td>{index + 1}</td>
@@ -154,7 +160,7 @@ class CustomerHome extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.balances.map((balance, index)=>(
+              {this.state.balances.map((balance, index) => (
                 // eslint-disable-next-line react/jsx-key
                 <tr>
                   <td>{index + 1}</td>

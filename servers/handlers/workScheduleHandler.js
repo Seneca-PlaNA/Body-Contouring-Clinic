@@ -1,6 +1,5 @@
 const WorkSchedule = require('../../models/workSchedule');
 const Date = require('../../models/date');
-// const Time = require('../../models/time');
 
 // create new
 exports.addNewWorkSchedule = function (data) {
@@ -56,8 +55,6 @@ exports.viewAllWorkSchedulesByStaff = function (query) {
   });
 };
 
-
-
 // view one
 exports.viewWorkScheduleById = function (id) {
   return new Promise((resolve, reject) => {
@@ -83,46 +80,23 @@ exports.viewWorkScheduleByDate = function (query) {
   return new Promise((resolve, reject) => {
     Date.findOne(query)
       .exec()
-      .then((result) =>{
-        WorkSchedule.find({date: result._id})
-        .populate({
-          path: 'staff',
-          populate: { path: 'account' },
-        })
-        .populate('time')
-        .exec()
-        .then((workSchedule) => {
-          resolve(workSchedule);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-      })
+      .then((result) => {
+        WorkSchedule.find({ date: result._id })
+          .populate({
+            path: 'staff',
+            populate: { path: 'account' },
+          })
+          .populate('time')
+          .exec()
+          .then((workSchedule) => {
+            resolve(workSchedule);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
   });
 };
-
-// // view one by input
-// exports.viewWorkScheduleByTime = function (query) {
-//   return new Promise((resolve, reject) => {
-//     Time.findOne(query)
-//       .exec()
-//       .then((result) =>{
-//         WorkSchedule.find({times: result._id, date: })
-//         .populate({
-//           path: 'staff',
-//           populate: { path: 'account' },
-//         })
-//         .populate('date')
-//         .exec()
-//         .then((workSchedule) => {
-//           resolve(workSchedule);
-//         })
-//         .catch((err) => {
-//           reject(err);
-//         });
-//       })
-//   });
-// };
 
 // update one
 exports.editWorkScheduleById = function (data, id) {

@@ -66,7 +66,7 @@ class CreateOffer extends React.Component {
     });
   };
 
-  handlSubmit(event) {
+  handleSubmit(event) {
     event.preventDefault();
     this.state.offer.name == ''
       ? this.setState({ nameNull: true })
@@ -304,7 +304,7 @@ class CreateOffer extends React.Component {
           <h2 className="PageTitle">Create New Offer</h2>
           <br />
           <Container>
-            <Form onSubmit={this.handlSubmit.bind(this)} method="POST">
+            <Form onSubmit={this.handleSubmit.bind(this)} method="POST">
               <Form.Group as={Row} controlId="name">
                 <Form.Label column sm={2}>
                   Title:
@@ -432,10 +432,10 @@ class CreateOffer extends React.Component {
                     <Button variant="outline-secondary" href="/VIP/Admin/Manage">
                       Cancel
                     </Button>
-                    </Col>
-                    <Button type="submit" variant="outline-info">
-                      Save
-                    </Button>
+                  </Col>
+                  <Button type="submit" variant="outline-info">
+                    Save
+                  </Button>
                 </Row>
                 <br />
               </Container>

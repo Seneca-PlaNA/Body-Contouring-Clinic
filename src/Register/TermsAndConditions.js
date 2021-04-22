@@ -9,7 +9,7 @@ class TermsAndConditions extends Component {
     super(props);
     this.state = {
       isChecked: true,
-      contents: ''
+      contents: '',
     };
   }
   componentDidMount() {
@@ -17,13 +17,16 @@ class TermsAndConditions extends Component {
   }
 
   getTermsAndCondition() {
-    axios.get(`${process.env.REACT_APP_API_URL}/terms-and-conditions`).then(resp => {
-      this.setState({
-        contents: resp.data.length && resp.data[0].contents
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/terms-and-conditions`)
+      .then((resp) => {
+        this.setState({
+          contents: resp.data.length && resp.data[0].contents,
+        });
       })
-    }).catch((err) => {
-      console.error(err);
-    })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
   checkIfBoxIsChecked(e) {
@@ -42,17 +45,15 @@ class TermsAndConditions extends Component {
     }
   }
   render() {
-    const {contents } = this.state;
+    const { contents } = this.state;
     return (
-      <div className="col-md-8" style={{ 'margin': '0 auto' }}>
-        <h2 className="PageTitle" style={{ textAlign: 'center'}}>
+      <div className="col-md-8" style={{ margin: '0 auto' }}>
+        <h2 className="PageTitle" style={{ textAlign: 'center' }}>
           Terms and Conditions
         </h2>
         <br></br>
-        <Scrollbars style={{ width: 500, height: 300, margin: '0 auto'}}>
-          <p>
-           {contents}
-          </p>
+        <Scrollbars style={{ width: 500, height: 300, margin: '0 auto' }}>
+          <p>{contents}</p>
         </Scrollbars>
 
         <br></br>

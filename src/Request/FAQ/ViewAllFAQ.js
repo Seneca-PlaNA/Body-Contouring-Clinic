@@ -34,17 +34,15 @@ class ViewAllFAQ extends React.Component {
   }
 
   componentDidMount() {
-    this.getFAQs()
-      .then((data) => {
-        this.setState({
-          faqs: data,
-        });
+    this.getFAQs().then((data) => {
+      this.setState({
+        faqs: data,
+      });
     });
-    this.getFAQCategory()
-    .then((data)=>{
+    this.getFAQCategory().then((data) => {
       this.setState({
         faqCategories: data,
-      })
+      });
     });
   }
   render() {
@@ -56,26 +54,37 @@ class ViewAllFAQ extends React.Component {
             activeKey={this.state.key}
             onSelect={(key) => this.setState({ key })}
           >
-            { this.state.faqCategories.map( (result) => (
-              <Tab eventKey={result._id} title={result.name} style={{ color: '#393F44', 'margin-top': '10px' }}>
-              {this.state.faqs.map((oneFaq) =>(
-                oneFaq.faqCategory._id != result._id ? '' : 
-                  <Accordion>
-                    <Card>
-                      <Accordion.Toggle as={Card.Header} eventKey="0">
-                         {oneFaq.title}
-                         </Accordion.Toggle>
-                         <Accordion.Collapse eventKey="0">
-                           <Card.Body>{oneFaq.contents}</Card.Body>
-                         </Accordion.Collapse>
-                    </Card>
-                  </Accordion>      
-              ))}
-              </Tab> 
-          ))}
+            {this.state.faqCategories.map((result) => (
+              <Tab
+                eventKey={result._id}
+                title={result.name}
+                style={{ color: '#393F44', 'margin-top': '10px' }}
+              >
+                {this.state.faqs.map((oneFaq) =>
+                  oneFaq.faqCategory._id != result._id ? (
+                    ''
+                  ) : (
+                    <Accordion>
+                      <Card>
+                        <Accordion.Toggle as={Card.Header} eventKey="0">
+                          {oneFaq.title}
+                        </Accordion.Toggle>
+                        <Accordion.Collapse eventKey="0">
+                          <Card.Body>{oneFaq.contents}</Card.Body>
+                        </Accordion.Collapse>
+                      </Card>
+                    </Accordion>
+                  )
+                )}
+              </Tab>
+            ))}
           </Tabs>
 
-                      <br/><br/><br/><br/><br/>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
         </Container>
         <br />
         <br />

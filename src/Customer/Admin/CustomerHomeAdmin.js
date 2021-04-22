@@ -12,13 +12,14 @@ class CustomerHomeAdmin extends React.Component {
     this.state = {
       admin: {},
       profile: [],
-      items: [{ url: `/Customer/Admin`, title: 'Home' },
-              { url: `/Staff/Admin`, title: 'Staff Management' },
-              { url: `/Customer/Admin/Balance`, title: 'Balance Management' },
+      items: [
+        { url: `/Customer/Admin`, title: 'Home' },
+        { url: `/Staff/Admin`, title: 'Staff Management' },
+        { url: `/Customer/Admin/Balance`, title: 'Balance Management' },
       ],
       _id: localStorage.getItem('_id'),
-      filterData:[],
-      seachCustomer: '',
+      filterData: [],
+      searchCustomer: '',
       currentPage: 1,
       perPage: 8,
       authName: {},
@@ -33,9 +34,7 @@ class CustomerHomeAdmin extends React.Component {
     }
   }
   nextPage() {
-    if (
-      this.state.currentPage < Math.ceil(this.state.filterData.length / this.state.perPage)
-    ) {
+    if (this.state.currentPage < Math.ceil(this.state.filterData.length / this.state.perPage)) {
       this.setState({
         currentPage: parseInt(this.state.currentPage) + 1,
       });
@@ -49,17 +48,16 @@ class CustomerHomeAdmin extends React.Component {
 
   handleSearchCustomerChange(e) {
     this.setState({
-      seachCustomer: e.target.value,
+      searchCustomer: e.target.value,
     });
   }
 
-  handleSearchCustomer(){
-      const newCustomers = this.state.profile.filter((req) => {
-        let name = req.firstName + req.lastName;
-        return name.toLowerCase().includes(this.state.seachCustomer.toLowerCase());
-      });
-      console.log(newCustomers);
-      this.setState({ filterData: newCustomers });
+  handleSearchCustomer() {
+    const newCustomers = this.state.profile.filter((req) => {
+      let name = req.firstName + req.lastName;
+      return name.toLowerCase().includes(this.state.searchCustomer.toLowerCase());
+    });
+    this.setState({ filterData: newCustomers });
   }
 
   getCustomerProfile(id) {
@@ -82,14 +80,13 @@ class CustomerHomeAdmin extends React.Component {
     });
   }
 
-  verifyCustomerLevel(data){
-    const verifiedCustomer = data.filter((req)=>{
-      return !(req.accountLevelId != null &&  req.accountLevelId._id == "603719d1ec07da8afc6ff378")
-
-    })
+  verifyCustomerLevel(data) {
+    const verifiedCustomer = data.filter((req) => {
+      return !(req.accountLevelId != null && req.accountLevelId._id == '603719d1ec07da8afc6ff378');
+    });
     this.setState({
-        profile: verifiedCustomer,
-        filterData: verifiedCustomer,
+      profile: verifiedCustomer,
+      filterData: verifiedCustomer,
     });
   }
 
@@ -107,12 +104,12 @@ class CustomerHomeAdmin extends React.Component {
   }
 
   render() {
-
-    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
-    {
-      return (
-        <Redirect push to={{pathname: '/', }}  refresh="true"/>
-      );
+    if (
+      this.state.authName == null ||
+      this.state.authName._id == '60371ad3fda1af6510e75e3a' ||
+      this.state.authName._id == '60371ae9fda1af6510e75e3b'
+    ) {
+      return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
 
     const indexOfLast = this.state.currentPage * this.state.perPage;
@@ -139,20 +136,20 @@ class CustomerHomeAdmin extends React.Component {
           <div className="contents">
             <Form inline>
               <h4 className="PageTitle">Customer List</h4>
-              <Container style={{ display: 'flex', justifyContent: 'flex-end', flexWrap: 'wrap'}}>
-              <Form.Control
-                type="text"
-                placeholder="Search customer"
-                value={this.state.seachCustomer}
-                onChange={this.handleSearchCustomerChange.bind(this)}
-              ></Form.Control>
-              <Button
-                variant="outline-*"
-                style={{ background: 'none'}}
-                onClick={this.handleSearchCustomer.bind(this)}
-              >
-                <img src={searchIcon} alt="Search" />
-              </Button>
+              <Container style={{ display: 'flex', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+                <Form.Control
+                  type="text"
+                  placeholder="Search customer"
+                  value={this.state.searchCustomer}
+                  onChange={this.handleSearchCustomerChange.bind(this)}
+                ></Form.Control>
+                <Button
+                  variant="outline-*"
+                  style={{ background: 'none' }}
+                  onClick={this.handleSearchCustomer.bind(this)}
+                >
+                  <img src={searchIcon} alt="Search" />
+                </Button>
               </Container>
             </Form>
             <br />
@@ -167,27 +164,26 @@ class CustomerHomeAdmin extends React.Component {
               </tr>
             </thead>
 
-              <tbody>
+            <tbody>
               {currentItems.map((result, index) => (
                 <tr key={index}>
                   <td>{result.userID}</td>
                   <td>
                     {result.firstName} {result.lastName}
                   </td>
-                  <td>{result.accountLevelId == null ? "": result.accountLevelId.name}</td>
+                  <td>{result.accountLevelId == null ? '' : result.accountLevelId.name}</td>
                   <td>
                     <Link to={`/Customer/Admin/Profile/${result._id}`}>Detail</Link>
                   </td>
                 </tr>
-                ))}
-              </tbody>
-
+              ))}
+            </tbody>
           </Table>
-          <br/>
+          <br />
           <Pagination style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Pagination.Prev onClick={this.prevPage.bind(this)} />
-                    <Pagination>{pageNums}</Pagination>
-                    <Pagination.Next onClick={this.nextPage.bind(this)} />
+            <Pagination.Prev onClick={this.prevPage.bind(this)} />
+            <Pagination>{pageNums}</Pagination>
+            <Pagination.Next onClick={this.nextPage.bind(this)} />
           </Pagination>
         </div>
       </div>

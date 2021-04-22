@@ -113,7 +113,12 @@ class Appointments extends React.Component {
                     </td>
                     <td>{appointment.schedule == null ? '' : appointment.schedule.time.time}</td>
                     <td>{appointment.service.name}</td>
-                    <td>$ {appointment.isOffer == true ? appointment.offerPrice : appointment.service.price}</td>
+                    <td>
+                      ${' '}
+                      {appointment.isOffer == true
+                        ? appointment.offerPrice
+                        : appointment.service.price}
+                    </td>
                     <td>
                       <Link to={`/Appointment/Appointment/${appointment._id}`}>
                         <Button variant="outline-secondary">details</Button>

@@ -29,35 +29,31 @@ class VIPHome extends React.Component {
       this.setState({
         authName: data.accountLevelId,
       });
-      console.log(this.state.authName);
     });
   }
 
   render() {
-    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' )
-    {
-      return (
-        <Redirect push to={{pathname: '/', }}  refresh="true"/>
-      );
+    if (this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a') {
+      return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
-      return (
-        <div className="row">
-          <div className="col-md-1"></div>
-          <SideBar items={this.state.items} />
-          <div className="col-md-8" style={{ 'margin-left': '80px' }}>
-            <h2 className="PageTitle">Monthly Special Offers</h2>
+    return (
+      <div className="row">
+        <div className="col-md-1"></div>
+        <SideBar items={this.state.items} />
+        <div className="col-md-8" style={{ 'margin-left': '80px' }}>
+          <h2 className="PageTitle">Monthly Special Offers</h2>
+          <br />
+          <div className="contents">
             <br />
-            <div className="contents">
-              <br />
-              <ListAllOffer />
-              <br />
-              <br />
-              <br />
-            </div>
+            <ListAllOffer />
+            <br />
+            <br />
+            <br />
           </div>
         </div>
-      );
-    }
+      </div>
+    );
+  }
 }
 
 export default VIPHome;

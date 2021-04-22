@@ -11,7 +11,11 @@ class SignupSuccess extends Component {
           <br></br>
           <img src={imgName} width="230" height="230" style={{ 'margin-left': '10px' }} />
 
-          <p> Congrats! Your account is successfully created, you can now sign in with the new account.</p>
+          <p>
+            {' '}
+            Congrats! Your account is successfully created, you can now sign in with the new
+            account.
+          </p>
         </div>
 
         <button type="button" className="btn btn-outline-info" style={{ 'margin-left': '15px' }}>

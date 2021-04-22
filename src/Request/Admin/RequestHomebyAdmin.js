@@ -74,7 +74,6 @@ class RequestHomebyAdmin extends React.Component {
     });
   }
   handleSearchTypeChange(e) {
-    console.log(e.target.value);
     this.setState({
       searchType: e.target.value,
     });
@@ -96,19 +95,18 @@ class RequestHomebyAdmin extends React.Component {
       eDateStatus: false,
       sDateStatus: false,
       startDate: e.target.value,
-    })
+    });
 
-    if(moment(e.target.value).isBefore(this.state.endDate)){
+    if (moment(e.target.value).isBefore(this.state.endDate)) {
       this.setState({
         eDateStatus: false,
         sDateStatus: false,
-    });
-    }
-    else{
+      });
+    } else {
       this.setState({
         sDateStatus: true,
         eDateStatus: true,
-      })
+      });
     }
   };
 
@@ -117,21 +115,20 @@ class RequestHomebyAdmin extends React.Component {
       eDateStatus: false,
       sDateStatus: false,
       endDate: e.target.value,
-    })
+    });
 
-    if(moment(this.state.startDate).isBefore(e.target.value)){
+    if (moment(this.state.startDate).isBefore(e.target.value)) {
       this.setState({
         eDateStatus: false,
         sDateStatus: false,
       });
-    }
-    else{
+    } else {
       this.setState({
         sDateStatus: true,
         eDateStatus: true,
-      })
+      });
     }
-  }
+  };
 
   handleChange = (event) => {
     this.setState({ filter: event.target.value });
@@ -160,7 +157,6 @@ class RequestHomebyAdmin extends React.Component {
     });
   }
   updateRequest() {
-    console.log(this.state.searchType);
     if (this.state.startDate && this.state.endDate) {
       const newRequest = this.state.requests.filter((req) => {
         return moment(req.date).isBetween(this.state.startDate, this.state.endDate);
@@ -176,14 +172,12 @@ class RequestHomebyAdmin extends React.Component {
       });
       this.setState({ filterRequests: newRequests });
     } else if (this.state.searchType) {
-      console.log('searchtype');
       if (this.state.searchType == 'title') {
         const newRequests = this.state.requests.filter((req) => {
           return req.title.toLowerCase().includes(this.state.filter.toLowerCase());
         });
         this.setState({ filterRequests: newRequests });
       } else if (this.state.searchType == 'customerID') {
-        console.log('nam');
         const newRequests = this.state.requests.filter((req) => {
           return req.customer.account.userID
             .toLowerCase()
@@ -211,8 +205,7 @@ class RequestHomebyAdmin extends React.Component {
   }
 
   componentDidMount() {
-    this.getCustomerProfile(this.state._id)
-    .then((data)=>{
+    this.getCustomerProfile(this.state._id).then((data) => {
       this.setState({
         authName: data.accountLevelId,
       });
@@ -226,14 +219,14 @@ class RequestHomebyAdmin extends React.Component {
     });
   }
   render() {
-    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
-    {
-      return (
-        <Redirect push to={{pathname: '/', }}  refresh="true"/>
-      );
+    if (
+      this.state.authName == null ||
+      this.state.authName._id == '60371ad3fda1af6510e75e3a' ||
+      this.state.authName._id == '60371ae9fda1af6510e75e3b'
+    ) {
+      return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
 
-    console.log(this.state.filterRequests);
     const indexOfLast = this.state.currentPage * this.state.perPage;
     const indexOfFirst = indexOfLast - this.state.perPage;
     const currentItems = this.state.filterRequests.slice(indexOfFirst, indexOfLast);
@@ -251,8 +244,7 @@ class RequestHomebyAdmin extends React.Component {
         <div className="col-md-1"></div>
         <SideBar items={this.state.items} />
         <div className="col-md-8" style={{ 'margin-left': '80px' }}>
-          <h2 className="PageTitle">View All Request
-          </h2>
+          <h2 className="PageTitle">View All Request</h2>
           <br />
           <div className="contents">
             <Form inline>
@@ -354,7 +346,11 @@ class RequestHomebyAdmin extends React.Component {
                         </Link>
                       </td>
                       <td>{request.requestCategory.name}</td>
-                      <td>{!request.serviceCategory ? 'no service involved' : request.serviceCategory.name}</td>
+                      <td>
+                        {!request.serviceCategory
+                          ? 'no service involved'
+                          : request.serviceCategory.name}
+                      </td>
                       <td>{!request.customer ? ' ' : request.customer.account.userID}</td>
                       <td>
                         {!request.customer

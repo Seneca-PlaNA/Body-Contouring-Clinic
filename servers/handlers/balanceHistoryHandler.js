@@ -19,11 +19,10 @@ exports.addNewBalanceHistory = function (data) {
 exports.viewAllBalanceHistory = function () {
   return new Promise((resolve, reject) => {
     BalanceHistory.find()
-    .populate({
-      path: 'balances',
-      populate: [{ path: 'services',
-                   populate: 'serviceCategory' }]
-    })
+      .populate({
+        path: 'balances',
+        populate: [{ path: 'services', populate: 'serviceCategory' }],
+      })
       .then((data) => {
         resolve(data);
       })
@@ -37,11 +36,10 @@ exports.viewAllBalanceHistory = function () {
 exports.viewOneBalanceHistoryById = function (id) {
   return new Promise((resolve, reject) => {
     BalanceHistory.findOne({ _id: id })
-    .populate({
-      path: 'balances',
-      populate: [{ path: 'services',
-                   populate: 'serviceCategory' }]
-    })
+      .populate({
+        path: 'balances',
+        populate: [{ path: 'services', populate: 'serviceCategory' }],
+      })
       .exec()
       .then((data) => {
         resolve(data);
@@ -84,52 +82,52 @@ exports.deleteBalanceHistoryById = function (id) {
 exports.addBalanceInHistoryById = function (data, id) {
   return new Promise((resolve, reject) => {
     var calculate = 0;
-    console.log("Back Start");
-    console.log(data);
-    // var newBalance = data.balance;
     let addBalance = new Balance(data);
 
-    addBalance.save().then(()=>{
-
-      BalanceHistory.findOne({_id: id})
-      .exec()
-      .then((data)=>{
+    addBalance.save().then(() => {
+      BalanceHistory.findOne({ _id: id })
+        .exec()
+        .then((data) => {
           calculate = data.currentBalance + addBalance.balanceAccount;
-          BalanceHistory.updateOne({ _id: id }, { $push: {balances: addBalance._id}, currentBalance: calculate })
-          .exec()
-          .then(() => {
-            resolve(`Balance is updated in (id: ${id}) history`);
-          })
-          .catch((err) => {
-            reject(err);
-          });
-      })
-      });
+          BalanceHistory.updateOne(
+            { _id: id },
+            { $push: { balances: addBalance._id }, currentBalance: calculate }
+          )
+            .exec()
+            .then(() => {
+              resolve(`Balance is updated in (id: ${id}) history`);
+            })
+            .catch((err) => {
+              reject(err);
+            });
+        });
     });
+  });
 };
 
 //Update
-exports.substractBalanceInHistoryById = function (data, id) {
+exports.subtractBalanceInHistoryById = function (data, id) {
   return new Promise((resolve, reject) => {
     var calculate = 0;
-    // var newBalance = data.balance;
     let addBalance = new Balance(data);
 
-    addBalance.save().then(()=>{
-
-      BalanceHistory.findOne({_id: id})
-      .exec()
-      .then((data)=>{
+    addBalance.save().then(() => {
+      BalanceHistory.findOne({ _id: id })
+        .exec()
+        .then((data) => {
           calculate = data.currentBalance - addBalance.balanceAccount;
-          BalanceHistory.updateOne({ _id: id }, { $push: {balances: addBalance._id}, currentBalance: calculate })
-          .exec()
-          .then(() => {
-            resolve(`Balance is updated in (id: ${id}) history`);
-          })
-          .catch((err) => {
-            reject(err);
-          });
-      })
-      });
+          BalanceHistory.updateOne(
+            { _id: id },
+            { $push: { balances: addBalance._id }, currentBalance: calculate }
+          )
+            .exec()
+            .then(() => {
+              resolve(`Balance is updated in (id: ${id}) history`);
+            })
+            .catch((err) => {
+              reject(err);
+            });
+        });
     });
+  });
 };

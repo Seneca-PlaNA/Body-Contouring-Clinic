@@ -170,7 +170,6 @@ class CustomerProfileEdit extends React.Component {
         passwordIsMoreThan8: true,
       }));
     }
-    console.log(this.state.tempPwd);
   }
 
   onConfirmPasswordChange(event) {
@@ -207,7 +206,6 @@ class CustomerProfileEdit extends React.Component {
   }
 
   render() {
-    console.log(this.state.passwordIsMoreThan8);
     if (this.state.authName == null) {
       return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }

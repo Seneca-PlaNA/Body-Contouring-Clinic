@@ -3,9 +3,6 @@ import '../App.css';
 import logo from '../resources/brand-logo.png';
 import underBar from '../resources/underBar.png';
 import RouterConfig from '../RouterConfig';
-// import { Link } from 'react-router-dom'
-// import Nav from './nav';
-// import axios from 'axios';
 
 class Home extends React.Component {
   constructor(props) {
@@ -29,22 +26,11 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    // axios.get('http://localhost:3001/account/' + localStorage.getItem('_id')).then(
-    //   (res) => {
-    //     this.setState({
-    //       profile: res.data,
-    //     });
-    //   },
-    //   (err) => {
-    //     console.log(err);
-    //   }
-    // );
     this.getCustomerProfile(this.state._id).then((data) => {
       this.setState({
         profile: data,
         authName: data.accountLevelId,
       });
-      console.log(this.state.authName);
     });
   }
 
@@ -139,10 +125,10 @@ class Home extends React.Component {
                 </a>
               </li>
               <li className="nav-item">
-              <a className="nav-link" href="/Staff/Schedules/Calendar">
-                Schedule
-              </a>
-            </li>
+                <a className="nav-link" href="/Staff/Schedules/Calendar">
+                  Schedule
+                </a>
+              </li>
               <li className="nav-item">
                 <a className="nav-link" href="/" onClick={() => localStorage.clear()}>
                   Log out

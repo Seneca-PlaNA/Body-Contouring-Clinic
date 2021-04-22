@@ -79,7 +79,7 @@ class SignUp extends Component {
 
     if (confirmPassword && password != confirmPassword) {
       errorObject.isError = true;
-      errorObject.passwordInvalid = "Password doesn't matach";
+      errorObject.passwordInvalid = "Password doesn't match";
     }
     if (!confirmPassword) {
       errorObject.isError = true;
@@ -88,7 +88,7 @@ class SignUp extends Component {
     // - error message should displayed if first name is null
     if (!firstName) {
       errorObject.isError = true;
-      errorObject.firstName = 'First mame is required';
+      errorObject.firstName = 'First name is required';
     }
     // - error message should displayed if last name is null
     if (!lastName) {

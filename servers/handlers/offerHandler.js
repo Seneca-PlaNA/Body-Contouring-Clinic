@@ -46,7 +46,6 @@ exports.viewOneOfferById = function (id) {
 // update one
 exports.editOfferById = function (data, id) {
   return new Promise((resolve, reject) => {
-    console.log(data);
     Offer.updateOne({ _id: id }, { $set: data })
       .exec()
       .then(() => {
@@ -71,18 +70,3 @@ exports.deleteOfferById = function (id) {
       });
   });
 };
-
-// // view one
-// exports.viewOfferServiceById = function (id) {
-//   return new Promise((resolve, reject) => {
-//     Offer.findOne({ _id: id })
-//       .populate('services')
-//       .exec()
-//       .then((offerService) => {
-//         resolve(offerService);
-//       })
-//       .catch((err) => {
-//         reject(err);
-//       });
-//   });
-// };

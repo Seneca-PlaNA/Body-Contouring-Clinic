@@ -29,18 +29,19 @@ class AnswerRequest extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.setState({ 
+    this.setState({
       answerNull: false,
-      statusNull: false, 
-    })
+      statusNull: false,
+    });
 
-    if(this.state.request.answer == '' || this.state.answer.status == '' )
-    {
-      this.state.request.answer == '' ? this.setState({ answerNull: true }) : this.setState({ answerNull: false });
-      this.state.answer.status == '' ? this.setState({ statusNull: true }) : this.setState({ statusNull: false });
-    }
-    else
-    {
+    if (this.state.request.answer == '' || this.state.answer.status == '') {
+      this.state.request.answer == ''
+        ? this.setState({ answerNull: true })
+        : this.setState({ answerNull: false });
+      this.state.answer.status == ''
+        ? this.setState({ statusNull: true })
+        : this.setState({ statusNull: false });
+    } else {
       fetch(`${process.env.REACT_APP_API_URL}/request/${this.props.id}`, {
         method: 'PUT',
         body: JSON.stringify(this.state.answer),
@@ -53,7 +54,6 @@ class AnswerRequest extends React.Component {
         .then(() => this.setState({ completed: true }))
         .catch((err) => console.log(err));
     }
-    
   }
 
   onAnswerChange(e) {
@@ -93,9 +93,7 @@ class AnswerRequest extends React.Component {
   }
 
   componentDidMount() {
-
-    this.getCustomerProfile(this.state._id)
-    .then((data)=>{
+    this.getCustomerProfile(this.state._id).then((data) => {
       this.setState({
         authName: data.accountLevelId,
       });
@@ -111,11 +109,12 @@ class AnswerRequest extends React.Component {
   }
 
   render() {
-    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
-    {
-      return (
-        <Redirect push to={{pathname: '/', }}  refresh="true"/>
-      );
+    if (
+      this.state.authName == null ||
+      this.state.authName._id == '60371ad3fda1af6510e75e3a' ||
+      this.state.authName._id == '60371ae9fda1af6510e75e3b'
+    ) {
+      return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
 
     if (this.state.completed) {
@@ -156,32 +155,40 @@ class AnswerRequest extends React.Component {
                     A: RE: {this.state.request.title}{' '}
                     {' (' + moment(this.state.request.date).format('ll') + ')'}
                   </Form.Label>
-                  <Form.Control as="textarea" rows={3} value={this.state.request.answer} onChange={this.onAnswerChange.bind(this)} isInvalid={this.state.answerNull} />
-                  <Form.Control.Feedback type='invalid'>Answer is required</Form.Control.Feedback>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    value={this.state.request.answer}
+                    onChange={this.onAnswerChange.bind(this)}
+                    isInvalid={this.state.answerNull}
+                  />
+                  <Form.Control.Feedback type="invalid">Answer is required</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group style={{ 'background-color': '#F5F9F9' }}>
                   <Form.Label style={reqTitle}>Request Status</Form.Label>
-                  <Form.Control as="select" onChange={this.onStatusChange.bind(this)} isInvalid={this.state.statusNull}>
-                    <option default>
-                      ----Choose----
-                    </option>
+                  <Form.Control
+                    as="select"
+                    onChange={this.onStatusChange.bind(this)}
+                    isInvalid={this.state.statusNull}
+                  >
+                    <option default>----Choose----</option>
                     <option value="unsolved">Unsolved</option>
                     <option value="in-progress">In-Progress</option>
                     <option value="solved">Solved</option>
                   </Form.Control>
-                  <Form.Control.Feedback type='invalid'>Status is required</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">Status is required</Form.Control.Feedback>
                 </Form.Group>
                 <Container>
                   <Row>
                     <Col xs={9}></Col>
-                    <Col style={{ display: "flex", justifyContent: 'flex-end'}}>
+                    <Col style={{ display: 'flex', justifyContent: 'flex-end' }}>
                       <Button variant="outline-secondary" href="/Request/Admin/">
                         Cancel
                       </Button>
                     </Col>
-                      <Button type="submit" variant="outline-info">
-                        Save
-                      </Button>
+                    <Button type="submit" variant="outline-info">
+                      Save
+                    </Button>
                   </Row>
                 </Container>
               </Form>

@@ -476,10 +476,10 @@ class EditOffer extends React.Component {
                     <Button variant="outline-secondary" href="/VIP/Admin/Manage">
                       Cancel
                     </Button>
-                    </Col>
-                    <Button type="submit" variant="outline-info">
-                      Save
-                    </Button>
+                  </Col>
+                  <Button type="submit" variant="outline-info">
+                    Save
+                  </Button>
                 </Row>
                 <br />
               </Container>

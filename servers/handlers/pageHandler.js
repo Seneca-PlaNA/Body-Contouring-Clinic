@@ -1,23 +1,12 @@
 const Page = require('../../models/page');
-// const AccountLevel = require('../../models/accountLevel');
 
 // create new
 exports.addNewPage = function (data) {
   return new Promise((resolve, reject) => {
     let newPage = new Page(data);
-    // let pass = false;
-    // for (let i = 0; i < data.accountLevels.length; i++){
-    //   if (AccountLevel.exists({ _id: data.accountLevels[i]})) {
-    //     pass = true;
-    //   } else {
-    //     pass = false;
-    //   }
-    // }
     newPage.save((err) => {
       if (err) {
-        // if (err || pass == false) {
         reject(err);
-        // reject(err + "passed account level id(s) not exist");
       } else {
         resolve(`new service (id: ${newPage._id}) is created`);
       }
