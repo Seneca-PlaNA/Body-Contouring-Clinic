@@ -870,7 +870,7 @@ app.delete('/terms-and-conditions/:id', (req, res) => {
     .catch((err) => res.json(err));
 });
 app.use('/api', (req, res) => res.json({ backServer: 'true' }));
-app.get('/', (req, res) => res.json('BodyContouringClinic Back-end Server, Please contact eunbeek@outlook.com/ekim105@myseneca.ca' ));
+app.get('/', (req, res) => res.json('BodyContouringClinic Back-end Server, Please contact eunbeek@outlook.com/ekim105@myseneca.ca. This is the API document https://documenter.getpostman.com/view/10001438/TzCFiXMF' ));
 
 app.listen(port, () => {
   console.log('Express http server listening on: ' + port);
