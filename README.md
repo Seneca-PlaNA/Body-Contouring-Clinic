@@ -1,5 +1,19 @@
 # Body-Contouring-Clinic
 
+Heroku Deployment: https://bodycontouringclinic.herokuapp.com/
+
+Account Login information:
+
+| User ID       | Password     | Account type  |
+| ------------- | ------------- | ----- |
+| staff01      | 1234 | staff |
+| 56Vauseman   | 00000000      |   staff |
+| Yuan86 | 12345678      | VIP customer |
+| pipe04 | pipes4444 | Regular customer |
+| kmt1011 | 12341234 | Regular customer |
+| test1234 | 12341234 | Regular customer |
+
+
 ### Modify the repo
 
 1. File an issue
@@ -20,6 +34,9 @@
 #### required installation:
 - nodejs
 - npm
+
+#### database connection string:
+Please copy the `dbConnectionStr.json` file to your root for connecting to database.
 
 #### steps:
 - `git clone`
