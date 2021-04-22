@@ -5,7 +5,7 @@ Heroku Deployment: https://bodycontouringclinic.herokuapp.com/
 Account Login information:
 
 | User ID       | Password     | Account type  |
-| ------------- |:-------------:| -----:|
+| ------------- | ------------- | ----- |
 | staff01      | 1234 | staff |
 | 56Vauseman   | 00000000      |   staff |
 | Yuan86 | 12345678      | VIP customer |
