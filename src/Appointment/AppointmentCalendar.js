@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint react/prop-types: 0 */
 import React from 'react';
 import Calendar from '@toast-ui/react-calendar';
@@ -8,14 +9,13 @@ import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 
 import { Button } from 'react-bootstrap';
-// import { getAllByPlaceholderText } from '@testing-library/dom';
 
 class AppointmentCalendar extends React.Component {
   constructor(props) {
     super(props);
-    this.state ={
-      appointment:[],
-      schedule:[],
+    this.state = {
+      appointment: [],
+      schedule: [],
       customer: [],
       month: 0,
       monthText: String,
@@ -23,46 +23,39 @@ class AppointmentCalendar extends React.Component {
     };
     this.calendarRef = React.createRef();
   }
-  getAppointment(custId){
+  getAppointment(custId) {
     fetch(`${process.env.REACT_APP_API_URL}/appointment?customer=${custId}`)
-    .then(response => response.json())
-    .then((data) => {
-      this.setState({
-        appointment: data
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          appointment: data,
+        });
+        this.formatCalendar(this.state.appointment);
       });
-      console.log(this.state.appointment);
-      this.formatCalendar(this.state.appointment);
-    });
   }
 
   componentDidMount() {
     fetch(`${process.env.REACT_APP_API_URL}/customer?account=${this.state._id}`)
-    .then(response => response.json())
-    .then((data) => {
-      this.setState({
-        customer: data,
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          customer: data,
+        });
+        this.getAppointment(this.state.customer._id);
       });
-      console.log(this.state.customer);
-      this.getAppointment(this.state.customer._id);
-    });
   }
 
   formatCalendar = (appointments) => {
-    if(appointments == null)
-    {
-      console.log("Error");
-    }
-    else
-    {
-      appointments.forEach((appointment)=>{
-        console.log(appointment.schedule.time.time);
-        var pureDate = (appointment.schedule.date.date).split("/");
-        var pureTime = (appointment.schedule.time.time).split("-");
-        var pureStart = pureTime[0].split(":");
-        var pureEnd = pureTime[1].split(":");
+    if (appointments == null) {
+      console.log('Error');
+    } else {
+      appointments.forEach((appointment) => {
+        var pureDate = appointment.schedule.date.date.split('/');
+        var pureTime = appointment.schedule.time.time.split('-');
+        var pureStart = pureTime[0].split(':');
+        var pureEnd = pureTime[1].split(':');
 
         pureDate[0] = String(Number(pureDate[0]) - 1);
-        console.log(pureDate);
 
         var startTime = new Date(pureDate[2], pureDate[0], pureDate[1], pureStart[0], pureStart[1]);
         var endTime = new Date(pureDate[2], pureDate[0], pureDate[1], pureEnd[0], pureEnd[1]);
@@ -78,7 +71,7 @@ class AppointmentCalendar extends React.Component {
           start: startTime.toISOString(),
           end: endTime.toISOString(),
           isReadOnly: true,
-      }
+        };
 
         this.setState({
           schedule: this.state.schedule.concat(tempAppnmt),
@@ -86,62 +79,59 @@ class AppointmentCalendar extends React.Component {
         });
 
         this.handleMonthText(this.state.month);
-        console.log(this.state.schedule);
       });
     }
-  }
+  };
 
-  handleMonthText = (month) =>{
-    var tempText = "";
-    console.log(month);
+  handleMonthText = (month) => {
+    var tempText = '';
 
-    var editMonth = month >= 0 ? month%12 : 12 - Math.abs(month)%12;
-    console.log(editMonth);
-    switch (editMonth){
+    var editMonth = month >= 0 ? month % 12 : 12 - (Math.abs(month) % 12);
+    switch (editMonth) {
       case 0:
-        tempText= "December";
+        tempText = 'December';
         break;
       case 1:
-        tempText = "January";
+        tempText = 'January';
         break;
       case 2:
-        tempText = "Feburary"
+        tempText = 'February';
         break;
       case 3:
-        tempText = "March";
+        tempText = 'March';
         break;
       case 4:
-        tempText = "April";
+        tempText = 'April';
         break;
       case 5:
-        tempText = "May";
+        tempText = 'May';
         break;
       case 6:
-        tempText = "June";
+        tempText = 'June';
         break;
       case 7:
-        tempText = "July";
+        tempText = 'July';
         break;
       case 8:
-        tempText = "August";
+        tempText = 'August';
         break;
       case 9:
-        tempText = "September";
+        tempText = 'September';
         break;
       case 10:
-        tempText = "October";
+        tempText = 'October';
         break;
       case 11:
-        tempText = "November";
+        tempText = 'November';
         break;
       case 12:
-        tempText = "December";
+        tempText = 'December';
         break;
     }
     this.setState({
       monthText: tempText,
     });
-  }
+  };
   // ---------- Instance method ---------- //
 
   // Button to move next month
@@ -166,7 +156,6 @@ class AppointmentCalendar extends React.Component {
     calendarInstance.prev();
   };
 
-  // 한 주 스케줄 보기    ( defaultView = month 로 수정해놓았습니다 )
   weekChangeButton = () => {
     const calendarInstance = this.calendarRef.current.getInstance();
 
@@ -175,25 +164,20 @@ class AppointmentCalendar extends React.Component {
 
   // ---------- Event ---------- //
 
-  // week 상태에서 요일 클릭
   handleClickDayname = (ev) => {
     console.group('onClickDayname');
-    console.log(ev.date);
     console.groupEnd();
   };
 
   beforeCreateSchedule = (ev) => {
     console.group('onbeforeCreateSchedule');
-    console.log(ev.date);
     console.groupEnd();
   };
 
   render() {
     const selectedView = this.props.view; // default view
-    console.log(this.state.month);
     return (
       <>
-        {/* <button onClick={this.weekChangeButton}>Week</button> */}
         <Button variant="outline-*" onClick={this.handleClickPrevButton}>
           {' '}
           &laquo;{' '}
@@ -212,7 +196,7 @@ class AppointmentCalendar extends React.Component {
           disableDblClick={true}
           disableClick={false}
           isReadOnly={false}
-          schedules = {this.state.schedule}
+          schedules={this.state.schedule}
           scheduleView
           taskView
           template={{
@@ -229,7 +213,7 @@ class AppointmentCalendar extends React.Component {
               return 'All Day';
             },
           }}
-          theme="" // 어두운 테마 사용가능
+          theme=""
           timezones={[
             {
               timezoneName: 'America/New_York',
@@ -238,11 +222,9 @@ class AppointmentCalendar extends React.Component {
             },
           ]}
           useDetailPopup
-          // useCreationPopup
           view={selectedView} // You can also set the `defaultView` option.
           month={{
             daynames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-            //narrowWeekend: true // 토, 일은 사이즈 작게
           }}
         />
       </>

@@ -21,7 +21,7 @@ class CreateFAQ extends React.Component {
         title: '',
         contents: '',
       },
-      faqCategories:[],
+      faqCategories: [],
       completed: false,
       _id: localStorage.getItem('_id'),
       authName: {},
@@ -34,24 +34,31 @@ class CreateFAQ extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.state.faq.faqCategory == '' ? this.setState({ faqCatNull: true }) : this.setState({ faqCatNull: false });
-    this.state.faq.title == '' ? this.setState({ titleNull: true }) : this.setState({ titleNull: false });
-    this.state.faq.contents == '' ? this.setState({ contentsNull: true }) : this.setState({ contentsNull: false });
-    fetch(`${process.env.REACT_APP_API_URL}/create-faq`,{
-      method: "POST",
+    this.state.faq.faqCategory == ''
+      ? this.setState({ faqCatNull: true })
+      : this.setState({ faqCatNull: false });
+    this.state.faq.title == ''
+      ? this.setState({ titleNull: true })
+      : this.setState({ titleNull: false });
+    this.state.faq.contents == ''
+      ? this.setState({ contentsNull: true })
+      : this.setState({ contentsNull: false });
+    fetch(`${process.env.REACT_APP_API_URL}/create-faq`, {
+      method: 'POST',
       body: JSON.stringify(this.state.faq),
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },})
-    .then((response) => (response.json()))
-    .then(()=> this.setState({completed: true}))
-    .catch((err) => (console.log(err)));
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then(() => this.setState({ completed: true }))
+      .catch((err) => console.log(err));
   }
 
   onFAQCategoryChange(event) {
     this.setState(() => ({
-      faq:{
+      faq: {
         ...this.state.faq,
         faqCategory: event.target.value,
       },
@@ -61,9 +68,9 @@ class CreateFAQ extends React.Component {
 
   onTitleChange(event) {
     this.setState(() => ({
-      faq:{
+      faq: {
         ...this.state.faq,
-        title: event.target.value
+        title: event.target.value,
       },
       titleNull: false,
     }));
@@ -71,8 +78,8 @@ class CreateFAQ extends React.Component {
 
   onContentsChange(event) {
     this.setState(() => ({
-      faq:{
-        ...this.state.faq,  
+      faq: {
+        ...this.state.faq,
         contents: event.target.value,
       },
       contentsNull: false,
@@ -100,8 +107,7 @@ class CreateFAQ extends React.Component {
   }
 
   componentDidMount() {
-    this.getCustomerProfile(this.state._id)
-    .then((data)=>{
+    this.getCustomerProfile(this.state._id).then((data) => {
       this.setState({
         authName: data.accountLevelId,
       });
@@ -115,18 +121,23 @@ class CreateFAQ extends React.Component {
   }
 
   render() {
-    if(this.state.authName == null || this.state.authName._id == '60371ad3fda1af6510e75e3a' || this.state.authName._id == '60371ae9fda1af6510e75e3b')
-    {
-      return (
-        <Redirect push to={{pathname: '/', }}  refresh="true"/>
-      );
+    if (
+      this.state.authName == null ||
+      this.state.authName._id == '60371ad3fda1af6510e75e3a' ||
+      this.state.authName._id == '60371ae9fda1af6510e75e3b'
+    ) {
+      return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
-    
-    if(this.state.completed)
-    {
-      return <Redirect push to={{
-        pathname: '/Request/FAQ/Admin'
-      }}/>
+
+    if (this.state.completed) {
+      return (
+        <Redirect
+          push
+          to={{
+            pathname: '/Request/FAQ/Admin',
+          }}
+        />
+      );
     }
     return (
       <div className="row">
@@ -141,8 +152,12 @@ class CreateFAQ extends React.Component {
                 <Form.Label column sm={2}>
                   Category:
                 </Form.Label>
-                 <Col sm={6}>
-                  <Form.Control as="select" onChange={this.onFAQCategoryChange.bind(this)} isInvalid={this.state.faqCatNull}>    
+                <Col sm={6}>
+                  <Form.Control
+                    as="select"
+                    onChange={this.onFAQCategoryChange.bind(this)}
+                    isInvalid={this.state.faqCatNull}
+                  >
                     <option value="">--Choose--</option>
                     {this.state.faqCategories.map((faqCategory) => (
                       <option key={faqCategory._id} value={faqCategory._id}>
@@ -150,7 +165,9 @@ class CreateFAQ extends React.Component {
                       </option>
                     ))}
                   </Form.Control>
-                  <Form.Control.Feedback type="invalid">FAQ Category is required</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">
+                    FAQ Category is required
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -158,7 +175,12 @@ class CreateFAQ extends React.Component {
                   Title:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="text" placeholder="FAQ Title" onChange={this.onTitleChange.bind(this)} isInvalid={this.state.titleNull}/>
+                  <Form.Control
+                    type="text"
+                    placeholder="FAQ Title"
+                    onChange={this.onTitleChange.bind(this)}
+                    isInvalid={this.state.titleNull}
+                  />
                   <Form.Control.Feedback type="invalid">Title is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
@@ -167,7 +189,12 @@ class CreateFAQ extends React.Component {
                   Contents:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control as="textarea" rows={3} onChange={this.onContentsChange.bind(this)} isInvalid={this.state.contentsNull}/>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    onChange={this.onContentsChange.bind(this)}
+                    isInvalid={this.state.contentsNull}
+                  />
                   <Form.Control.Feedback type="invalid">Content is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
@@ -175,13 +202,13 @@ class CreateFAQ extends React.Component {
                 <Row>
                   <Col xs={6}></Col>
                   <Col md="auto">
-                    <Button variant="outline-secondary"href="/Request/FAQ/Admin/">
+                    <Button variant="outline-secondary" href="/Request/FAQ/Admin/">
                       Cancel
                     </Button>
-                    </Col>
-                    <Button type="submit" variant="outline-info">
-                      Save
-                    </Button>    
+                  </Col>
+                  <Button type="submit" variant="outline-info">
+                    Save
+                  </Button>
                 </Row>
               </Container>
             </Form>

@@ -24,8 +24,6 @@ class CustomerProfileAdmin extends React.Component {
   }
 
   onAccountLevelChange(event) {
-    console.log(this.state.accountLevel);
-    console.log('id: ' + event.target.value);
     this.setState(() => ({
       account: {
         ...this.state.account,
@@ -36,7 +34,6 @@ class CustomerProfileAdmin extends React.Component {
   }
 
   onNotesChange(event) {
-    console.log(event.target.value);
     this.setState({
       account: {
         ...this.state.account,
@@ -96,7 +93,6 @@ class CustomerProfileAdmin extends React.Component {
       });
     });
     this.getCustomerProfile(this.props.id).then((data) => {
-      console.log(data);
       this.setState({
         account: data,
         accountLevel: data.accountLevelId,
@@ -116,7 +112,6 @@ class CustomerProfileAdmin extends React.Component {
   }
 
   render() {
-    console.log(this.state.account.notes);
     if (
       this.state.authName == null ||
       this.state.authName._id == '60371ad3fda1af6510e75e3a' ||

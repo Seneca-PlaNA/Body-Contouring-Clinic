@@ -31,7 +31,7 @@ class CreateRequest extends React.Component {
       serviceCategories: [],
       completed: false,
       file: null,
-      imageSuccess : false,
+      imageSuccess: false,
       authName: {},
       fileFormat: false,
       titleNull: false,
@@ -46,27 +46,33 @@ class CreateRequest extends React.Component {
 
   imageShow = () => {
     this.setState({
-      imageSuccess : true
-    })
-  }
+      imageSuccess: true,
+    });
+  };
 
   imageHide = () => {
     this.setState({
-      imageSuccess : false
-    })
-  }
-  
-  fileCheck = () =>{
+      imageSuccess: false,
+    });
+  };
+
+  fileCheck = () => {
     this.setState({
-      fileFormat: false
-    })
-  }
+      fileFormat: false,
+    });
+  };
 
   handleSubmit(e) {
     e.preventDefault();
-    this.state.request.title == '' ? this.setState({ titleNull: true }) : this.setState({ titleNull: false });
-    this.state.request.requestCategory == '' ? this.setState({ requestCategoryNull: true }) : this.setState({ requestCategoryNull: false });
-    this.state.request.contents == '' ? this.setState({ contentsNull: true }) : this.setState({ contentsNull: false });
+    this.state.request.title == ''
+      ? this.setState({ titleNull: true })
+      : this.setState({ titleNull: false });
+    this.state.request.requestCategory == ''
+      ? this.setState({ requestCategoryNull: true })
+      : this.setState({ requestCategoryNull: false });
+    this.state.request.contents == ''
+      ? this.setState({ contentsNull: true })
+      : this.setState({ contentsNull: false });
 
     fetch(`${process.env.REACT_APP_API_URL}/create-request`, {
       method: 'POST',
@@ -81,63 +87,63 @@ class CreateRequest extends React.Component {
       .catch((err) => console.log(err));
   }
 
-  onFormSubmit(event){
+  onFormSubmit(event) {
     var fileValue = event.target.files[0].name;
-    console.log("File name: "+ fileValue);
     var extension = fileValue.split('.').pop();
-    console.log("File extension: "+ extension);
 
-    if(extension == 'jpg' || extension == 'png' || extension == 'gif' || extension == 'pdf' || extension == 'txt')
-    {
+    if (
+      extension == 'jpg' ||
+      extension == 'png' ||
+      extension == 'gif' ||
+      extension == 'pdf' ||
+      extension == 'txt'
+    ) {
       this.setState({
         file: event.target.files[0],
       });
-    }
-    else{
+    } else {
       this.setState({
         fileFormat: true,
-      })
+      });
     }
   }
 
-  fileUpload(){
-    if(!this.state.fileFormat){
-    const url = process.env.REACT_APP_IMAGE_URL + "/upload";
-    const formData = new FormData();
-    formData.append('file', this.state.file)
-    const config = {
+  fileUpload() {
+    if (!this.state.fileFormat) {
+      const url = process.env.REACT_APP_IMAGE_URL + '/upload';
+      const formData = new FormData();
+      formData.append('file', this.state.file);
+      const config = {
         headers: {
-            'content-type': 'multipart/form-data'
-        }
-    }
-    post(url, formData,config)
-    .then((data)=>{
-      var tempData = JSON.stringify(data.data.fileName).replace('"','').replace('"','');
-      console.log("ResultData: " + tempData );
-      this.setState(()=>({
-        request: {
-          ...this.state.request,
-          attachedFile: tempData,
-        }
-      }));
-    })
-    .then(()=>{
+          'content-type': 'multipart/form-data',
+        },
+      };
+      post(url, formData, config)
+        .then((data) => {
+          var tempData = JSON.stringify(data.data.fileName).replace('"', '').replace('"', '');
+          this.setState(() => ({
+            request: {
+              ...this.state.request,
+              attachedFile: tempData,
+            },
+          }));
+        })
+        .then(() => {
+          this.setState({
+            imageSuccess: true,
+          });
+        })
+        .catch(() => {
+          this.setState({
+            imageSuccess: false,
+            fileFormat: true,
+          });
+        });
+    } else {
       this.setState({
-        imageSuccess: true
-      })
-    })
-    .catch(()=>{
-      this.setState({
-        imageSuccess: false,
         fileFormat: true,
-      })
-    });
-  }
-  else{
-    this.setState({
-      fileFormat: true,
-    })
-  }
+      });
+    }
   }
 
   onTitleChange(e) {
@@ -211,9 +217,7 @@ class CreateRequest extends React.Component {
   }
 
   componentDidMount() {
-
-    this.getCustomerProfile(this.state._id)
-    .then((data)=>{
+    this.getCustomerProfile(this.state._id).then((data) => {
       this.setState({
         authName: data.accountLevelId,
       });
@@ -222,12 +226,10 @@ class CreateRequest extends React.Component {
     fetch(`${process.env.REACT_APP_API_URL}/customer?account=${this.state._id}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         this.setState({
           customer: data,
         });
       });
-    console.log(this.state._id);
     this.getRequestCategories().then((data) => {
       this.setState({
         requestCategories: data,
@@ -240,13 +242,10 @@ class CreateRequest extends React.Component {
     });
   }
   render() {
-    if(this.state.authName == null)
-    {
-      return (
-        <Redirect push to={{pathname: '/', }}  refresh="true"/>
-      );
+    if (this.state.authName == null) {
+      return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
-    
+
     if (this.state.completed) {
       return (
         <Redirect
@@ -271,7 +270,12 @@ class CreateRequest extends React.Component {
                   Title:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="text" placeholder="Request Title" onChange={this.onTitleChange.bind(this)} isInvalid={this.state.titleNull}></Form.Control>
+                  <Form.Control
+                    type="text"
+                    placeholder="Request Title"
+                    onChange={this.onTitleChange.bind(this)}
+                    isInvalid={this.state.titleNull}
+                  ></Form.Control>
                   <Form.Control.Feedback type="invalid">Title is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
@@ -280,7 +284,11 @@ class CreateRequest extends React.Component {
                   Request Category:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control as="select" onChange={this.onRequestCategoryChange.bind(this)} isInvalid={this.state.requestCategoryNull}>
+                  <Form.Control
+                    as="select"
+                    onChange={this.onRequestCategoryChange.bind(this)}
+                    isInvalid={this.state.requestCategoryNull}
+                  >
                     <option value="">--Choose--</option>
                     {this.state.requestCategories.map((reqCategory) => (
                       <option key={reqCategory._id} value={reqCategory._id}>
@@ -288,7 +296,9 @@ class CreateRequest extends React.Component {
                       </option>
                     ))}
                   </Form.Control>
-                  <Form.Control.Feedback type="invalid">Request Category is required</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">
+                    Request Category is required
+                  </Form.Control.Feedback>
                 </Col>
               </Form.Group>
               <Form.Group as={Row}>
@@ -311,7 +321,12 @@ class CreateRequest extends React.Component {
                   Contents:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control as="textarea" rows={3} onChange={this.onContentsChange.bind(this)} isInvalid={this.state.contentsNull}/>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    onChange={this.onContentsChange.bind(this)}
+                    isInvalid={this.state.contentsNull}
+                  />
                   <Form.Control.Feedback type="invalid">Content is required</Form.Control.Feedback>
                 </Col>
               </Form.Group>
@@ -319,26 +334,26 @@ class CreateRequest extends React.Component {
                 <Form.Label column sm={2}>
                   Attach File:
                 </Form.Label>
-                <Form.File type="file" onChange={this.onFormSubmit.bind(this)}/>
-                  <Modal show={this.state.fileFormat} onHide={this.fileCheck}>
-                    <Modal.Header closeButton>
-                      <Modal.Title>Image Upload Result</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <p>Only .jpg .png .gif .pdf .txt file type is allowed</p>
-                    </Modal.Body>
-                  </Modal>
+                <Form.File type="file" onChange={this.onFormSubmit.bind(this)} />
+                <Modal show={this.state.fileFormat} onHide={this.fileCheck}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Image Upload Result</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <p>Only .jpg .png .gif .pdf .txt file type is allowed</p>
+                  </Modal.Body>
+                </Modal>
                 <Button variant="outline-secondary" onClick={this.fileUpload.bind(this)}>
-                      Upload
+                  Upload
                 </Button>
-                  <Modal show={this.state.imageSuccess} onHide={this.imageHide}>
-                    <Modal.Header closeButton>
-                      <Modal.Title>Image Upload Result</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <p>Image Upload Success</p>
-                    </Modal.Body>
-                  </Modal>
+                <Modal show={this.state.imageSuccess} onHide={this.imageHide}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Image Upload Result</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <p>Image Upload Success</p>
+                  </Modal.Body>
+                </Modal>
               </Form.Group>
               <Container>
                 <Row>
@@ -348,9 +363,9 @@ class CreateRequest extends React.Component {
                       Cancel
                     </Button>
                   </Col>
-                    <Button variant="outline-info" type="submit">
-                      Save
-                    </Button>
+                  <Button variant="outline-info" type="submit">
+                    Save
+                  </Button>
                 </Row>
               </Container>
             </Form>

@@ -57,7 +57,6 @@ class CustomerBalanceDetailAdmin extends React.Component {
   }
 
   onUpdateBalance(event) {
-    console.log(event.target.value);
     if (event.target.value == '') {
       this.setState({
         updateError: 'Amount is required',
@@ -78,7 +77,6 @@ class CustomerBalanceDetailAdmin extends React.Component {
   }
 
   onUpdateInfo(event) {
-    console.log(event.target.value);
     if (event.target.value == '') {
       this.setState({
         balance: {
@@ -99,8 +97,6 @@ class CustomerBalanceDetailAdmin extends React.Component {
   }
 
   handleAddBalance(e) {
-    console.log(this.state.balance);
-    console.log(this.props.id);
     if (this.state.balance.balanceAccount == '') {
       this.setState({
         updateError: 'Amount is required',
@@ -108,11 +104,6 @@ class CustomerBalanceDetailAdmin extends React.Component {
       });
       e.preventDefault();
     } else if (isNaN(this.state.balance.balanceAccount)) {
-      console.log(
-        this.state.balance.balanceAccount +
-          ' is not a number, type: ' +
-          typeof this.state.balance.balanceAccount
-      );
       this.setState({
         updateError: 'Amount should be digit',
         updateIsValid: false,
@@ -234,7 +225,6 @@ class CustomerBalanceDetailAdmin extends React.Component {
             <Form style={{ fontSize: '20px', textAlign: 'left' }}>
               <h4>
                 Modify Balance
-                
                 <Alert
                   variant="info"
                   style={{
@@ -250,7 +240,7 @@ class CustomerBalanceDetailAdmin extends React.Component {
 
               <br />
               <Row>
-                <Col sm={4} >
+                <Col sm={4}>
                   <Form.Label>
                     Current Balance: ${' '}
                     {this.state.balanceHistory == null
@@ -258,8 +248,8 @@ class CustomerBalanceDetailAdmin extends React.Component {
                       : this.state.balanceHistory.currentBalance}
                   </Form.Label>
                 </Col>
-                <Col >
-                  <Row style={{display: "flex"}}>
+                <Col>
+                  <Row style={{ display: 'flex' }}>
                     <Col sm={2}>
                       <Form.Label>Amount</Form.Label>
                     </Col>
@@ -267,7 +257,7 @@ class CustomerBalanceDetailAdmin extends React.Component {
                       <Form.Control
                         type="text"
                         value={this.state.updateBalance}
-                        style={{marginLeft: "20px"}}
+                        style={{ marginLeft: '20px' }}
                         onChange={this.onUpdateBalance.bind(this)}
                         isInvalid={!this.state.updateIsValid}
                       />
@@ -277,7 +267,7 @@ class CustomerBalanceDetailAdmin extends React.Component {
                     </Col>
                   </Row>
                   <br></br>
-                  <Row style={{display: "flex"}}>
+                  <Row style={{ display: 'flex' }}>
                     <Col sm={2}>
                       <Form.Label>Info</Form.Label>
                     </Col>
@@ -285,7 +275,7 @@ class CustomerBalanceDetailAdmin extends React.Component {
                       <Form.Control
                         type="text"
                         value={this.state.info}
-                        style={{marginLeft: "20px"}}
+                        style={{ marginLeft: '20px' }}
                         onChange={this.onUpdateInfo.bind(this)}
                         isInvalid={!this.state.infoIsInput}
                       />
@@ -294,7 +284,7 @@ class CustomerBalanceDetailAdmin extends React.Component {
                   </Row>
                   <br />
                   <Row>
-                    <Col sm={7}></Col> 
+                    <Col sm={7}></Col>
                     <Col sm={2}>
                       <Button
                         type="submit"

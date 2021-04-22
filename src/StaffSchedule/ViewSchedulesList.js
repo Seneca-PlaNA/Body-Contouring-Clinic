@@ -41,7 +41,6 @@ class ViewSchedulesList extends React.Component {
   }
 
   handleFilterChange(e) {
-    console.log(e.target.value);
     this.setState({ filter: e.target.value });
   }
 
@@ -102,11 +101,11 @@ class ViewSchedulesList extends React.Component {
   }
 
   resetAll() {
-      this.setState({
-        filteredSchedules: this.state.workSchedules,
-        filter: '',
-        status: '',
-      });
+    this.setState({
+      filteredSchedules: this.state.workSchedules,
+      filter: '',
+      status: '',
+    });
   }
 
   componentDidMount() {

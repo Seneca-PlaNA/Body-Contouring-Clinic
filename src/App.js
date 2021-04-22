@@ -1,7 +1,7 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css'; // temporary, we can create our css later
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Footer from './Footer';
 import Home from './Home/Home';
 
@@ -14,15 +14,16 @@ class App extends React.Component {
     };
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   render() {
     return (
       <div className="App">
         <Home />
-        <br /><br />
-        <br/><br />
+        <br />
+        <br />
+        <br />
+        <br />
         <Footer />
       </div>
     );

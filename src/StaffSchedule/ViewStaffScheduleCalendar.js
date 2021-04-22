@@ -38,7 +38,6 @@ class ViewStaffScheduleCalendar extends React.Component {
 
   hideSave = () => {
     this.setState({ saveModal: false });
-    console.log('hey');
   };
 
   getWorkSchedules(id) {
@@ -61,7 +60,6 @@ class ViewStaffScheduleCalendar extends React.Component {
           staff: data,
           account: data.account,
         });
-        console.log(this.state.staff);
         this.getWorkSchedules(this.state.staff._id);
       });
   }
@@ -114,8 +112,12 @@ class ViewStaffScheduleCalendar extends React.Component {
           <SideBar items={this.state.items} />
           <div className="col-md-9">
             <Container style={{ marginLeft: '0px', marginRight: '0px', float: 'center' }}>
-              <h2>Hi, {this.state.account.firstName + ' ' + this.state.account.lastName}, here is your schedule</h2>
-              <hr/><br/>
+              <h2>
+                Hi, {this.state.account.firstName + ' ' + this.state.account.lastName}, here is your
+                schedule
+              </h2>
+              <hr />
+              <br />
               <SavedPopUp
                 show={this.state.saveModal}
                 handelClose={this.hideSave}

@@ -9,11 +9,11 @@ class CustomerBalance extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-     items: [
-      { url: '/Customer', title: 'Home' },
-      { url: `/Customer/Profile`, title: 'Profile' },
-      { url: `/Customer/Balance/${localStorage.getItem('_id')}`, title: 'Balance' },
-    ],
+      items: [
+        { url: '/Customer', title: 'Home' },
+        { url: `/Customer/Profile`, title: 'Profile' },
+        { url: `/Customer/Balance/${localStorage.getItem('_id')}`, title: 'Balance' },
+      ],
       _id: localStorage.getItem('_id'),
       balances: [],
       balanceHistory: [],
@@ -35,9 +35,7 @@ class CustomerBalance extends React.Component {
   }
 
   nextPage() {
-    if (
-      this.state.currentPage < Math.ceil(this.state.balances.length / this.state.perPage)
-    ) {
+    if (this.state.currentPage < Math.ceil(this.state.balances.length / this.state.perPage)) {
       this.setState({
         currentPage: parseInt(this.state.currentPage) + 1,
       });
@@ -57,33 +55,30 @@ class CustomerBalance extends React.Component {
         .then((data) => {
           resolve(data);
         });
-
     });
   }
 
-  getBalance(id){
+  getBalance(id) {
     return new Promise((resolve) => {
-      console.log(id);
       fetch(`${process.env.REACT_APP_API_URL}/balance-history/${id}`)
         .then((response) => response.json())
         .then((data) => {
           resolve(data);
-      });
-
-  });
-}
+        });
+    });
+  }
 
   componentDidMount() {
-    this.getCustomerProfile()
-    .then((data)=>{
+    this.getCustomerProfile().then((data) => {
       this.setState({
         profile: data,
-        balanceHistoryId : data.balanceHistory,
+        balanceHistoryId: data.balanceHistory,
         authName: data.accountLevelId,
-      })
+      });
 
-      this.getBalance(this.state.balanceHistoryId == null? null:this.state.balanceHistoryId._id)
-      .then((data)=>{
+      this.getBalance(
+        this.state.balanceHistoryId == null ? null : this.state.balanceHistoryId._id
+      ).then((data) => {
         this.setState({
           balanceHistory: data,
           balances: data.balances,
@@ -98,11 +93,8 @@ class CustomerBalance extends React.Component {
     return dateA > dateB ? -1 : 1;
   }
   render() {
-    if(this.state.authName == null)
-    {
-      return (
-        <Redirect push to={{pathname: '/', }}  refresh="true"/>
-      );
+    if (this.state.authName == null) {
+      return <Redirect push to={{ pathname: '/' }} refresh="true" />;
     }
 
     this.state.balances.sort(this.sortingByDate);
@@ -120,58 +112,64 @@ class CustomerBalance extends React.Component {
     }
 
     return (
-        <div className="row">
-          <div className="col-md-1"></div>
-          <SideBar items={this.state.items} />
-          <div className="col-md-8" style={{ 'margin-left': '80px' }}>
-            <h2 className="PageTitle">Hi, {this.state.profile.firstName + ' ' + this.state.profile.lastName}</h2>
-            <hr />
-            <br />
+      <div className="row">
+        <div className="col-md-1"></div>
+        <SideBar items={this.state.items} />
+        <div className="col-md-8" style={{ 'margin-left': '80px' }}>
+          <h2 className="PageTitle">
+            Hi, {this.state.profile.firstName + ' ' + this.state.profile.lastName}
+          </h2>
+          <hr />
+          <br />
 
-            <Container class="col-md-8">
-              <Form style={{ fontSize: '20px', textAlign: 'left' }}>
-              <h4>Balance Information</h4><br/>
-                  <Col sm={4}>
-                    <Form.Label>
-                      Current Balance: $ {this.state.balanceHistory == null? 0 :this.state.balanceHistory.currentBalance}
-                    </Form.Label>
-                  </Col>
-              </Form>
-            </Container>
-            <br />
-            <h4>Balance History</h4>
-            <Container class="col-md-8">
-              <Table>
-                <Row>
-                  <Col md={12}>
+          <Container class="col-md-8">
+            <Form style={{ fontSize: '20px', textAlign: 'left' }}>
+              <h4>Balance Information</h4>
+              <br />
+              <Col sm={4}>
+                <Form.Label>
+                  Current Balance: ${' '}
+                  {this.state.balanceHistory == null ? 0 : this.state.balanceHistory.currentBalance}
+                </Form.Label>
+              </Col>
+            </Form>
+          </Container>
+          <br />
+          <h4>Balance History</h4>
+          <Container class="col-md-8">
+            <Table>
+              <Row>
+                <Col md={12}>
                   <table>
-                      <tr>
-                        <th>Date</th>
-                        <th>info</th>
-                        <th>Update</th>
-                      </tr>
-                      {currentItems == null? "" : currentItems.map((result) => (
-                      <tr key={result._id}>
-                        <td>{moment(result.date).format('ll')}</td>
-                        <td>{result.info}</td>
-                        <td>$ {result.balanceAccount}</td>
-                      </tr>
-                     ))}
-                    </table>
-                  </Col>
-                </Row>
-              </Table>
-              <br/>
+                    <tr>
+                      <th>Date</th>
+                      <th>info</th>
+                      <th>Update</th>
+                    </tr>
+                    {currentItems == null
+                      ? ''
+                      : currentItems.map((result) => (
+                          <tr key={result._id}>
+                            <td>{moment(result.date).format('ll')}</td>
+                            <td>{result.info}</td>
+                            <td>$ {result.balanceAccount}</td>
+                          </tr>
+                        ))}
+                  </table>
+                </Col>
+              </Row>
+            </Table>
+            <br />
             <Pagination style={{ display: 'flex', justifyContent: 'center' }}>
-                      <Pagination.Prev onClick={this.prevPage.bind(this)} />
-                      <Pagination>{pageNums}</Pagination>
-                      <Pagination.Next onClick={this.nextPage.bind(this)} />
+              <Pagination.Prev onClick={this.prevPage.bind(this)} />
+              <Pagination>{pageNums}</Pagination>
+              <Pagination.Next onClick={this.nextPage.bind(this)} />
             </Pagination>
-            </Container>
-            <br />
-            <br />
-          </div>
+          </Container>
+          <br />
+          <br />
         </div>
+      </div>
     );
   }
 }

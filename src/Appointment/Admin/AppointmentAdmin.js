@@ -59,7 +59,7 @@ class AppointmentAdmin extends React.Component {
 
   deleteAppointment = () => {
     return new Promise((resolve) => {
-      fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`, {method: 'DELETE'})
+      fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`, { method: 'DELETE' })
         .then((response) => response.json())
         .then((results) => {
           resolve(results);
@@ -69,55 +69,55 @@ class AppointmentAdmin extends React.Component {
 
   handleDelete = () => {
     this.deleteAppointment()
-      .then((response) => (response.json()))
-      .then(()=> this.setState({
-        show: false,
-      }))
-      .catch((err) => (console.log(err)));
+      .then((response) => response.json())
+      .then(() =>
+        this.setState({
+          show: false,
+        })
+      )
+      .catch((err) => console.log(err));
   };
 
-  onConfirmChange(event){
-    console.log("event : " + event);
-
-    console.log("Current : "+ this.state.appointment.confirmation);
+  onConfirmChange(event) {
     this.setState(() => ({
-      appointment:{
+      appointment: {
         ...this.state.appointment,
         confirmation: event,
-      }
+      },
     }));
-    console.log("After : "+ this.state.appointment.confirmation);
   }
 
-  updateConfirmation(event){
+  updateConfirmation(event) {
     event.preventDefault();
 
-    fetch(`${process.env.REACT_APP_API_URL}/appointment/confirm/${this.props.id}`,{
-        method: "PUT",
-        body: JSON.stringify(this.state.appointment),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },})
-        .then((response) => response.json())
-        .then(()=>{this.setState({alert: true})})
-        .then(() => {
-          this.getAppointment()
-          .then((data) => {
-            this.setState({
-              appointment: data,
-              customer: data.customer.account,
-              schedule: data.schedule,
-              time: data.schedule.time,
-              date: data.schedule.date,
-              staff: data.schedule.staff.account,
-              service: data.service,
-            });
+    fetch(`${process.env.REACT_APP_API_URL}/appointment/confirm/${this.props.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(this.state.appointment),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then(() => {
+        this.setState({ alert: true });
+      })
+      .then(() => {
+        this.getAppointment().then((data) => {
+          this.setState({
+            appointment: data,
+            customer: data.customer.account,
+            schedule: data.schedule,
+            time: data.schedule.time,
+            date: data.schedule.date,
+            staff: data.schedule.staff.account,
+            service: data.service,
           });
         });
+      });
   }
 
-  getAppointment(){
+  getAppointment() {
     return new Promise((resolve) => {
       fetch(`${process.env.REACT_APP_API_URL}/appointment/${this.props.id}`)
         .then((response) => response.json())
@@ -128,8 +128,7 @@ class AppointmentAdmin extends React.Component {
   }
 
   componentDidMount() {
-    this.getAppointment()
-    .then((data) => {
+    this.getAppointment().then((data) => {
       this.setState({
         appointment: data,
         customer: data.customer.account,
@@ -146,31 +145,49 @@ class AppointmentAdmin extends React.Component {
   }
 
   render() {
-    if(this.state.completed)
-    {
-      return <Redirect push to={{
-        pathname: '/Appointment/Admin'
-      }}/>
+    if (this.state.completed) {
+      return (
+        <Redirect
+          push
+          to={{
+            pathname: '/Appointment/Admin',
+          }}
+        />
+      );
     }
     return (
-        <div className="row">
-          <div className="col-md-1"></div>
-          <SideBar items={this.state.items} />
-          <div className="col-md-6" style={{ 'margin-left': '80px' }}>
-            <h2>Appointment Details {this.state.appointment.isOffer? <Badge pill variant="info">Promotion</Badge>: ''}</h2>
-            <br/>
-            <Container>
+      <div className="row">
+        <div className="col-md-1"></div>
+        <SideBar items={this.state.items} />
+        <div className="col-md-6" style={{ 'margin-left': '80px' }}>
+          <h2>
+            Appointment Details{' '}
+            {this.state.appointment.isOffer ? (
+              <Badge pill variant="info">
+                Promotion
+              </Badge>
+            ) : (
+              ''
+            )}
+          </h2>
+          <br />
+          <Container>
             <Form onSubmit={this.updateConfirmation.bind(this)}>
               <Row>
                 <Col>
                   <table className={styles.appointmentTable}>
                     <tr>
                       <td>Customer Name: </td>
-                      <td>{this.state.customer == null? '' :this.state.customer.firstName} {this.state.customer == null? '' :this.state.customer.lastName}</td>
+                      <td>
+                        {this.state.customer == null ? '' : this.state.customer.firstName}{' '}
+                        {this.state.customer == null ? '' : this.state.customer.lastName}
+                      </td>
                     </tr>
                     <tr>
                       <td>Date:</td>
-                      <td>{moment(this.state.year+this.state.month+this.state.day).format('ll')}</td>
+                      <td>
+                        {moment(this.state.year + this.state.month + this.state.day).format('ll')}
+                      </td>
                     </tr>
                     <tr>
                       <td>Time:</td>
@@ -179,21 +196,35 @@ class AppointmentAdmin extends React.Component {
                     <tr>
                       <td>Status:</td>
                       <td>
-                          <Dropdown>
-                            <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
-                              {this.state.appointment.confirmation == "false"? "Await":"Confirmed"}
-                            </Dropdown.Toggle>
+                        <Dropdown>
+                          <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
+                            {this.state.appointment.confirmation == 'false' ? 'Await' : 'Confirmed'}
+                          </Dropdown.Toggle>
 
-                            <Dropdown.Menu>
-                              <Dropdown.Item eventKey="false" variant="outline-secondary" onSelect={this.onConfirmChange.bind(this)}>Await</Dropdown.Item>
-                              <Dropdown.Item eventKey="true" variant="outline-success" onSelect={this.onConfirmChange.bind(this)}>Confirmed</Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
+                          <Dropdown.Menu>
+                            <Dropdown.Item
+                              eventKey="false"
+                              variant="outline-secondary"
+                              onSelect={this.onConfirmChange.bind(this)}
+                            >
+                              Await
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              eventKey="true"
+                              variant="outline-success"
+                              onSelect={this.onConfirmChange.bind(this)}
+                            >
+                              Confirmed
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
                       </td>
                     </tr>
                     <tr>
                       <td>Technician:</td>
-                      <td>{this.state.staff.firstName} {this.state.staff.lastName}</td>
+                      <td>
+                        {this.state.staff.firstName} {this.state.staff.lastName}
+                      </td>
                     </tr>
                     <tr>
                       <td>Service:</td>
@@ -201,7 +232,12 @@ class AppointmentAdmin extends React.Component {
                     </tr>
                     <tr>
                       <td>Price:</td>
-                      <td>${this.state.appointment.isOffer == true ? this.state.appointment.offerPrice : this.state.service.price}</td>
+                      <td>
+                        $
+                        {this.state.appointment.isOffer == true
+                          ? this.state.appointment.offerPrice
+                          : this.state.service.price}
+                      </td>
                     </tr>
                     <tr>
                       <td>Contact #:</td>
@@ -209,36 +245,55 @@ class AppointmentAdmin extends React.Component {
                     </tr>
                     <tr>
                       <td>Special Request:</td>
-                      <td>{this.state.appointment.specialRequest ? this.state.appointment.specialRequest : "No special request"}</td>
+                      <td>
+                        {this.state.appointment.specialRequest
+                          ? this.state.appointment.specialRequest
+                          : 'No special request'}
+                      </td>
                     </tr>
                     <tr>
                       <td>Message:</td>
-                      <td>{this.state.appointment.message ? this.state.appointment.message : "No message"}</td>
+                      <td>
+                        {this.state.appointment.message
+                          ? this.state.appointment.message
+                          : 'No message'}
+                      </td>
                     </tr>
                   </table>
                 </Col>
                 <Col></Col>
               </Row>
-              <br/>
+              <br />
               <Row>
                 <Col></Col>
-                <Col md='auto'>
-                  <Button variant="outline-success" action type="submit" style={{'margin-right': '5px' }} >Confirm Status</Button>
+                <Col md="auto">
+                  <Button
+                    variant="outline-success"
+                    action
+                    type="submit"
+                    style={{ 'margin-right': '5px' }}
+                  >
+                    Confirm Status
+                  </Button>
                   <Link to={`/Appointment/Admin/Message/${this.props.id}`}>
-                      <Button variant="outline-secondary">
-                        Leave Message
-                      </Button>
+                    <Button variant="outline-secondary">Leave Message</Button>
                   </Link>{' '}
-                  <Button style={{'margin-left': '5px' }} variant="outline-danger" onClick={this.showModal}>
+                  <Button
+                    style={{ 'margin-left': '5px' }}
+                    variant="outline-danger"
+                    onClick={this.showModal}
+                  >
                     Delete
                   </Button>{' '}
-                  {moment(this.state.year+'-'+this.state.month+'-'+this.state.day).isBefore(new Date())? '':
+                  {moment(this.state.year + '-' + this.state.month + '-' + this.state.day).isBefore(
+                    new Date()
+                  ) ? (
+                    ''
+                  ) : (
                     <Link to={`/Appointment/Admin/Edit/${this.props.id}`}>
-                        <Button variant="outline-secondary">
-                          Edit
-                        </Button>
+                      <Button variant="outline-secondary">Edit</Button>
                     </Link>
-                  }
+                  )}
                 </Col>
                 <PopUp
                   show={this.state.show}
@@ -254,21 +309,24 @@ class AppointmentAdmin extends React.Component {
                     <Modal.Title>Appointment Status</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <p>{this.state.appointment.confirmation == 'true'? 'This Appointment is confirmed': 'This appointment is still waiting for customer'}</p>
+                    <p>
+                      {this.state.appointment.confirmation == 'true'
+                        ? 'This Appointment is confirmed'
+                        : 'This appointment is still waiting for customer'}
+                    </p>
                   </Modal.Body>
                 </Modal>
               </Row>
-              </Form>
-            </Container>
-          </div>
+            </Form>
+          </Container>
         </div>
+      </div>
     );
   }
 }
 
 AppointmentAdmin.propTypes = {
-  id : PropTypes.string.isRequired
-}
-
+  id: PropTypes.string.isRequired,
+};
 
 export default AppointmentAdmin;
